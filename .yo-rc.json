@@ -1,0 +1,16 @@
+{
+  "generator-docker-laravel": {
+    "promptValues": {
+      "nginxPort": "8888",
+      "database": "smallMySQL",
+      "extra": [
+        "queue",
+        "notifications",
+        "adminer"
+      ],
+      "notificationsPort": "8082",
+      "notificationsAppPath": "nodejs-apps/notifications",
+      "adminerPort": "9999"
+    }
+  }
+}

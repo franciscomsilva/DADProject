@@ -1,0 +1,6 @@
+/vendor
+docker
+nodejs-apps
+update-notifications-service.sh
+docker-compose.yml
+dc-aliases
