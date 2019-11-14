@@ -5,4 +5,4 @@ update-notifications-service.sh
 docker-compose.yml
 dc-aliases
 .yo-rc.json 
-
+.env
