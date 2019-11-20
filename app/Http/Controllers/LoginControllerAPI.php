@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+<<<<<<< HEAD
 define('YOUR_SERVER_URL', env('PASSPORT_URL'));
 // Check "oauth_clients" table for next 2 values:
 define('CLIENT_ID', env('PASSPORT_ID'));
 define('CLIENT_SECRET',env('PASSPORT_SECRET'));
+=======
+define('YOUR_SERVER_URL', env('APP_URL'));
+// Check "oauth_clients" table for next 2 values:
+define('CLIENT_ID', env('PASSPORT_ID'));
+define('CLIENT_SECRET', env('PASSPORT_SECRET'));
+>>>>>>> 4f555f8fb3a49e090908ebd15d7f277624cc162a
 
 
 class LoginControllerAPI extends Controller

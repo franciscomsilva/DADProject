@@ -21,5 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login', 'LoginControllerAPI@login')->name('login');
 Route::middleware('auth:api')->post('logout','LoginControllerAPI@logout');
 Route::get('users','UserControllerAPI@index')->name('users');
+Route::get('wallets','WalletControllerAPI@index')->name('wallets');
 
 
