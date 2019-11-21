@@ -10,9 +10,12 @@ require('./bootstrap');
 window.Vue = require('vue');
 import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
+import Vuex from 'vuex'
+
 
 Vue.use(VueRouter)
 Vue.use(Vuetify)
+Vue.use(Vuex)
 
 
 import Login from './components/login'
@@ -26,6 +29,7 @@ const routes = [
 const router = new VueRouter({
     routes
 })
+
 
 const app = new Vue({
     el: '#app',
