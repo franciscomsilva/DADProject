@@ -10,8 +10,17 @@ $ npm run install
 # [development] watch for file changes and build js file
 $ npm run watch
 
-#if above command doesn't work
+# [development] if 'watch' command doesn't work
 $ npm run watch-poll
+
+# deploy server locally using php artisan
+$ php artisan serve
+
+# update loaded classes
+$ composer dump-autoload
+
+# build for production and launch server
+$ npm run production
 
 # generate static project
 $ npm run generate
