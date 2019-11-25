@@ -19,11 +19,9 @@ $ php artisan serve
 # update loaded classes
 $ composer dump-autoload
 
-# build for production and launch server
+# build for production 
 $ npm run production
 
-# generate static project
-$ npm run generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
