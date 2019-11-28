@@ -22,6 +22,7 @@ Route::post('login', 'LoginControllerAPI@login')->name('login');
 Route::middleware('auth:api')->post('logout','LoginControllerAPI@logout');
 Route::get('users','UserControllerAPI@index')->name('users')->middleware('auth:api');
 Route::get('wallets','WalletControllerAPI@index')->name('wallets');
-
+Route::get('users/{id}', 'UserControllerAPI@show');
+Route::put('users/{id}','UserControllerAPI@update');
 
 

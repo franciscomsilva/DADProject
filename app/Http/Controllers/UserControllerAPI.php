@@ -18,4 +18,19 @@ class UserControllerAPI extends Controller
         }
     }
 
+    public function show($id)
+    {
+        return new UserResource(User::find($id));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            
+            ]);
+        $user = User::findOrFail($id);
+        $user->update($request->all());
+        return new UserResource($user);
+    }
+
 }
