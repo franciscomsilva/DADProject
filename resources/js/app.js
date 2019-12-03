@@ -19,10 +19,12 @@ Vue.use(Vuex)
 
 
 import Login from './components/login'
+import Register from './components/register'
 
 
 const routes = [
     {path:'/login',component:Login},
+    {path:'/register',component:Register},
     
 ]
 
