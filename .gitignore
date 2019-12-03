@@ -7,3 +7,4 @@ docker-compose.yml
 dc-aliases
 .yo-rc.json 
 .env
+/.idea
