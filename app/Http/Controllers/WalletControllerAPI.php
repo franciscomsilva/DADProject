@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Wallet;
 use App\Http\Resources\Wallet as WalletResource;
 
 class WalletControllerAPI extends Controller
@@ -14,5 +15,9 @@ class WalletControllerAPI extends Controller
         } else {
             return WalletResource::collection(User::all());
         }
+    }
+
+    public function getWalletCount() {
+    	return response()->json(Wallet::count());
     }
 }

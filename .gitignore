@@ -1,8 +1,10 @@
 /vendor
 /docker
 /nodejs-apps
+/node_modules
 update-notifications-service.sh
 docker-compose.yml
 dc-aliases
 .yo-rc.json 
 .env
+.gitignore
