@@ -10,7 +10,6 @@ define('CLIENT_ID', env('PASSPORT_ID'));
 define('CLIENT_SECRET',env('PASSPORT_SECRET'));
 
 
-
 class LoginControllerAPI extends Controller
 {
     public function login(Request $request)
