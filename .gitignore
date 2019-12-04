@@ -7,4 +7,5 @@ docker-compose.yml
 dc-aliases
 .yo-rc.json 
 .env
-.gitignore
+/.idea
+/public

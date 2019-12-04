@@ -19,9 +19,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('login', 'LoginControllerAPI@login')->name('login');
+Route::post('register', 'UserControllerAPI@store')->name('register');
 Route::middleware('auth:api')->post('logout','LoginControllerAPI@logout');
 Route::get('users','UserControllerAPI@index')->name('users')->middleware('auth:api');
 Route::get('wallets','WalletControllerAPI@index')->name('wallets');
+<<<<<<< HEAD
 Route::get('walletCount', 'WalletControllerAPI@getWalletCount')->name('walletCount');
+=======
+Route::get('users/{id}', 'UserControllerAPI@show');
+Route::put('users/{id}','UserControllerAPI@update');
+>>>>>>> master
 
 

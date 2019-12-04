@@ -3,8 +3,10 @@
   <v-app id="inspire">
     <v-content>
       <v-container
+
         fluid
         fill-height
+        fill-width
       >
         <v-layout
           align-center
@@ -21,7 +23,7 @@
                 dark
                 flat
               >
-                <v-toolbar-title>Login form</v-toolbar-title>
+                <v-toolbar-title>Register</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
@@ -36,35 +38,12 @@
               </v-toolbar>
               <v-card-text>
                 <v-form ref="form">
-                  <v-text-field
-                    label="Email"
-                    name="email"
-                    prepend-icon="person"
-                    type="text" v-model="email"
-                    :rules="[rules.required, rules.counter,rules.email]"
-                  ></v-text-field>
-
-                  <v-text-field
-                    id="password"
-                    label="Password"
-                    name="password"
-                    prepend-icon="lock"
-                    type="password" 
-                    v-model="password"
-                    :rules="[rules.required,rules.password]"
-                  
-                  ></v-text-field>
+                  <user-form></user-form>
                 </v-form>
               </v-card-text>
-              <v-alert color="red"
-              dense
-             outlined
-              type="error"
-              v-if="hasAlert">Wrong username/password combination! </v-alert>
               <v-card-actions>
-                <v-btn color="primary" v-on:click.prevent="cancelLogin()" >Cancel</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" v-on:click.prevent="login()" >Login</v-btn>
+                <v-btn color="primary" v-on:click.prevent="register()" >Register</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -76,11 +55,19 @@
 </template>
 
 <script>
+  import UserForm from './userForm';
+
 export default {
     data : function(){
         return  {
+            name:null,
             email:null,
             password:null,
+            passwordConfirmation:null,
+            nif:null,
+            selectedFile:null,
+            type:'u',
+            active: 1,
             rules: {
               required: value => !!value || 'Required.',
               counter: value => value == null || value.length <= 20 || 'Max 20 characters',
@@ -88,40 +75,61 @@ export default {
                 const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                 return pattern.test(value) || 'Invalid e-mail.'
                 },
-              passsword: value => value == null || value.lenght < 8 || 'Minium of 8 characters'
+              password: value => {
+                  const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{3,}$/
+                  return pattern.test(value) || 'Must contain at least 1 uppercase letter, 1 lowercase letter and 1 number. Min of 3 characters'
+              },
+              passwordConfirmation: value => value == null  || value == this.password || 'Passwords dont match.',
+              nif: value => {
+                  const pattern = /^([0-9]{9})+$/
+                  return pattern.test(value) || 'Min of 9 characters'}
             },
             hasAlert:null
         }
     },
     methods:{
-        login: async function (){
+        register: async function (){
           this.hasAlert = false;
 
           if(!this.$refs.form.validate()){
             return;
           }
-          
-          await axios.post('api/login', {
-            email: this.email,
-            password: this.password
-          })
-            .then(response=>{
+          const formData = new FormData();
+            
+            formData.append('name', this.name);
+            formData.append('email', this.email);
+            formData.append('password', this.password);
+            formData.append('password_confirmation', this.passwordConfirmation);     
+            formData.append('type', this.type);
+            formData.append('active', this.active);
+            formData.append('nif', this.nif);
+            
+            if(this.selectedFile) formData.append('photo', this.selectedFile);
+            const headers = { 'Content-Type': 'multipart/form-data'}
+
+            await axios.post('api/register', formData, headers)
+              .then(response=>{
               /*SAVE TOKEN IN SESSION*/
               const token = response.data.access_token
               localStorage.setItem('token', token)
               axios.defaults.headers.common['Authorization'] = token
 
               this.$router.push('/users')
-            })
-            .catch(error => { this.hasAlert = true });
+             }).catch(error => {
+                this.hasAlert = true
+                console.log(error)
+            });
         },
-        cancelLogin: function() {
-          this.$emit('cancel-login');
+        onFileSelected(event){
+          this.selectedFile = event.target.files[0]
+        },
+        
+  },
+  components:{
+            'user-form':UserForm
         }
-    }
-};
+}
 </script>
-
 <style>
 
 </style>
