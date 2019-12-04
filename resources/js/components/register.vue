@@ -38,53 +38,7 @@
               </v-toolbar>
               <v-card-text>
                 <v-form ref="form">
-                  <v-text-field
-                    label="Name"
-                    name="name"
-                    prepend-icon="person"
-                    type="text" v-model="name"
-                    :rules="[rules.required, rules.counter]"
-                  ></v-text-field>
-                  <v-text-field
-                    label="Email"
-                    name="email"
-                    prepend-icon="person"
-                    type="text" v-model="email"
-                    :rules="[rules.required, rules.counter,rules.email]"
-                  ></v-text-field>
-                  <v-text-field
-                    id="password"
-                    label="Password"
-                    name="password"
-                    prepend-icon="lock"
-                    type="password" 
-                    v-model="password"
-                    :rules="[rules.required,rules.password]"
-                  
-                  ></v-text-field>
-
-                  <v-text-field
-                    id="passwordConfirmation"
-                    label="Password Confirmation"
-                    name="passwordConfirmation"
-                    prepend-icon="lock"
-                    type="password" 
-                    v-model="passwordConfirmation"
-                    :rules="[rules.required,rules.password,rules.passwordConfirmation]"
-                  
-                  ></v-text-field>
-                  <v-text-field
-                    id="nif"
-                    label="NIF"
-                    name="nif"
-                    prepend-icon="lock"
-                    type="number" 
-                    v-model="nif"
-                    :rules="[rules.required,rules.nif]"
-                  
-                  ></v-text-field>
-                 <input type="file" @change="onFileSelected" >
-
+                  <user-form></user-form>
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -101,6 +55,8 @@
 </template>
 
 <script>
+  import UserForm from './userForm';
+
 export default {
     data : function(){
         return  {
@@ -166,8 +122,12 @@ export default {
         },
         onFileSelected(event){
           this.selectedFile = event.target.files[0]
+        },
+        
+  },
+  components:{
+            'user-form':UserForm
         }
-  }
 }
 </script>
 <style>
