@@ -18,22 +18,8 @@ Vue.use(Vuetify)
 Vue.use(Vuex)
 
 
-<<<<<<< HEAD
-import Application from './components/app'
-
-
 const routes = [
     {path:'/', component:Application},
-=======
-import Login from './components/login'
-import Register from './components/register'
-
-
-const routes = [
-    {path:'/login',component:Login},
-    {path:'/register',component:Register},
-    
->>>>>>> master
 ]
 
 const router = new VueRouter({ routes })
