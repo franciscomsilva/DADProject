@@ -62,6 +62,7 @@
               type="error"
               v-if="hasAlert">Wrong username/password combination! </v-alert>
               <v-card-actions>
+                <v-btn color="primary" v-on:click.prevent="cancelLogin()" >Cancel</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" v-on:click.prevent="login()" >Login</v-btn>
               </v-card-actions>
@@ -99,24 +100,26 @@ export default {
           if(!this.$refs.form.validate()){
             return;
           }
-              await axios.post('api/login', {
-                email: this.email,
-                password: this.password
-            }).then(response=>{
+          
+          await axios.post('api/login', {
+            email: this.email,
+            password: this.password
+          })
+            .then(response=>{
               /*SAVE TOKEN IN SESSION*/
               const token = response.data.access_token
               localStorage.setItem('token', token)
               axios.defaults.headers.common['Authorization'] = token
 
               this.$router.push('/users')
-             }).catch(error => {
-                this.hasAlert = true
-                    
-            });
+            })
+            .catch(error => { this.hasAlert = true });
+        },
+        cancelLogin: function() {
+          this.$emit('cancel-login');
         }
-  
-  }
-}
+    }
+};
 </script>
 
 <style>
