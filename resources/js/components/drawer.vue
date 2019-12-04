@@ -53,7 +53,7 @@
 				<v-list-item-icon>
 					<v-icon>mdi-folder</v-icon>
 				</v-list-item-icon>
-				<v-list-item-title>Register</v-list-item-title>
+				<v-list-item-title v-on:click.prevent="registerAccount()">Register</v-list-item-title>
 			</v-list-item>
 
 
@@ -94,6 +94,9 @@ export default {
 		logout: function() {
 			this.loggedUser=false;
 			this.$emit('logout');
+		},
+		registerAccount: function() {
+			this.$emit('register-account');
 		}
 	}
 };

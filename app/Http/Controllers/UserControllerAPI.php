@@ -24,7 +24,7 @@ class UserControllerAPI extends Controller
         }
     }
 
-<<<<<<< HEAD
+
     public function show($id)
     {
         return new UserResource(User::find($id));
@@ -41,7 +41,6 @@ class UserControllerAPI extends Controller
     }
 
 }
-=======
     public function store(Request $request)
     {
        
@@ -73,4 +72,3 @@ class UserControllerAPI extends Controller
         return response()->json(new UserResource($user), 201);
     }
 }
->>>>>>> 1e3cd2ed2988197d0975f6236b51627c2701523c
