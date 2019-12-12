@@ -17,7 +17,6 @@ Vue.use(VueRouter)
 Vue.use(Vuetify)
 Vue.use(Vuex)
 
-
 const routes = [
     {path:'/', component:Application},
 ]
