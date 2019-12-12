@@ -12,6 +12,7 @@ import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
 import Application from './components/app'
+import Edit from './components/edit'
 
 Vue.use(VueRouter)
 Vue.use(Vuetify)
@@ -19,6 +20,7 @@ Vue.use(Vuex)
 
 const routes = [
     {path:'/', component:Application},
+    {path:'/edit',component:Edit}
 ]
 
 const router = new VueRouter({ routes })
