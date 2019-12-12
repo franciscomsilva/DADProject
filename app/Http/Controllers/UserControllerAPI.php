@@ -39,8 +39,6 @@ class UserControllerAPI extends Controller
         $user->update($request->all());
         return new UserResource($user);
     }
-
-}
     public function store(Request $request)
     {
        
@@ -71,4 +69,5 @@ class UserControllerAPI extends Controller
 
         return response()->json(new UserResource($user), 201);
     }
+
 }
