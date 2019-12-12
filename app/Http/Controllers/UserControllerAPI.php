@@ -32,9 +32,15 @@ class UserControllerAPI extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            
-            ]);
+         $request->validate([
+                   'name' => 'required|string|min:3|regex:/^[A-Za-záàâãéèêíóôõúçÁÀÂÃÉÈÍÓÔÕÚÇ ]+$/',
+                   'email' => 'required|email|unique:users,email',
+                   'password' => 'required|min:3|confirmed',
+                   'photo' => 'nullable|image|mimes:jpeg,png,jpg,bmp',
+                   'nif' => 'nullable|digits:9|regex:/^[0-9]{9}+$/'
+         ]);
+
+
         $user = User::findOrFail($id);
         $user->update($request->all());
         return new UserResource($user);
@@ -71,4 +77,9 @@ class UserControllerAPI extends Controller
 
         return response()->json(new UserResource($user), 201);
     }
+
+       public function myProfile(Request $request)
+            {
+                return new UserResource($request->user());
+        }
 }

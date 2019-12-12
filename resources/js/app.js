@@ -13,6 +13,8 @@ import Vuetify from 'vuetify'
 import Vuex from 'vuex'
 import Application from './components/app'
 import Edit from './components/edit'
+import store from "./store";
+
 
 Vue.use(VueRouter)
 Vue.use(Vuetify)
@@ -30,6 +32,7 @@ const app = new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     router,
+    store,
     data: {
         drawer: null
     },

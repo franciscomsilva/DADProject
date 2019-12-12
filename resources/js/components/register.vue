@@ -1,22 +1,22 @@
 <template>
-  <div id="app">
-    <v-app id="inspire">
-      <v-content>
-        <v-container
+    <div id="app">
+      <v-app id="inspire">
+        <v-content>
+          <v-container
 
-                fluid
-                fill-height
-                fill-width
-        >
-          <v-layout
-                  align-center
-                  justify-center
+                  fluid
+                  fill-height
+                  fill-width
           >
-            <v-flex
-                    xs12
-                    sm8
-                    md4
+            <v-layout
+                    align-center
+                    justify-center
             >
+              <v-flex
+                      xs12
+                      sm8
+                      md4
+              >
               <v-card class="elevation-12">
                 <v-toolbar
                         color="primary"
@@ -91,7 +91,7 @@
                             label="Avatar"
                     ></v-file-input>
 
-                  </v-form>mdi-camera"
+                  </v-form>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>

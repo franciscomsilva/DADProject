@@ -1,5 +1,31 @@
 <template>
-    <div>
+    <div id="app">
+        <v-app id="inspire">
+            <v-content>
+                <v-container
+                        fluid
+                        fill-height
+                        fill-width>
+                    <v-layout
+                            align-center
+                            justify-center>
+                        <v-flex
+                                xs12
+                                sm8
+                                md4>
+                            <v-card class="elevation-12">
+                                <v-toolbar
+                                        color="primary"
+                                        dark
+                                        flat>
+                                    <v-toolbar-title>Edit</v-toolbar-title>
+                                    <v-spacer></v-spacer>
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+
+                                        </template>
+                                    </v-tooltip>
+                                </v-toolbar>
         <v-form ref="form">
         <v-text-field
                 label="Name"
@@ -49,7 +75,12 @@
                 @change="onFileSelected" />
 
         </v-form>
-
+                            </v-card>
+                        </v-flex>
+                    </v-layout>
+            </v-container>
+    </v-content>
+    </v-app>
     </div>
 </template>
 <script>
@@ -61,7 +92,6 @@ export default {
             passwordConfirmation:null,
             nif:null,
             selectedFile:null,
-
             rules: {
                 required: value => !!value || 'Required.',
                 counter: value => value == null || value.length <= 20 || 'Max 20 characters',
@@ -77,6 +107,14 @@ export default {
             hasAlert:null
         }
     },
+    methods: {
+        mounted(){
+            this.getUsers();
+        },
+        getUsers(){
+
+        },
+    }
     
 }
 </script>
