@@ -7,13 +7,7 @@
                     type="text" v-model="name"
                     :rules="[rules.required, rules.counter]"
                   ></v-text-field>
-        <v-text-field
-                    label="Email"
-                    name="email"
-                    prepend-icon="person"
-                    type="text" v-model="email"
-                    :rules="[rules.required, rules.counter,rules.email]"
-         ></v-text-field>
+
          <v-text-field
                     id="password"
                     label="Password"
@@ -45,7 +39,13 @@
                     :rules="[rules.required,rules.nif]"
                   
         ></v-text-field>
-        <input type="file" @change="onFileSelected" >
+         <v-file-input
+                 :rules="rules"
+                 accept="image/png, image/jpeg, image/bmp"
+                 placeholder="Pick an avatar"
+                 prepend-icon="mdi-camera"
+                 label="Avatar"
+          @change="onFileSelected" />
 
      </div>
 </template>
@@ -79,6 +79,15 @@ data : function(){
             },
             hasAlert:null
         }
-    }
+    },
+    methods:{
+        onFileSelected(event){
+            this.selectedFile = event.target.files[0]
+        },
+        register(){
+            this.$emit('edit-user',)
+        }
+
+    },
 }
 </script>
