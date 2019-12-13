@@ -31,7 +31,7 @@
                 label="Name"
                 name="name"
                 prepend-icon="person"
-                type="text" v-model="name"
+                type="text" v-model="user.name"
                 :rules="[rules.required, rules.counter]"
         ></v-text-field>
 
@@ -62,7 +62,7 @@
                 name="nif"
                 prepend-icon="lock"
                 type="number"
-                v-model="nif"
+                v-model="user.nif"
                 :rules="[rules.required,rules.nif]"
 
         ></v-text-field>
@@ -73,7 +73,10 @@
                 prepend-icon="mdi-camera"
                 label="Avatar"
                 @change="onFileSelected" />
-
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" v-on:click.prevent="update()" >Update</v-btn>
+            </v-card-actions>
         </v-form>
                             </v-card>
                         </v-flex>
@@ -87,11 +90,18 @@
 export default {
     data : function(){
         return  {
-            name:null,
-            password:null,
             passwordConfirmation:null,
-            nif:null,
+            user: {
+                name:"",
+                email:"",
+                type:"",
+                active :0,
+                nif: 0
+            },
             selectedFile:null,
+            name: null,
+            password: null,
+            nif:null,
             rules: {
                 required: value => !!value || 'Required.',
                 counter: value => value == null || value.length <= 20 || 'Max 20 characters',
@@ -107,13 +117,27 @@ export default {
             hasAlert:null
         }
     },
+    mounted(){
+        this.getUser();
+    },
     methods: {
-        mounted(){
-            this.getUsers();
+        onFileSelected(event){
+            this.selectedFile = event.target.files[0]
         },
-        getUsers(){
+         async getUser(){
+             await axios.get("api/users/me")
+                .then(response => {
+                    this.user = response.data.data;
+                    console.log(this.user);
 
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         },
+        update(){
+
+        }
     }
     
 }

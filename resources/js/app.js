@@ -38,8 +38,8 @@ const app = new Vue({
     },
     methods: {
     },
-    mounted() {
-        
+    created() {
+        this.$store.commit('loadTokenAndUserFromSession');
     }
 });
 

@@ -2034,6 +2034,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+//
+//
+//
 //
 //
 //
@@ -2124,11 +2130,18 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     return {
+      passwordConfirmation: null,
+      user: {
+        name: "",
+        email: "",
+        type: "",
+        active: 0,
+        nif: 0
+      },
+      selectedFile: null,
       name: null,
       password: null,
-      passwordConfirmation: null,
       nif: null,
-      selectedFile: null,
       rules: {
         required: function required(value) {
           return !!value || 'Required.';
@@ -2151,11 +2164,36 @@ __webpack_require__.r(__webpack_exports__);
       hasAlert: null
     };
   },
+  mounted: function mounted() {
+    this.getUser();
+  },
   methods: {
-    mounted: function mounted() {
-      this.getUsers();
+    onFileSelected: function onFileSelected(event) {
+      this.selectedFile = event.target.files[0];
     },
-    getUsers: function getUsers() {}
+    getUser: function getUser() {
+      var _this2 = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUser$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("api/users/me").then(function (response) {
+                _this2.user = response.data.data;
+                console.log(_this2.user);
+              })["catch"](function (error) {
+                console.log(error);
+              }));
+
+            case 2:
+            case "end":
+              return _context.stop();
+          }
+        }
+      });
+    },
+    update: function update() {}
   }
 });
 
@@ -2333,12 +2371,13 @@ __webpack_require__.r(__webpack_exports__);
         return axios.get("api/users/me");
       }).then(function (response) {
         _this.$store.commit("setUser", response.data.data);
+
+        _this.$router.push('/users');
       })["catch"](function (error) {
         _this.$store.commit("clearUserAndToken");
 
         console.log(error);
       });
-      this.$router.push('/users');
     },
     cancelLogin: function cancelLogin() {
       this.$emit('cancel-login');
@@ -21278,11 +21317,11 @@ var render = function() {
                                       ]
                                     },
                                     model: {
-                                      value: _vm.name,
+                                      value: _vm.user.name,
                                       callback: function($$v) {
-                                        _vm.name = $$v
+                                        _vm.$set(_vm.user, "name", $$v)
                                       },
-                                      expression: "name"
+                                      expression: "user.name"
                                     }
                                   }),
                                   _vm._v(" "),
@@ -21339,11 +21378,11 @@ var render = function() {
                                       rules: [_vm.rules.required, _vm.rules.nif]
                                     },
                                     model: {
-                                      value: _vm.nif,
+                                      value: _vm.user.nif,
                                       callback: function($$v) {
-                                        _vm.nif = $$v
+                                        _vm.$set(_vm.user, "nif", $$v)
                                       },
-                                      expression: "nif"
+                                      expression: "user.nif"
                                     }
                                   }),
                                   _vm._v(" "),
@@ -21357,7 +21396,29 @@ var render = function() {
                                       label: "Avatar"
                                     },
                                     on: { change: _vm.onFileSelected }
-                                  })
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-card-actions",
+                                    [
+                                      _c("v-spacer"),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: { color: "primary" },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.update()
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Update")]
+                                      )
+                                    ],
+                                    1
+                                  )
                                 ],
                                 1
                               )
@@ -75568,7 +75629,9 @@ var app = new Vue({
     drawer: null
   },
   methods: {},
-  mounted: function mounted() {}
+  created: function created() {
+    this.$store.commit('loadTokenAndUserFromSession');
+  }
 });
 
 /***/ }),
@@ -75747,14 +75810,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!******************************************!*\
   !*** ./resources/js/components/edit.vue ***!
   \******************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _edit_vue_vue_type_template_id_017b2856___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./edit.vue?vue&type=template&id=017b2856& */ "./resources/js/components/edit.vue?vue&type=template&id=017b2856&");
 /* harmony import */ var _edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./edit.vue?vue&type=script&lang=js& */ "./resources/js/components/edit.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -75784,7 +75848,7 @@ component.options.__file = "resources/js/components/edit.vue"
 /*!*******************************************************************!*\
   !*** ./resources/js/components/edit.vue?vue&type=script&lang=js& ***!
   \*******************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

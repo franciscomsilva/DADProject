@@ -110,13 +110,14 @@ export default {
             })
                   .then(response => {
                     this.$store.commit("setUser", response.data.data);
+                    this.$router.push('/users');
+
                   })
                   .catch(error => {
                     this.$store.commit("clearUserAndToken");
 
                     console.log(error);
                   });
-          this.$router.push('/users');
 
         },
         cancelLogin: function() {
