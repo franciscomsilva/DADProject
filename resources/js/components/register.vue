@@ -1,22 +1,22 @@
 <template>
-  <div id="app">
-    <v-app id="inspire">
-      <v-content>
-        <v-container
+    <div id="app">
+      <v-app id="inspire">
+        <v-content>
+          <v-container
 
-                fluid
-                fill-height
-                fill-width
-        >
-          <v-layout
-                  align-center
-                  justify-center
+                  fluid
+                  fill-height
+                  fill-width
           >
-            <v-flex
-                    xs12
-                    sm8
-                    md4
+            <v-layout
+                    align-center
+                    justify-center
             >
+              <v-flex
+                      xs12
+                      sm8
+                      md4
+              >
               <v-card class="elevation-12">
                 <v-toolbar
                         color="primary"
@@ -91,7 +91,7 @@
                             label="Avatar"
                     ></v-file-input>
 
-                  </v-form>mdi-camera"
+                  </v-form>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -129,10 +129,11 @@
             const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{3,}$/
             return pattern.test(value) || 'Must contain at least 1 uppercase letter, 1 lowercase letter and 1 number. Min of 3 characters'
           },
-          passwordConfirmation: value => value == null  || value == this.password || 'Passwords dont match.',
+          passwordConfirmation: value => value == null || value == this.password || 'Passwords dont match.',
           nif: value => {
             const pattern = /^([0-9]{9})+$/
-            return pattern.test(value) || 'Min of 9 characters'}
+            return pattern.test(value) || 'Min of 9 characters'
+          }
         },
         hasAlert:null
       }
