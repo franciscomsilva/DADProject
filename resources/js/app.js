@@ -9,37 +9,57 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 import VueRouter from 'vue-router'
-import Vuetify from 'vuetify'
-import Vuex from 'vuex'
-import Application from './components/app'
-import Edit from './components/edit'
-import store from "./store";
-
-
 Vue.use(VueRouter)
+import Vuetify from 'vuetify'
 Vue.use(Vuetify)
+import Vuex from 'vuex'
 Vue.use(Vuex)
 
+
+import store from "./store";
+import HomePage from './components/home'
+import Login from './components/login'
+import RegisterAccount from './components/register'
+import Edit from './components/edit'
+
 const routes = [
-    {path:'/', component:Application},
-    {path:'/edit',component:Edit}
+    {path:'/', redirect: '/home'},
+    {path:'/home', component: HomePage},
+    {path:'/login', component: Login},
+    {path:'/register', component: RegisterAccount},
+    {path:'/edit',component: Edit}
 ]
 
 const router = new VueRouter({ routes })
 
 
 const app = new Vue({
-    el: '#app',
     vuetify: new Vuetify(),
     router,
     store,
-    data: {
-        drawer: null
-    },
-    methods: {
-    },
     created() {
         this.$store.commit('loadTokenAndUserFromSession');
+    },
+    methods: {
+        homePage: function() {
+            this.$router.push('/')
+        },
+        loginAttempt: function() {
+            this.$router.push('/login')
+        },
+        logout: function(){
+            axios.post("api/logout")
+                .then(response => {
+                    this.$store.commit("clearUserAndToken");
+                    this.$router.push('/')
+                })
+                .catch(error => {
+                    this.$store.commit("clearUserAndToken");
+                    console.log(error);
+                });
+        },
+        registerAccount: function() {
+            this.$router.push('/register')
+        }
     }
-});
-
+}).$mount("#app");

@@ -1,14 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    status: '',
-    user : null,
-    token:""
+    token:"",
+    user: null,
+    status: ""
   },
   mutations: {
     clearUserAndToken: state => {
@@ -59,4 +58,4 @@ export default new Vuex.Store({
   getters : {
 
   }
-})
+});
