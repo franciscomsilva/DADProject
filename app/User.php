@@ -47,4 +47,12 @@ class User extends Authenticatable
         return $this->hasOne(Wallet::class, 'id');
     }
 
+     /**
+     * Get the movements records associated with the user.
+     */
+    public function movements()
+    {
+        return $this->hasMany(Movement::class, 'wallet_id');
+    }
+
 }

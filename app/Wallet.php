@@ -18,4 +18,12 @@ class Wallet extends Model
     {
         return $this->belongsTo(User::class, 'id');
     }
+
+     /**
+     * Get the movements records associated with the wallet.
+     */
+    public function movements()
+    {
+        return $this->hasMany(Movement::class, 'id');
+    }
 }

@@ -9,32 +9,70 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 import VueRouter from 'vue-router'
-import Vuetify from 'vuetify'
-import Vuex from 'vuex'
-import Application from './components/app'
-
 Vue.use(VueRouter)
+import Vuetify from 'vuetify'
 Vue.use(Vuetify)
+import Vuex from 'vuex'
 Vue.use(Vuex)
 
+
+import store from "./store";
+import HomePage from './components/home'
+import Login from './components/login'
+import RegisterAccount from './components/register'
+import Edit from './components/edit'
+import ListMovements from './components/movements/ListComponent'
+import CreateMovements from './components/movements/CreateComponent'
+
+
+
 const routes = [
-    {path:'/', component:Application},
+    {path:'/', redirect: '/home'},
+    {path:'/home', component: HomePage},
+    {path:'/login', component: Login},
+    {path:'/register', component: RegisterAccount},
+    {path:'/edit',component: Edit},
+    {path:'/movements',component: ListMovements},
+    {path:'/movements/create',component: CreateMovements}
 ]
 
 const router = new VueRouter({ routes })
 
 
 const app = new Vue({
-    el: '#app',
     vuetify: new Vuetify(),
     router,
-    data: {
-        drawer: null
+    store,
+    created() {
+        this.$store.commit('loadTokenAndUserFromSession');
     },
     methods: {
-    },
-    mounted() {
-        
-    }
-});
+        homePage: function() {
+            this.$router.push('/')
+        },
+        loginAttempt: function() {
+            this.$router.push('/login')
+        },
+        logout: function(){
+            axios.post("api/logout")
+                .then(response => {
+                    this.$store.commit("clearUserAndToken");
+                    this.$router.push('/')
+                })
+                .catch(error => {
+                    this.$store.commit("clearUserAndToken");
+                    console.log(error);
+                });
+        },
+        registerAccount: function() {
+            this.$router.push('/register')
+        },
+        createMovements: function(){
+            this.$router.push('/registerIncome')
+        },
+        listMovements: function(){
+            this.$router.push('/movements')
+        }
 
+    }
+}).$mount("#app");

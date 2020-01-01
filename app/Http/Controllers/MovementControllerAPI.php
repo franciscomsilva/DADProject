@@ -4,6 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\User;
+use App\Wallet;
+use App\Movement;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\File;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
+
 class MovementControllerAPI extends Controller
 {
     /**
@@ -34,8 +43,36 @@ class MovementControllerAPI extends Controller
      */
     public function store(Request $request)
     {
-        //
         
+        $request->validate([
+            'wallet_id' => 'required',
+            'type' => 'required|in:e,i', 
+            'transfer' =>'required|in:0,1',
+            'transfer_movement_id'=>'nullable',
+            'transfer_wallet_id'=>'nullable',
+            'type_payment'=>'nullable|in:bt,c,mb',
+            'category_id'=>'nullable',
+            'iban'=>'nullable|required_if:type_payment,bt|string|min:25|regex:/^[A-Z]{2}[0-9]{23}$/',
+            'mb_entity_code'=>'nullable|digits:5|regex:/^[0-9]{9}+$/',
+            'mb_payment_reference'=>'nullable|digits:9|regex:/^[0-9]{9}+$/',
+            'description'=>'nullable|string',
+            'source_description'=>'nullable|string',
+            'value'=>'required'
+        ]);
+
+        $movement = new Movement();
+        
+        $movement->fill($request->all());
+        $user_wallet = $movement->wallet;
+        $movement->start_balance  = $user_wallet->balance;
+        
+        $movement->end_balance = $user_wallet->balance + $movement->value;
+        $movement->date = now();
+        $movement->save();        
+            
+        $movement->wallet()->update(['balance'=> $movement->end_balance]);
+
+        return $movement;
     }
 
     /**
