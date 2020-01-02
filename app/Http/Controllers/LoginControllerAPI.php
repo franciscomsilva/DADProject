@@ -15,6 +15,7 @@ class LoginControllerAPI extends Controller
     public function login(Request $request)
     {
         $http = new \GuzzleHttp\Client;
+
         $response = $http->post(YOUR_SERVER_URL.'/oauth/token', [
             'form_params' => [
             'grant_type' => 'password',

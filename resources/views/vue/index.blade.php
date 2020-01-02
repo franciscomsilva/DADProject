@@ -64,7 +64,7 @@
 				<v-list-item-icon>
 					<v-icon>mdi-account-multiple</v-icon>
 			    </v-list-item-icon>
-			    <v-list-item-title>Movimentos</v-list-item-title>
+			    <v-list-item-title v-on:click.prevent="listMovements()">Movimentos</v-list-item-title>
 			</v-list-item>
 		</v-list>
 

@@ -13,20 +13,43 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Requstoreest $request) {
     return $request->user();
 
 });
 
+//Login
 Route::post('login', 'LoginControllerAPI@login')->name('login');
-Route::post('register', 'UserControllerAPI@store')->name('register');
 Route::middleware('auth:api')->post('logout','LoginControllerAPI@logout');
-Route::get('users','UserControllerAPI@index')->name('users')->middleware('auth:api');
+
+
+
+//Movements
+Route::middleware('auth:api')->post('registerMovement', 'MovementControllerAPI@store')->name('registerMovement');
+Route::middleware('auth:api')->get('users/movements','UserMovementsControllerAPI@index');
+
+
+//Wallets
+Route::middleware('auth:api')->get('wallets/{wallet}', 'WalletControllerAPI@show');
 Route::get('wallets','WalletControllerAPI@index')->name('wallets');
 Route::get('walletCount', 'WalletControllerAPI@getWalletCount')->name('walletCount');
+
+//Categories
+Route::middleware('auth:api')->get('categories', 'CategoryControllerAPI@index');
+Route::middleware('auth:api')->get('categories/incomeCategories', 'CategoryControllerAPI@showIncomeCategories');
+Route::middleware('auth:api')->get('categories/debitCategories', 'CategoryControllerAPI@showDebitCategories');
+
+
+
+//User
+Route::post('register', 'UserControllerAPI@store')->name('register');
+Route::get('users','UserControllerAPI@index')->name('users')->middleware('auth:api');
 Route::middleware('auth:api')->get('users/me', 'UserControllerAPI@myProfile');
+Route::middleware('auth:api')->get('users', 'UserControllerAPI@index');
+Route::middleware('auth:api')->get('users/platformUsers', 'UserControllerAPI@indexPlatformUsers');
 Route::get('users/{id}', 'UserControllerAPI@show');
 Route::put('users/{id}','UserControllerAPI@update');
+
 
 
 

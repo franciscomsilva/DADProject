@@ -21,13 +21,20 @@ import HomePage from './components/home'
 import Login from './components/login'
 import RegisterAccount from './components/register'
 import Edit from './components/edit'
+import ListMovements from './components/movements/ListComponent'
+import CreateMovements from './components/movements/CreateComponent'
+
+
 
 const routes = [
     {path:'/', redirect: '/home'},
     {path:'/home', component: HomePage},
     {path:'/login', component: Login},
     {path:'/register', component: RegisterAccount},
-    {path:'/edit',component: Edit}
+    {path:'/edit',component: Edit},
+    {path:'/movements',component: ListMovements},
+    {path:'/movements/create',component: CreateMovements}
+    
 ]
 
 const router = new VueRouter({ routes })
@@ -60,6 +67,13 @@ const app = new Vue({
         },
         registerAccount: function() {
             this.$router.push('/register')
+        },
+        createMovements: function(){
+            this.$router.push('/registerIncome')
+        },
+        listMovements: function(){
+            this.$router.push('/movements')
         }
+
     }
 }).$mount("#app");

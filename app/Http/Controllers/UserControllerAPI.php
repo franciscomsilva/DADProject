@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Wallet;
+use App\Movement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\File;
@@ -28,6 +29,13 @@ class UserControllerAPI extends Controller
     public function show($id)
     {
         return new UserResource(User::find($id));
+    }
+
+    public function indexPlatformUsers()
+    {
+        $users = User::where('type','=','u')->get();
+
+        return response()->json($users);
     }
 
     public function update(Request $request, $id)
@@ -78,8 +86,8 @@ class UserControllerAPI extends Controller
         return response()->json(new UserResource($user), 201);
     }
 
-       public function myProfile(Request $request)
-            {
-                return new UserResource($request->user());
-        }
+    public function myProfile(Request $request)
+    {
+        return new UserResource($request->user());
+    }
 }
