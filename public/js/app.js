@@ -2325,6 +2325,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2332,16 +2377,21 @@ __webpack_require__.r(__webpack_exports__);
         wallet_id: null,
 
         /* user id */
-        type: "i",
-        transfer: 0,
+        type: null,
+        transfer: false,
+        transfer_movement_id: null,
+        transfer_wallet_id: null,
         type_payment: null,
         category_id: null,
         iban: null,
+        mb_entity_code: null,
+        mb_payment_reference: null,
         description: null,
         source_description: null,
         value: null
       },
-      categories: [],
+      incomeCategories: [],
+      debitCategories: [],
       users: [],
       wallet: [],
       rules: {
@@ -2355,33 +2405,49 @@ __webpack_require__.r(__webpack_exports__);
         iban: function iban(value) {
           var pattern = /^[A-Z]{2}[0-9]{23}$/;
           return pattern.test(value) || 'Must contain 2 letters and 23 digits';
+        },
+        mb_entity_code: function mb_entity_code(value) {
+          var pattern = /^[0-9]{5}$/;
+          return pattern.test(value) || 'Must contain 5 digits';
+        },
+        mb_payment_reference: function mb_payment_reference(value) {
+          var pattern = /^[0-9]{9}$/;
+          return pattern.test(value) || 'Must contain 9 digits';
         }
       },
-      payment: [{
+      income_payment_types: [{
         text: 'Cash',
         value: 'c'
       }, {
         text: 'Bank Transfer',
         value: 'bt'
       }],
+      expense_payment_types: [{
+        text: 'Bank Transfer',
+        value: 'bt'
+      }, {
+        text: 'MB payment',
+        value: 'mb'
+      }],
       hasAlert: null
     };
   },
   created: function created() {
-    this.getCategories();
+    this.getIncomeCategories();
+    this.getDebitCategories();
     this.getUsers();
   },
   methods: {
-    getCategories: function getCategories() {
+    getIncomeCategories: function getIncomeCategories() {
       var _this = this;
 
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getCategories$(_context) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getIncomeCategories$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/categories/incomeCategories").then(function (response) {
-                _this.categories = response.data;
+                _this.incomeCategories = response.data;
               })["catch"](function (error) {
                 console.log(error);
               }));
@@ -2393,16 +2459,16 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    getUsers: function getUsers() {
+    getDebitCategories: function getDebitCategories() {
       var _this2 = this;
 
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUsers$(_context2) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getDebitCategories$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users/platformUsers").then(function (response) {
-                _this2.users = response.data;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/categories/debitCategories").then(function (response) {
+                _this2.debitCategories = response.data;
               })["catch"](function (error) {
                 console.log(error);
               }));
@@ -2414,34 +2480,97 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    registerIncome: function registerIncome() {
+    getUsers: function getUsers() {
       var _this3 = this;
 
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function registerIncome$(_context3) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUsers$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              this.hasAlert = false;
-
-              if (this.$refs.form.validate()) {
-                _context3.next = 3;
-                break;
-              }
-
-              return _context3.abrupt("return");
-
-            case 3:
-              _context3.next = 5;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/registerIncome', this.form).then(function (response) {
-                _this3.$router.push('/movements');
+              _context3.next = 2;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users/platformUsers").then(function (response) {
+                _this3.users = response.data;
               })["catch"](function (error) {
-                _this3.hasAlert = true;
                 console.log(error);
               }));
 
-            case 5:
+            case 2:
             case "end":
               return _context3.stop();
+          }
+        }
+      });
+    },
+    registerExpense: function registerExpense() {
+      var _this4 = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function registerExpense$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              this.form.type = 'e'; //this.form.wallet_id = user_id;
+
+              this.hasAlert = false;
+              this.form.transfer_wallet_id = this.form.wallet_id;
+              this.form.wallet_id = null;
+
+              if (this.form.transfer === true) {
+                this.form.transfer = 1;
+              }
+
+              if (this.$refs.form.validate()) {
+                _context4.next = 7;
+                break;
+              }
+
+              return _context4.abrupt("return");
+
+            case 7:
+              _context4.next = 9;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/registerMovement', this.form).then(function (response) {
+                _this4.$router.push('/movements');
+              })["catch"](function (error) {
+                _this4.hasAlert = true;
+                console.log(error);
+              }));
+
+            case 9:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, null, this);
+    },
+    registerIncome: function registerIncome() {
+      var _this5 = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function registerIncome$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              this.form.transfer = 0;
+              this.form.type = 'i';
+              this.hasAlert = false;
+
+              if (this.$refs.form.validate()) {
+                _context5.next = 5;
+                break;
+              }
+
+              return _context5.abrupt("return");
+
+            case 5:
+              _context5.next = 7;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/registerMovement', this.form).then(function (response) {
+                _this5.$router.push('/movements');
+              })["catch"](function (error) {
+                _this5.hasAlert = true;
+                console.log(error);
+              }));
+
+            case 7:
+            case "end":
+              return _context5.stop();
           }
         }
       }, null, this);
@@ -2579,8 +2708,8 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    registerIncome: function registerIncome() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function registerIncome$(_context2) {
+    registerMovement: function registerMovement() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function registerMovement$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
@@ -2592,17 +2721,6 @@ __webpack_require__.r(__webpack_exports__);
           }
         }
       }, null, this);
-    },
-    createMovement: function createMovement() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function createMovement$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      });
     }
   }
 });
@@ -21696,7 +21814,7 @@ var render = function() {
                     "v-layout",
                     { attrs: { "align-center": "", "justify-center": "" } },
                     [
-                      _vm.$store.state.user.type === "o"
+                      _vm.$store.state.user
                         ? _c(
                             "v-flex",
                             { attrs: { xs12: "", sm8: "", md8: "" } },
@@ -21716,7 +21834,7 @@ var render = function() {
                                     },
                                     [
                                       _c("v-toolbar-title", [
-                                        _vm._v("Register Income")
+                                        _vm._v("Register New Movement")
                                       ]),
                                       _vm._v(" "),
                                       _c("v-spacer"),
@@ -21767,34 +21885,188 @@ var render = function() {
                                         "v-form",
                                         { ref: "form" },
                                         [
-                                          _c(
-                                            "v-row",
-                                            {
-                                              staticClass: "d-flex",
-                                              attrs: { cols: "12", sm: "6" }
-                                            },
-                                            [
-                                              _c("v-select", {
-                                                attrs: {
-                                                  rules: [_vm.rules.required],
-                                                  items: _vm.payment
+                                          _vm.$store.state.user.type === "o" ||
+                                          _vm.$store.state.user.type === "a"
+                                            ? _c(
+                                                "v-col",
+                                                {
+                                                  staticClass: "d-flex",
+                                                  attrs: { cols: "12", sm: "6" }
                                                 },
-                                                model: {
-                                                  value: _vm.form.type_payment,
-                                                  callback: function($$v) {
-                                                    _vm.$set(
-                                                      _vm.form,
-                                                      "type_payment",
-                                                      $$v
-                                                    )
-                                                  },
-                                                  expression:
-                                                    "form.type_payment"
-                                                }
-                                              })
-                                            ],
-                                            1
-                                          ),
+                                                [
+                                                  _c("v-select", {
+                                                    attrs: {
+                                                      rules: [
+                                                        _vm.rules.required
+                                                      ],
+                                                      items:
+                                                        _vm.income_payment_types,
+                                                      label: "Type of Payment"
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.form.type_payment,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.form,
+                                                          "type_payment",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "form.type_payment"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          _vm.$store.state.user.type === "u"
+                                            ? _c(
+                                                "v-col",
+                                                {
+                                                  staticClass: "d-flex",
+                                                  attrs: { cols: "12", sm: "6" }
+                                                },
+                                                [
+                                                  _c("checkbox", {
+                                                    attrs: {
+                                                      label: "Transfer"
+                                                    },
+                                                    model: {
+                                                      value: _vm.form.transfer,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.form,
+                                                          "transfer",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "form.transfer"
+                                                    }
+                                                  }),
+                                                  _vm._v(" "),
+                                                  _c("input", {
+                                                    directives: [
+                                                      {
+                                                        name: "model",
+                                                        rawName: "v-model",
+                                                        value:
+                                                          _vm.form.transfer,
+                                                        expression:
+                                                          "form.transfer"
+                                                      }
+                                                    ],
+                                                    attrs: {
+                                                      type: "checkbox",
+                                                      name: "Transfer",
+                                                      value: "1"
+                                                    },
+                                                    domProps: {
+                                                      checked: Array.isArray(
+                                                        _vm.form.transfer
+                                                      )
+                                                        ? _vm._i(
+                                                            _vm.form.transfer,
+                                                            "1"
+                                                          ) > -1
+                                                        : _vm.form.transfer
+                                                    },
+                                                    on: {
+                                                      change: function($event) {
+                                                        var $$a =
+                                                            _vm.form.transfer,
+                                                          $$el = $event.target,
+                                                          $$c = $$el.checked
+                                                            ? true
+                                                            : false
+                                                        if (
+                                                          Array.isArray($$a)
+                                                        ) {
+                                                          var $$v = "1",
+                                                            $$i = _vm._i(
+                                                              $$a,
+                                                              $$v
+                                                            )
+                                                          if ($$el.checked) {
+                                                            $$i < 0 &&
+                                                              _vm.$set(
+                                                                _vm.form,
+                                                                "transfer",
+                                                                $$a.concat([
+                                                                  $$v
+                                                                ])
+                                                              )
+                                                          } else {
+                                                            $$i > -1 &&
+                                                              _vm.$set(
+                                                                _vm.form,
+                                                                "transfer",
+                                                                $$a
+                                                                  .slice(0, $$i)
+                                                                  .concat(
+                                                                    $$a.slice(
+                                                                      $$i + 1
+                                                                    )
+                                                                  )
+                                                              )
+                                                          }
+                                                        } else {
+                                                          _vm.$set(
+                                                            _vm.form,
+                                                            "transfer",
+                                                            $$c
+                                                          )
+                                                        }
+                                                      }
+                                                    }
+                                                  }),
+                                                  _vm._v(
+                                                    "Transfer\n                  "
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          _vm.$store.state.user.type === "u" &&
+                                          _vm.form.transfer == false
+                                            ? _c(
+                                                "v-col",
+                                                {
+                                                  staticClass: "d-flex",
+                                                  attrs: { cols: "12", sm: "6" }
+                                                },
+                                                [
+                                                  _c("v-select", {
+                                                    attrs: {
+                                                      rules: [
+                                                        _vm.rules.required
+                                                      ],
+                                                      items:
+                                                        _vm.expense_payment_types,
+                                                      label: "Type of Payment"
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.form.type_payment,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.form,
+                                                          "type_payment",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "form.type_payment"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            : _vm._e(),
                                           _vm._v(" "),
                                           _vm.form.type_payment === "bt"
                                             ? _c(
@@ -21838,42 +22110,141 @@ var render = function() {
                                               )
                                             : _vm._e(),
                                           _vm._v(" "),
+                                          _vm.form.type_payment === "mb"
+                                            ? _c(
+                                                "v-row",
+                                                [
+                                                  _c(
+                                                    "v-col",
+                                                    { attrs: { cols: "8" } },
+                                                    [
+                                                      _c("v-text-field", {
+                                                        attrs: {
+                                                          id: "mb_entity_code",
+                                                          label:
+                                                            "MB entity code",
+                                                          hint:
+                                                            "Insert MB entity code, 5 digits",
+                                                          rules: [
+                                                            _vm.rules.required,
+                                                            _vm.rules
+                                                              .mb_entity_code
+                                                          ]
+                                                        },
+                                                        model: {
+                                                          value:
+                                                            _vm.form
+                                                              .mb_entity_code,
+                                                          callback: function(
+                                                            $$v
+                                                          ) {
+                                                            _vm.$set(
+                                                              _vm.form,
+                                                              "mb_entity_code",
+                                                              $$v
+                                                            )
+                                                          },
+                                                          expression:
+                                                            "form.mb_entity_code"
+                                                        }
+                                                      })
+                                                    ],
+                                                    1
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-col",
+                                                    { attrs: { cols: "8" } },
+                                                    [
+                                                      _c("v-text-field", {
+                                                        attrs: {
+                                                          id:
+                                                            "mb_payment_reference",
+                                                          label:
+                                                            "MB payment reference",
+                                                          hint:
+                                                            "Insert MB payment reference, 9 digits",
+                                                          rules: [
+                                                            _vm.rules.required,
+                                                            _vm.rules
+                                                              .mb_payment_reference
+                                                          ]
+                                                        },
+                                                        model: {
+                                                          value:
+                                                            _vm.form
+                                                              .mb_payment_reference,
+                                                          callback: function(
+                                                            $$v
+                                                          ) {
+                                                            _vm.$set(
+                                                              _vm.form,
+                                                              "mb_payment_reference",
+                                                              $$v
+                                                            )
+                                                          },
+                                                          expression:
+                                                            "form.mb_payment_reference"
+                                                        }
+                                                      })
+                                                    ],
+                                                    1
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            : _vm._e(),
+                                          _vm._v(" "),
                                           _c(
                                             "v-row",
                                             [
-                                              _c(
-                                                "v-col",
-                                                {
-                                                  staticClass: "d-flex",
-                                                  attrs: { cols: "12", sm: "6" }
-                                                },
-                                                [
-                                                  _c("v-select", {
-                                                    attrs: {
-                                                      filled: "",
-                                                      rules: [
-                                                        _vm.rules.required
-                                                      ],
-                                                      items: _vm.users,
-                                                      "item-text": "name",
-                                                      "item-value": "id"
+                                              _vm.$store.state.user.type ===
+                                                "o" ||
+                                              _vm.$store.state.user.type ===
+                                                "a" ||
+                                              (_vm.$store.state.user.type ===
+                                                "u" &&
+                                                _vm.form.transfer == true)
+                                                ? _c(
+                                                    "v-col",
+                                                    {
+                                                      staticClass: "d-flex",
+                                                      attrs: {
+                                                        cols: "12",
+                                                        sm: "6"
+                                                      }
                                                     },
-                                                    model: {
-                                                      value: _vm.form.wallet_id,
-                                                      callback: function($$v) {
-                                                        _vm.$set(
-                                                          _vm.form,
-                                                          "wallet_id",
-                                                          $$v
-                                                        )
-                                                      },
-                                                      expression:
-                                                        "form.wallet_id"
-                                                    }
-                                                  })
-                                                ],
-                                                1
-                                              ),
+                                                    [
+                                                      _c("v-select", {
+                                                        attrs: {
+                                                          rules: [
+                                                            _vm.rules.required
+                                                          ],
+                                                          items: _vm.users,
+                                                          "item-text": "name",
+                                                          "item-value": "id",
+                                                          label: "Users"
+                                                        },
+                                                        model: {
+                                                          value:
+                                                            _vm.form.wallet_id,
+                                                          callback: function(
+                                                            $$v
+                                                          ) {
+                                                            _vm.$set(
+                                                              _vm.form,
+                                                              "wallet_id",
+                                                              $$v
+                                                            )
+                                                          },
+                                                          expression:
+                                                            "form.wallet_id"
+                                                        }
+                                                      })
+                                                    ],
+                                                    1
+                                                  )
+                                                : _vm._e(),
                                               _vm._v(" "),
                                               _c(
                                                 "v-col",
@@ -21884,13 +22255,14 @@ var render = function() {
                                                 [
                                                   _c("v-select", {
                                                     attrs: {
-                                                      filled: "",
                                                       rules: [
                                                         _vm.rules.required
                                                       ],
-                                                      items: _vm.categories,
+                                                      items:
+                                                        _vm.incomeCategories,
                                                       "item-text": "name",
-                                                      "item-value": "id"
+                                                      "item-value": "id",
+                                                      label: "Category"
                                                     },
                                                     model: {
                                                       value:
@@ -21948,42 +22320,45 @@ var render = function() {
                                                 1
                                               ),
                                               _vm._v(" "),
-                                              _c(
-                                                "v-col",
-                                                {
-                                                  attrs: {
-                                                    cols: "12",
-                                                    sm: "6",
-                                                    md: "3"
-                                                  }
-                                                },
-                                                [
-                                                  _c("v-text-field", {
-                                                    attrs: {
-                                                      rules: [
-                                                        _vm.rules.required
-                                                      ],
-                                                      label:
-                                                        "Source description"
+                                              _vm.$store.state.user.type ===
+                                                "o" ||
+                                              _vm.$store.state.user.type === "a"
+                                                ? _c(
+                                                    "v-col",
+                                                    {
+                                                      attrs: {
+                                                        cols: "12",
+                                                        sm: "6",
+                                                        md: "3"
+                                                      }
                                                     },
-                                                    model: {
-                                                      value:
-                                                        _vm.form
-                                                          .source_description,
-                                                      callback: function($$v) {
-                                                        _vm.$set(
-                                                          _vm.form,
-                                                          "source_description",
-                                                          $$v
-                                                        )
-                                                      },
-                                                      expression:
-                                                        "form.source_description"
-                                                    }
-                                                  })
-                                                ],
-                                                1
-                                              )
+                                                    [
+                                                      _c("v-text-field", {
+                                                        attrs: {
+                                                          label:
+                                                            "Source description"
+                                                        },
+                                                        model: {
+                                                          value:
+                                                            _vm.form
+                                                              .source_description,
+                                                          callback: function(
+                                                            $$v
+                                                          ) {
+                                                            _vm.$set(
+                                                              _vm.form,
+                                                              "source_description",
+                                                              $$v
+                                                            )
+                                                          },
+                                                          expression:
+                                                            "form.source_description"
+                                                        }
+                                                      })
+                                                    ],
+                                                    1
+                                                  )
+                                                : _vm._e()
                                             ],
                                             1
                                           ),
@@ -22032,27 +22407,54 @@ var render = function() {
                                     1
                                   ),
                                   _vm._v(" "),
-                                  _c(
-                                    "v-card-actions",
-                                    [
-                                      _c("v-spacer"),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: { color: "primary" },
-                                          on: {
-                                            click: function($event) {
-                                              $event.preventDefault()
-                                              return _vm.registerIncome()
-                                            }
-                                          }
-                                        },
-                                        [_vm._v("Register Income")]
+                                  _vm.$store.state.user.type === "o" ||
+                                  _vm.$store.state.user.type === "a"
+                                    ? _c(
+                                        "v-card-actions",
+                                        [
+                                          _c("v-spacer"),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              attrs: { color: "primary" },
+                                              on: {
+                                                click: function($event) {
+                                                  $event.preventDefault()
+                                                  return _vm.registerIncome()
+                                                }
+                                              }
+                                            },
+                                            [_vm._v("Register New Movement")]
+                                          )
+                                        ],
+                                        1
                                       )
-                                    ],
-                                    1
-                                  )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.$store.state.user.type === "u"
+                                    ? _c(
+                                        "v-card-actions",
+                                        [
+                                          _c("v-spacer"),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              attrs: { color: "primary" },
+                                              on: {
+                                                click: function($event) {
+                                                  $event.preventDefault()
+                                                  return _vm.registerExpense()
+                                                }
+                                              }
+                                            },
+                                            [_vm._v("Register New Movement")]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    : _vm._e()
                                 ],
                                 1
                               )
@@ -22060,9 +22462,7 @@ var render = function() {
                             1
                           )
                         : _c("v-col", [
-                            _vm._v(
-                              "\n            Olny for Operators\n          "
-                            )
+                            _vm._v("\n            Não vai dar\n          ")
                           ])
                     ],
                     1
@@ -22155,7 +22555,8 @@ var render = function() {
                             "v-col",
                             { attrs: { cols: "12" } },
                             [
-                              _vm.$store.state.user.type === "o"
+                              _vm.$store.state.user.type === "o" ||
+                              _vm.$store.state.user.type === "a"
                                 ? _c(
                                     "v-btn",
                                     {
@@ -22163,7 +22564,7 @@ var render = function() {
                                       on: {
                                         click: function($event) {
                                           $event.preventDefault()
-                                          return _vm.registerIncome()
+                                          return _vm.registerMovement()
                                         }
                                       }
                                     },
@@ -22171,19 +22572,21 @@ var render = function() {
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
-                              _c(
-                                "v-btn",
-                                {
-                                  attrs: { color: "primary" },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.createMovement()
-                                    }
-                                  }
-                                },
-                                [_vm._v("Create New Movement")]
-                              )
+                              _vm.$store.state.user.type === "u"
+                                ? _c(
+                                    "v-btn",
+                                    {
+                                      attrs: { color: "primary" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.registerMovement()
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Create New Expense")]
+                                  )
+                                : _vm._e()
                             ],
                             1
                           ),

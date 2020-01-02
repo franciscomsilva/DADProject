@@ -26,6 +26,12 @@ class CategoryControllerAPI extends Controller
         return response()->json($categories);
     }
 
+    public function showDebitCategories()
+    {
+        $categories = Category::where('type','=','e')->get();
+
+        return response()->json($categories);
+    }
     /**
      * Store a newly created resource in storage.
      *

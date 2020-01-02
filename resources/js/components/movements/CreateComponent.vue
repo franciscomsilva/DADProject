@@ -4,10 +4,10 @@
       <v-content>
         <v-container  fluid fill-height fill-width >
           <v-layout align-center justify-center>
-            <v-flex v-if="$store.state.user.type === 'o'" xs12 sm8 md8>
+            <v-flex v-if="$store.state.user"  xs12 sm8 md8>
               <v-card class="elevation-12">
                 <v-toolbar color="primary" dark flat>
-                  <v-toolbar-title>Register Income</v-toolbar-title>
+                  <v-toolbar-title>Register New Movement</v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
@@ -20,14 +20,33 @@
                 </v-toolbar>
                 <v-card-text>
                   <v-form ref="form" >
-                    <v-row class="d-flex" cols="12" sm="6" >
+                    <v-col v-if="$store.state.user.type === 'o' || $store.state.user.type === 'a'" class="d-flex" cols="12" sm="6" >
                        <v-select 
                           :rules="[rules.required]" 
                           v-model="form.type_payment" 
-                          :items="payment"
+                          :items="income_payment_types"
+                          label="Type of Payment"
                           >
                       </v-select>
-                    </v-row>
+                    </v-col>
+
+                    <v-col v-if="$store.state.user.type === 'u'" class="d-flex" cols="12" sm="6" >
+                      <checkbox
+                        v-model="form.transfer"
+                        label="Transfer"
+                      ></checkbox>
+                      <input type="checkbox" name="Transfer" value="1" v-model="form.transfer">Transfer
+                    </v-col>
+
+                    <v-col v-if="$store.state.user.type === 'u' && form.transfer == false" class="d-flex" cols="12" sm="6" >
+                       <v-select 
+                          :rules="[rules.required]" 
+                          v-model="form.type_payment" 
+                          :items="expense_payment_types"
+                          label="Type of Payment"
+                          >
+                      </v-select>
+                    </v-col>
                     
                     <v-row v-if="form.type_payment ==='bt'">
                       <v-col cols="8">
@@ -40,29 +59,51 @@
                         ></v-text-field>
                       </v-col>
                     </v-row>
+                    <v-row v-if="form.type_payment ==='mb'">
+                      <v-col cols="8">
+                        <v-text-field
+                          id='mb_entity_code'
+                          label="MB entity code"
+                          v-model="form.mb_entity_code"
+                          hint="Insert MB entity code, 5 digits"
+                          :rules="[rules.required,rules.mb_entity_code]"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="8">
+                        <v-text-field
+                          id='mb_payment_reference'
+                          label="MB payment reference"
+                          v-model="form.mb_payment_reference"
+                          hint="Insert MB payment reference, 9 digits"
+                          :rules="[rules.required,rules.mb_payment_reference]"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
 
                     <v-row>
-                      <v-col class="d-flex" cols="12" sm="6" >
+                      <v-col v-if="($store.state.user.type === 'o' || $store.state.user.type === 'a') || ($store.state.user.type === 'u' && form.transfer == true) " class="d-flex" cols="12" sm="6" >
 
                          <v-select 
-                         filled 
+                          
                          :rules="[rules.required]" 
                          v-model="form.wallet_id" 
                          :items="users"
                          item-text="name"
-                         item-value="id">
+                         item-value="id"
+                         label="Users">
                         </v-select>
 
                       </v-col>
                       <v-col class="d-flex" cols="12" sm="6">
 
                         <v-select 
-                         filled 
+                          
                          :rules="[rules.required]" 
                          v-model="form.category_id" 
-                         :items="categories"
+                         :items="incomeCategories"
                          item-text="name"
-                         item-value="id">
+                         item-value="id"
+                         label="Category">
                         </v-select>
 
                       </v-col>
@@ -72,8 +113,8 @@
                         <v-text-field v-model="form.description"
                               label="Description" ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="6" md="3">
-                        <v-text-field :rules="[rules.required]" v-model="form.source_description"
+                      <v-col v-if="$store.state.user.type === 'o' || $store.state.user.type === 'a'" cols="12" sm="6" md="3">
+                        <v-text-field v-model="form.source_description"
                               label="Source description"
                         ></v-text-field>
                       </v-col>
@@ -92,14 +133,18 @@
                     </v-row>
                   </v-form>
                 </v-card-text>
-                <v-card-actions>
+                <v-card-actions v-if="$store.state.user.type === 'o' || $store.state.user.type === 'a'">
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" v-on:click.prevent="registerIncome()" >Register Income</v-btn>
+                  <v-btn color="primary" v-on:click.prevent="registerIncome()" >Register New Movement</v-btn>
+                </v-card-actions>
+                <v-card-actions v-if="$store.state.user.type === 'u'">
+                  <v-spacer></v-spacer>
+                  <v-btn color="primary" v-on:click.prevent="registerExpense()" >Register New Movement</v-btn>
                 </v-card-actions>
               </v-card>
             </v-flex>
             <v-col v-else>
-              Olny for Operators
+              Não vai dar
             </v-col>
         </v-layout>
       </v-container>
@@ -118,16 +163,21 @@ export default {
         return  {
             form: {
                 wallet_id:null, /* user id */
-                type:"i",
-                transfer:0,
+                type:null,
+                transfer:false,
+                transfer_movement_id:null,
+                transfer_wallet_id:null,
                 type_payment:null,
                 category_id:null,
                 iban:null,
+                mb_entity_code:null,
+                mb_payment_reference:null,
                 description:null,
                 source_description:null,
-                value:null,
+                value:null        
             },
-            categories: [],
+            incomeCategories: [],
+            debitCategories: [],
             users: [],
             wallet: [],
             rules: {
@@ -139,32 +189,56 @@ export default {
                 iban: value => {
                   const pattern = /^[A-Z]{2}[0-9]{23}$/
                   return pattern.test(value) || 'Must contain 2 letters and 23 digits'
+                },
+                mb_entity_code: value => {
+                  const pattern = /^[0-9]{5}$/
+                  return pattern.test(value) || 'Must contain 5 digits'
+                },
+                mb_payment_reference: value => {
+                  const pattern = /^[0-9]{9}$/
+                  return pattern.test(value) || 'Must contain 9 digits'
                 }
+
+                
             },
-            payment: [{text: 'Cash', value: 'c'},{text: 'Bank Transfer', value:'bt'}],
+            income_payment_types: [{text: 'Cash', value: 'c'},{text: 'Bank Transfer', value:'bt'}],
+            expense_payment_types: [{text: 'Bank Transfer', value:'bt'},{text: 'MB payment', value: 'mb'}],
             hasAlert:null
         }
     },
 
     created() {
-      this.getCategories();
+      this.getIncomeCategories();
+      this.getDebitCategories();
       this.getUsers();
 
     },
   
     methods:{
 
-        async getCategories() {
+        async getIncomeCategories() {
 
             await axios.get("/api/categories/incomeCategories")
             .then(response => {
-                this.categories = response.data
+                this.incomeCategories = response.data
                 
             })
             .catch(error => {
                 console.log(error);
             });
         },
+
+        async getDebitCategories() {
+
+            await axios.get("/api/categories/debitCategories")
+            .then(response => {
+                this.debitCategories = response.data
+                
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        },        
 
         async getUsers() {
 
@@ -177,15 +251,39 @@ export default {
             });
         },
 
+        registerExpense: async function (){
+            this.form.type = 'e';
+            //this.form.wallet_id = user_id;
+            this.hasAlert = false;
+            this.form.transfer_wallet_id= this.form.wallet_id;
+            this.form.wallet_id=null;
+            if(this.form.transfer === true){
+              this.form.transfer = 1;
+            }
 
+            if(!this.$refs.form.validate()){
+                return;
+            }
+
+          await axios.post('api/registerMovement', this.form)
+                .then(response=>{
+                  this.$router.push('/movements')
+                }).catch(error => {
+                  this.hasAlert = true
+                  console.log(error)
+                });
+      
+        },
 
         registerIncome: async function (){
+            this.form.transfer = 0;
+            this.form.type = 'i';
             this.hasAlert = false;
             if(!this.$refs.form.validate()){
                 return;
             }
 
-          await axios.post('api/registerIncome', this.form)
+          await axios.post('api/registerMovement', this.form)
                 .then(response=>{
                   this.$router.push('/movements')
                 }).catch(error => {

@@ -34,6 +34,7 @@ const routes = [
     {path:'/edit',component: Edit},
     {path:'/movements',component: ListMovements},
     {path:'/movements/create',component: CreateMovements}
+    
 ]
 
 const router = new VueRouter({ routes })

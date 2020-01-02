@@ -25,8 +25,9 @@ Route::middleware('auth:api')->post('logout','LoginControllerAPI@logout');
 
 
 //Movements
-Route::middleware('auth:api')->post('registerIncome', 'MovementControllerAPI@store')->name('registerIncome');
+Route::middleware('auth:api')->post('registerMovement', 'MovementControllerAPI@store')->name('registerMovement');
 Route::middleware('auth:api')->get('users/movements','UserMovementsControllerAPI@index');
+
 
 //Wallets
 Route::middleware('auth:api')->get('wallets/{wallet}', 'WalletControllerAPI@show');
@@ -36,6 +37,8 @@ Route::get('walletCount', 'WalletControllerAPI@getWalletCount')->name('walletCou
 //Categories
 Route::middleware('auth:api')->get('categories', 'CategoryControllerAPI@index');
 Route::middleware('auth:api')->get('categories/incomeCategories', 'CategoryControllerAPI@showIncomeCategories');
+Route::middleware('auth:api')->get('categories/debitCategories', 'CategoryControllerAPI@showDebitCategories');
+
 
 
 //User

@@ -22,7 +22,9 @@ class MovementControllerAPI extends Controller
      */
     public function index()
     {
-        //
+        $movements = request()->all();
+
+        return response()->json($movements);
     }
 
     /**
@@ -45,16 +47,16 @@ class MovementControllerAPI extends Controller
     {
         
         $request->validate([
-            'wallet_id' => 'required',
+            'wallet_id' => 'nullable|required_if:type,i',
             'type' => 'required|in:e,i', 
-            'transfer' =>'required|in:0,1',
+            'transfer' =>'nullable',
             'transfer_movement_id'=>'nullable',
             'transfer_wallet_id'=>'nullable',
             'type_payment'=>'nullable|in:bt,c,mb',
             'category_id'=>'nullable',
             'iban'=>'nullable|required_if:type_payment,bt|string|min:25|regex:/^[A-Z]{2}[0-9]{23}$/',
-            'mb_entity_code'=>'nullable|digits:5|regex:/^[0-9]{9}+$/',
-            'mb_payment_reference'=>'nullable|digits:9|regex:/^[0-9]{9}+$/',
+            'mb_entity_code'=>'nullable|digits:5|regex:/^[0-9]{5}$/',
+            'mb_payment_reference'=>'nullable|digits:9|regex:/^[0-9]{9}$/',
             'description'=>'nullable|string',
             'source_description'=>'nullable|string',
             'value'=>'required'
@@ -62,9 +64,15 @@ class MovementControllerAPI extends Controller
 
         $movement = new Movement();
         
+        
         $movement->fill($request->all());
+        
+        if($movement->type === 'e'){
+            $movement->wallet_id = $request->user()->id;
+        }
         $user_wallet = $movement->wallet;
         $movement->start_balance  = $user_wallet->balance;
+        
         
         $movement->end_balance = $user_wallet->balance + $movement->value;
         $movement->date = now();

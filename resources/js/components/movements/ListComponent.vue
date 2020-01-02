@@ -21,8 +21,8 @@
             md11
           >
           <v-col cols="12">
-          <v-btn v-if="$store.state.user.type === 'o'" color="primary" v-on:click.prevent="registerIncome()" >Register New Income</v-btn>
-          <v-btn color="primary" v-on:click.prevent="createMovement()" >Create New Movement</v-btn>
+          <v-btn v-if="$store.state.user.type === 'o' || $store.state.user.type === 'a'" color="primary" v-on:click.prevent="registerMovement()" >Register New Income</v-btn>
+          <v-btn v-if="$store.state.user.type === 'u'" color="primary" v-on:click.prevent="registerMovement()" >Create New Expense</v-btn>
           </v-col>
             <v-data-table
                 :headers="headers"
@@ -89,22 +89,19 @@ export default {
   methods:{
       
     async getMovements() {
-
-        await axios.get("/api/users/movements")
-        .then(response => {
-            this.movements = response.data
-        })
-        .catch(error => {
-             console.log(error);
-        });
+          await axios.get("/api/users/movements")
+          .then(response => {
+              this.movements = response.data
+          })
+          .catch(error => {
+              console.log(error);
+          });
+        
     },
-    registerIncome: async function (){
+    registerMovement: async function (){
         this.$router.push('/movements/create');
 
-    },
-    createMovement: async function (){
-        
-    }        
+    }
   }
 }
 
