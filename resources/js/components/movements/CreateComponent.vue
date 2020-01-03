@@ -4,7 +4,7 @@
       <v-content>
         <v-container  fluid fill-height fill-width >
           <v-layout align-center justify-center>
-            <v-flex v-if="$store.state.user"  xs12 sm8 md8>
+            <v-flex v-if="$store.state.user && $store.state.user.active === 1"  xs12 sm8 md8>
               <v-card class="elevation-12">
                 <v-toolbar color="primary" dark flat>
                   <v-toolbar-title>Register New Movement</v-toolbar-title>
@@ -20,7 +20,7 @@
                 </v-toolbar>
                 <v-card-text>
                   <v-form ref="form" >
-                    <v-col v-if="$store.state.user.type === 'o' || $store.state.user.type === 'a'" class="d-flex" cols="12" sm="6" >
+                    <v-col v-if="($store.state.user.type === 'o' || $store.state.user.type === 'a') && $store.state.user.active === 1" class="d-flex" cols="12" sm="6" >
                        <v-select 
                           :rules="[rules.required]" 
                           v-model="form.type_payment" 
@@ -30,15 +30,14 @@
                       </v-select>
                     </v-col>
 
-                    <v-col v-if="$store.state.user.type === 'u'" class="d-flex" cols="12" sm="6" >
-                      <checkbox
+                    <v-col v-if="$store.state.user.type === 'u' && $store.state.user.active === 1" class="d-flex" cols="12" sm="6" >
+                      <v-checkbox
                         v-model="form.transfer"
                         label="Transfer"
-                      ></checkbox>
-                      <input type="checkbox" name="Transfer" value="1" v-model="form.transfer">Transfer
+                      ></v-checkbox>
                     </v-col>
 
-                    <v-col v-if="$store.state.user.type === 'u' && form.transfer == false" class="d-flex" cols="12" sm="6" >
+                    <v-col v-if="$store.state.user.type === 'u' && $store.state.user.active === 1 && form.transfer == false" class="d-flex" cols="12" sm="6" >
                        <v-select 
                           :rules="[rules.required]" 
                           v-model="form.type_payment" 
@@ -81,7 +80,7 @@
                     </v-row>
 
                     <v-row>
-                      <v-col v-if="($store.state.user.type === 'o' || $store.state.user.type === 'a') || ($store.state.user.type === 'u' && form.transfer == true) " class="d-flex" cols="12" sm="6" >
+                      <v-col v-if="(($store.state.user.type === 'o' || $store.state.user.type === 'a') || ($store.state.user.type === 'u' && form.transfer == true)) && $store.state.user.active === 1" class="d-flex" cols="12" sm="6" >
 
                          <v-select 
                           
@@ -113,7 +112,7 @@
                         <v-text-field v-model="form.description"
                               label="Description" ></v-text-field>
                       </v-col>
-                      <v-col v-if="$store.state.user.type === 'o' || $store.state.user.type === 'a'" cols="12" sm="6" md="3">
+                      <v-col v-if="($store.state.user.type === 'o' || $store.state.user.type === 'a') && $store.state.user.active === 1" cols="12" sm="6" md="3">
                         <v-text-field v-model="form.source_description"
                               label="Source description"
                         ></v-text-field>
@@ -133,11 +132,11 @@
                     </v-row>
                   </v-form>
                 </v-card-text>
-                <v-card-actions v-if="$store.state.user.type === 'o' || $store.state.user.type === 'a'">
+                <v-card-actions v-if="($store.state.user.type === 'o' || $store.state.user.type === 'a')&& $store.state.user.active === 1">
                   <v-spacer></v-spacer>
                   <v-btn color="primary" v-on:click.prevent="registerIncome()" >Register New Movement</v-btn>
                 </v-card-actions>
-                <v-card-actions v-if="$store.state.user.type === 'u'">
+                <v-card-actions v-if="$store.state.user.type === 'u' && $store.state.user.active === 1">
                   <v-spacer></v-spacer>
                   <v-btn color="primary" v-on:click.prevent="registerExpense()" >Register New Movement</v-btn>
                 </v-card-actions>

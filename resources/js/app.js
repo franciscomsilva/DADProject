@@ -6,7 +6,7 @@ require('./bootstrap');
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-
+import '@mdi/font/css/materialdesignicons.css'
 window.Vue = require('vue');
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
@@ -23,7 +23,7 @@ import RegisterAccount from './components/register'
 import Edit from './components/edit'
 import ListMovements from './components/movements/ListComponent'
 import CreateMovements from './components/movements/CreateComponent'
-
+import ListUsers from './components/users/ListUsers'
 
 
 const routes = [
@@ -33,7 +33,8 @@ const routes = [
     {path:'/register', component: RegisterAccount},
     {path:'/edit',component: Edit},
     {path:'/movements',component: ListMovements},
-    {path:'/movements/create',component: CreateMovements}
+    {path:'/movements/create',component: CreateMovements},
+    {path:'/users',component: ListUsers}
     
 ]
 
@@ -41,7 +42,11 @@ const router = new VueRouter({ routes })
 
 
 const app = new Vue({
-    vuetify: new Vuetify(),
+    vuetify: new Vuetify({
+        icons: {
+          iconfont: 'mdi',
+        },
+      }),
     router,
     store,
     created() {
@@ -73,6 +78,9 @@ const app = new Vue({
         },
         listMovements: function(){
             this.$router.push('/movements')
+        },
+        listUsers: function(){
+            this.$router.push('/users')
         }
 
     }

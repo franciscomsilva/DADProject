@@ -16,10 +16,9 @@
 	        	<v-list-item>
 	            	<v-list-item-avatar>
 		        		<!-- Guest user avatar -->
-	              		<v-img v-show="!$store.state.user" src="https://www.standingstills.com/pub/media/catalog/product/cache/75eed2686e01eb22cb4050b2f40ddf97/c/a/cad195-1-1.jpg"></v-img>
-	              		<!-- Logged in user avatar -->
-	              		<!-- TODO - place user avatar -->
-		          	</v-list-item-avatar>
+	              		<v-img v-if="!$store.state.user " src="https://www.standingstills.com/pub/media/catalog/product/cache/75eed2686e01eb22cb4050b2f40ddf97/c/a/cad195-1-1.jpg"></v-img>
+						<v-img v-else :src="'{{asset('storage/fotos')}}/' +  $store.state.user.photo"/>
+		          	</v-list-item-avatar>	
 		        </v-list-item>
 		        
 	          	<v-list-item link two-line>
@@ -81,5 +80,7 @@
 
 @endsection
 @section('pagescript')
+
 	<script src="js/app.js"></script>
+	
 @stop  

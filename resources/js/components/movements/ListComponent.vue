@@ -44,7 +44,7 @@
               :items="movements"
               :search="search"
               :sort-by="['date', 'type','category_id','transfer','value','iban','description','source_description','mb_entity_code','type_payment','start_balance','end_balance']"
-              :sort-desc="[false, true]"
+              :sort-desc="[true, true]"
               class="elevation-1"
               :footer-props="{
                 showFirstLastPage: true,
@@ -53,6 +53,7 @@
                 prevIcon: 'mdi-minus',
                 nextIcon: 'mdi-plus'
               }"
+              
             ></v-data-table>
           </v-card>
           
@@ -67,6 +68,7 @@
 </template>
 
 <script>
+import { async } from 'q';
 
 export default {
 
@@ -89,7 +91,7 @@ export default {
         },
         {text:'MB Payment Reference',value:'mb_payment_reference'       
         },
-        {text:'Description',value:'description'       
+        {text:'Description',value:'description'   
         },
         {text:'Source Description',value:'source_description'       
         },
@@ -140,6 +142,9 @@ export default {
     registerMovement: async function (){
         this.$router.push('/movements/create');
 
+    },
+    sim: async function(){
+      console.log('sim')
     }
   }
 }

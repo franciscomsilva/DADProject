@@ -84,8 +84,7 @@
 
                     ></v-text-field>
                     <v-file-input
-                            :rules="rules"
-                            accept="image/png, image/jpeg, image/bmp"
+                            v-model="photo"
                             placeholder="Pick an avatar"
                             prepend-icon="camera"
                             label="Avatar"
@@ -118,6 +117,7 @@
         selectedFile:null,
         type:'u',
         active: 1,
+        photo:null,
         rules: {
           required: value => !!value || 'Required.',
           counter: value => value == null || value.length <= 20 || 'Max 20 characters',
@@ -155,7 +155,7 @@
         formData.append('active', this.active);
         formData.append('nif', this.nif);
 
-        if(this.selectedFile) formData.append('photo', this.selectedFile);
+        if(this.photo) formData.append('photo', this.photo);
         const headers = { 'Content-Type': 'multipart/form-data'}
 
         await axios.post('api/register', formData, headers)
