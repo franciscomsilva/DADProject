@@ -2637,9 +2637,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      search: '',
       headers: [{
         text: 'Type',
         value: 'type'
@@ -2680,7 +2704,9 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Value',
         value: 'value'
       }],
-      movements: []
+      movements: [],
+      wallet: [],
+      user_wallet_id: null
     };
   },
   created: function created() {
@@ -2697,27 +2723,52 @@ __webpack_require__.r(__webpack_exports__);
               _context.next = 2;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users/movements").then(function (response) {
                 _this.movements = response.data;
+                _this.user_wallet_id = response.data[0].wallet_id;
+              })["catch"](function (error) {
+                console.log(error);
+              }));
+
+            case 2:
+              this.getUserWallet();
+
+            case 3:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, null, this);
+    },
+    getUserWallet: function getUserWallet() {
+      var _this2 = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUserWallet$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/wallets/" + this.user_wallet_id).then(function (response) {
+                _this2.wallet = response.data;
               })["catch"](function (error) {
                 console.log(error);
               }));
 
             case 2:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
-      });
+      }, null, this);
     },
     registerMovement: function registerMovement() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function registerMovement$(_context2) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function registerMovement$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
               this.$router.push('/movements/create');
 
             case 1:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
       }, null, this);
@@ -22552,6 +22603,27 @@ var render = function() {
                         },
                         [
                           _c(
+                            "v-row",
+                            { attrs: { align: "center" } },
+                            [
+                              _c("v-col", { attrs: { cols: "12" } }, [
+                                _c(
+                                  "p",
+                                  { staticClass: "subtitle-2 text-center" },
+                                  [
+                                    _vm._v(
+                                      "Balance: " +
+                                        _vm._s(this.wallet.balance) +
+                                        " € "
+                                    )
+                                  ]
+                                )
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
                             "v-col",
                             { attrs: { cols: "12" } },
                             [
@@ -22591,16 +22663,64 @@ var render = function() {
                             1
                           ),
                           _vm._v(" "),
-                          _c("v-data-table", {
-                            staticClass: "elevation-1",
-                            attrs: {
-                              headers: _vm.headers,
-                              items: _vm.movements,
-                              "sort-by": ["date", "type"],
-                              "sort-desc": [false, true],
-                              "multi-sort": ""
-                            }
-                          })
+                          _c(
+                            "v-card",
+                            [
+                              _c(
+                                "v-card-title",
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "append-icon": "search",
+                                      label: "Search",
+                                      "single-line": "",
+                                      "hide-details": ""
+                                    },
+                                    model: {
+                                      value: _vm.search,
+                                      callback: function($$v) {
+                                        _vm.search = $$v
+                                      },
+                                      expression: "search"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-data-table", {
+                                staticClass: "elevation-1",
+                                attrs: {
+                                  headers: _vm.headers,
+                                  items: _vm.movements,
+                                  search: _vm.search,
+                                  "sort-by": [
+                                    "date",
+                                    "type",
+                                    "category_id",
+                                    "transfer",
+                                    "value",
+                                    "iban",
+                                    "description",
+                                    "source_description",
+                                    "mb_entity_code",
+                                    "type_payment",
+                                    "start_balance",
+                                    "end_balance"
+                                  ],
+                                  "sort-desc": [false, true],
+                                  "footer-props": {
+                                    showFirstLastPage: true,
+                                    firstIcon: "mdi-arrow-collapse-left",
+                                    lastIcon: "mdi-arrow-collapse-right",
+                                    prevIcon: "mdi-minus",
+                                    nextIcon: "mdi-plus"
+                                  }
+                                }
+                              })
+                            ],
+                            1
+                          )
                         ],
                         1
                       )

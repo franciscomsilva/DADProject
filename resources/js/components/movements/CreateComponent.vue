@@ -255,7 +255,7 @@ export default {
             this.form.type = 'e';
             //this.form.wallet_id = user_id;
             this.hasAlert = false;
-            this.form.transfer_wallet_id= this.form.wallet_id;
+            this.form.transfer_wallet_id = this.form.wallet_id;
             this.form.wallet_id=null;
             if(this.form.transfer === true){
               this.form.transfer = 1;
