@@ -19,7 +19,8 @@ class User extends JsonResource
             'email' => $this->email,
             'type'=> $this->type,
             'active'=> $this->active,
-            'nif'=> $this->nif
+            'nif'=> $this->nif,
+            'photo' => $this->photo
         ];
     }
 }

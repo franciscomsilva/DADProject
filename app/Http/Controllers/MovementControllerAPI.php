@@ -74,7 +74,7 @@ class MovementControllerAPI extends Controller
         
         $user_wallet = $movement->wallet;
         $movement->start_balance  = $user_wallet->balance;
-        if($movement->transfer === 1){
+        if($movement->transfer === 1 || $movement->type === 'e'){
             $movement->end_balance = $user_wallet->balance - $movement->value;
         }else {
             $movement->end_balance = $user_wallet->balance + $movement->value;

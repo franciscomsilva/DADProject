@@ -48,6 +48,12 @@ class UserControllerAPI extends Controller
                    'nif' => 'nullable|digits:9|regex:/^[0-9]{9}+$/'
          ]);
 
+         if($request->has('photo')) {
+            $name = Str::uuid() . '.' . $request->photo->getClientOriginalExtension();
+            $targetDir = storage_path("app/public/fotos");
+            $request->photo->move($targetDir, $name);
+            $user->photo = $name;
+        }
 
         $user = User::findOrFail($id);
         $user->update($request->all());
@@ -71,10 +77,10 @@ class UserControllerAPI extends Controller
         $user = new User();
 
         if($request->has('photo')) {
-            $name = Str::uuid() . '.' . $request->photo->getClientOriginalExtension();
-            $targetDir = storage_path("app/public/fotos");
-            $request->photo->move($targetDir, $name);
-            $user->photo = $name;
+            $photo_name = Str::uuid() . '.' . $request->photo->getClientOriginalExtension();
+            $targetDir = storage_path("public/fotos");
+            $request->photo->move($targetDir, $photo_name);
+            $user->photo = $photo_name;
         }
 
         $user->fill($request->all());
