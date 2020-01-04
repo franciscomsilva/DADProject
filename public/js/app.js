@@ -2267,8 +2267,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios.post("api/login", this.user).then(function (response) {
-        console.log(response.data.access_token);
-
         _this.$store.commit("setToken", response.data.access_token);
 
         return axios.get("api/users/me");
@@ -2680,6 +2678,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var q__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! q */ "./node_modules/q/q.js");
 /* harmony import */ var q__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(q__WEBPACK_IMPORTED_MODULE_1__);
 
+//
 //
 //
 //
@@ -3253,6 +3252,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3277,6 +3279,10 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: 'Photo',
         value: 'photo'
+      }, {
+        text: 'Actions',
+        value: 'action',
+        sortable: false
       }],
       users: [],
       user: [],
@@ -3363,31 +3369,73 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    editUser: function editUser(item) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function editUser$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              this.editedIndex = this.users.indexOf(item);
+              this.editedUser = Object.assign({}, item);
+              this.dialog = true;
 
-    /*
-    async editItem (item) {
-    this.editedIndex = this.desserts.indexOf(item)
-    this.editedUser = Object.assign({}, item)
-    this.dialog = true
-    }, */
-    close: function close() {
+            case 3:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, null, this);
+    },
+    deleteUser: function deleteUser(item) {
       var _this3 = this;
+
+      var user_id;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function deleteUser$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              user_id = this.users.indexOf(item) + 1;
+              console.log();
+              _context4.t0 = confirm('Are you sure you want to delete this item?');
+
+              if (!_context4.t0) {
+                _context4.next = 6;
+                break;
+              }
+
+              _context4.next = 6;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.put('api/users/delete/' + user_id).then(function (response) {})["catch"](function (error) {
+                _this3.hasAlert = true;
+                console.log(error);
+              }));
+
+            case 6:
+              this.getUsers();
+
+            case 7:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, null, this);
+    },
+    close: function close() {
+      var _this4 = this;
 
       this.dialog = false;
       setTimeout(function () {
-        _this3.editedUser = Object.assign({}, _this3.defaultUser);
-        _this3.editedIndex = -1;
+        _this4.editedUser = Object.assign({}, _this4.defaultUser);
+        _this4.editedIndex = -1;
 
-        _this3.getUsers();
+        _this4.getUsers();
       }, 300);
     },
     save: function save() {
-      var _this4 = this;
+      var _this5 = this;
 
       var formData, headers;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function save$(_context3) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function save$(_context5) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
               this.hasAlert = false;
               formData = new FormData();
@@ -3402,9 +3450,9 @@ __webpack_require__.r(__webpack_exports__);
               headers = {
                 'Content-Type': 'multipart/form-data'
               };
-              _context3.next = 13;
+              _context5.next = 13;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/register', formData, headers).then(function (response) {})["catch"](function (error) {
-                _this4.hasAlert = true;
+                _this5.hasAlert = true;
                 console.log(error);
               }));
 
@@ -3413,7 +3461,7 @@ __webpack_require__.r(__webpack_exports__);
 
             case 14:
             case "end":
-              return _context3.stop();
+              return _context5.stop();
           }
         }
       }, null, this);
@@ -26521,7 +26569,7 @@ var render = function() {
                                         attrs: { small: "" },
                                         on: {
                                           click: function($event) {
-                                            return _vm.editItem(item)
+                                            return _vm.editUser(item)
                                           }
                                         }
                                       },
@@ -26534,7 +26582,7 @@ var render = function() {
                                         attrs: { small: "" },
                                         on: {
                                           click: function($event) {
-                                            return _vm.deleteItem(item)
+                                            return _vm.deleteUser(item)
                                           }
                                         }
                                       },
@@ -26546,6 +26594,26 @@ var render = function() {
                                     )
                                   ]
                                 }
+                              },
+                              {
+                                key: "no-data",
+                                fn: function() {
+                                  return [
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: { color: "primary" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.created()
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Reset")]
+                                    )
+                                  ]
+                                },
+                                proxy: true
                               }
                             ])
                           })

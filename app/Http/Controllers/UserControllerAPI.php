@@ -96,4 +96,17 @@ class UserControllerAPI extends Controller
     {
         return new UserResource($request->user());
     }
+
+     /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+        return response()->json(null, 204);
+    }
 }

@@ -55,7 +55,8 @@
                 nextIcon: 'mdi-plus'
               }"
               
-            ></v-data-table>
+            >
+            </v-data-table>
           </v-card>
           
           </v-flex>

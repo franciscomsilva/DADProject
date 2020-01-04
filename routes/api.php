@@ -47,8 +47,9 @@ Route::get('users','UserControllerAPI@index')->name('users')->middleware('auth:a
 Route::middleware('auth:api')->get('users/me', 'UserControllerAPI@myProfile');
 Route::middleware('auth:api')->get('usersList','UserControllerAPI@index');
 Route::middleware('auth:api')->get('users/platformUsers', 'UserControllerAPI@indexPlatformUsers');
-Route::get('users/{id}', 'UserControllerAPI@show');
-Route::put('users/{id}','UserControllerAPI@update');
+Route::middleware('auth:api')->get('users/{id}', 'UserControllerAPI@show');
+Route::middleware('auth:api')->put('users/{id}','UserControllerAPI@update');
+Route::middleware('auth:api')->put('users/delete/{id}','UserControllerAPI@destroy');
 
 
 

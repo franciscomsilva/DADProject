@@ -11,6 +11,7 @@
           align-center
           justify-center
         >
+        
     <v-card>
             <v-card-title>
               <v-text-field
@@ -22,20 +23,20 @@
               ></v-text-field>
             </v-card-title>
     <v-data-table
-     :headers="headers"
-     :items="users"
-              :search="search"
-              :sort-by="['name','email','type','active','nif']"
-              :sort-desc="[true, true]"
-              class="elevation-1"
-              :items-per-page=5
-              :footer-props="{
-                showFirstLastPage: true,
-                firstIcon: 'mdi-arrow-collapse-left',
-                lastIcon: 'mdi-arrow-collapse-right',
-                prevIcon: 'mdi-minus',
-                nextIcon: 'mdi-plus'
-              }"
+      :headers="headers"
+      :items="users"
+      :search="search"
+      :sort-by="['name','email','type','active','nif']"
+      :sort-desc="[true, true]"
+      class="elevation-1"
+      :items-per-page=5
+      :footer-props="{
+        showFirstLastPage: true,
+        firstIcon: 'mdi-arrow-collapse-left',
+        lastIcon: 'mdi-arrow-collapse-right',
+        prevIcon: 'mdi-minus',
+        nextIcon: 'mdi-plus'
+      }"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
@@ -99,17 +100,19 @@
         <v-icon
           small
           class="mr-2"
-          @click="editItem(item)"
+          @click="editUser(item)"
         >
           edit
         </v-icon>
-        
         <v-icon
           small
-          @click="deleteItem(item)"
+          @click="deleteUser(item)"
         >
           delete
         </v-icon>
+      </template>
+      <template v-slot:no-data>
+        <v-btn color="primary" @click="created()">Reset</v-btn>
       </template>
     </v-data-table>
     </v-card>
@@ -140,7 +143,8 @@ export default {
         {text:'NIF',value:'nif'       
         },
         {text:'Photo',value:'photo'
-        }
+        },
+        { text: 'Actions', value: 'action', sortable: false },
         ],
         users: [],
         user:[],        
@@ -200,12 +204,25 @@ export default {
           .catch(error => {
               console.log(error);
           });
-    },/*
-    async editItem (item) {
-      this.editedIndex = this.desserts.indexOf(item)
+    },
+    async editUser (item) {
+      this.editedIndex = this.users.indexOf(item)
       this.editedUser = Object.assign({}, item)
       this.dialog = true
-    }, */
+    }, 
+    deleteUser: async function (item) {
+      const user_id = this.users.indexOf(item) +1
+      console.log()
+      confirm('Are you sure you want to delete this item?') &&  await axios.put('api/users/delete/'+user_id)
+        .then(response=>{
+          
+
+        }).catch(error => {
+          this.hasAlert = true
+          console.log(error)
+        });
+        this.getUsers();
+    },
     close () {
       this.dialog = false
       setTimeout(() => {
