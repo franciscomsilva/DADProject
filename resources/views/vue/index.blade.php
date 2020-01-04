@@ -59,11 +59,17 @@
 
 
 			<!-- Logged in user options -->
-			<v-list-item link v-show="$store.state.user">
+			<v-list-item link v-show="$store.state.user && !($store.state.user.type == 'a')">
 				<v-list-item-icon>
 					<v-icon>mdi-account-multiple</v-icon>
 			    </v-list-item-icon>
 			    <v-list-item-title v-on:click.prevent="listMovements()">Movimentos</v-list-item-title>
+			</v-list-item>
+			<v-list-item link v-show="$store.state.user && $store.state.user.type == 'a'">
+				<v-list-item-icon>
+					<v-icon>mdi-account-multiple</v-icon>
+			    </v-list-item-icon>
+			    <v-list-item-title v-on:click.prevent="listUsers()">Users</v-list-item-title>
 			</v-list-item>
 		</v-list>
 

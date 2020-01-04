@@ -105,6 +105,7 @@ export default {
           
            axios.post("api/login", this.user)
             .then(response=> {
+              console.log(response.data.access_token)
               this.$store.commit("setToken", response.data.access_token);
               return axios.get("api/users/me");
             })

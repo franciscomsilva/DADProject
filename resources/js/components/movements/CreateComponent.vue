@@ -210,7 +210,6 @@ export default {
       this.getIncomeCategories();
       this.getDebitCategories();
       this.getUsers();
-
     },
   
     methods:{

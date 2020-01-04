@@ -11,16 +11,7 @@
           align-center
           justify-center
         >
-        <v-col link v-show="!($store.state.user.type === 'a')"
-            xs8
-            sm8
-            md11> Only for admin users </v-col>
-          <v-flex link v-show="$store.state.user.type === 'a'"
-            xs8
-            sm8
-            md11
-          >
-          <v-card>
+    <v-card>
             <v-card-title>
               <v-text-field
                 v-model="search"
@@ -30,13 +21,14 @@
                 hide-details
               ></v-text-field>
             </v-card-title>
-            <v-data-table
-              :headers="headers"
-              :items="users"
+    <v-data-table
+     :headers="headers"
+     :items="users"
               :search="search"
               :sort-by="['name','email','type','active','nif']"
               :sort-desc="[true, true]"
               class="elevation-1"
+              :items-per-page=5
               :footer-props="{
                 showFirstLastPage: true,
                 firstIcon: 'mdi-arrow-collapse-left',
@@ -44,27 +36,95 @@
                 prevIcon: 'mdi-minus',
                 nextIcon: 'mdi-plus'
               }"
-              
-            ></v-data-table>
-          </v-card>
-          
-          </v-flex>
-        </v-layout>
+    >
+      <template v-slot:top>
+        <v-toolbar flat color="white">
+          <v-toolbar-title>Users</v-toolbar-title>
+          <v-divider
+            class="mx-4"
+            inset
+            vertical
+          ></v-divider>
+          <v-spacer></v-spacer>
+          <v-dialog v-model="dialog" max-width="500px">
+            <template v-slot:activator="{ on }">
+              <v-btn color="primary" dark class="mb-2" v-on="on">New Admin/Operator</v-btn>
+            </template>
+            <v-card ref="form">
+              <v-card-title>
+                <span class="headline">{{ formTitle }}</span>
+              </v-card-title>
+  
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedUser.name" label="Name"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedUser.email" label="Email"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedUser.nif" label="NIF"></v-text-field>
+                    </v-col>
+                    <v-col class="d-flex" cols="12" sm="6">
+                        <v-select 
+                          v-model="editedUser.type" 
+                          :items="userTypes"
+                          label="User Type"
+                          >
+                      </v-select>
+                      </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                    <v-file-input
+                            v-model="selectedFile"
+                            placeholder="Pick an avatar"
+                            prepend-icon="camera"
+                            label="Avatar"
+                    ></v-file-input>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+      </template>
+      <template v-slot:item.action="{ item }">
+        <v-icon
+          small
+          class="mr-2"
+          @click="editItem(item)"
+        >
+          edit
+        </v-icon>
+        
+        <v-icon
+          small
+          @click="deleteItem(item)"
+        >
+          delete
+        </v-icon>
+      </template>
+    </v-data-table>
+    </v-card>
+  </v-layout>
       </v-container>
     </v-content>
   </v-app>
 </div>
-
-
 </template>
 
 <script>
 import { async } from 'q';
 
 export default {
-
-  data() {
-      return { 
+  data: () => ({
         search:'',
         dialog: false,
         headers:[{
@@ -78,74 +138,110 @@ export default {
         {text:'Active',value:'active'       
         },
         {text:'NIF',value:'nif'       
+        },
+        {text:'Photo',value:'photo'
         }
         ],
         users: [],
-        
+        user:[],        
+        selectedFile:null,
         editedIndex: -1,
         editedUser: {
             name: '',
             email: '',
             type: '',
             acive: '',
-            nif: ''
+            photo:''
         },
         defaultUser: {
             name: '',
             email: '',
             type: '',
             acive: '',
-            nif: ''
+            photo:''
         },
-        
+        userTypes: [{text: 'Admin', value: 'a'},{text: 'Operator', value:'o'}]
+    }),
+    hasAlert:null,
+    
+
+  computed: {
+    formTitle () {
+      return this.editedIndex === -1 ? 'New Admin/Operator' : 'edit'
     }
   },
+
   watch: {
-      dialog (val) {
-        val || this.close()
-      },
+    dialog (val) {
+      val || this.close()
     },
-  
-  created() {
-      this.getUsers();
   },
 
-  methods:{
-      
+  created () {
+    this.getUsers();
+    this.getUser();
+  },
+
+  methods: {
+    async getUser() {
+      await axios.get("api/users/me")
+      .then(response => {
+        this.user = response.data.data
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    },     
     async getUsers() {
-          await axios.get("/api/users")
+          await axios.get("/api/usersList")
           .then(response => {
               this.users = response.data.data
           })
           .catch(error => {
               console.log(error);
           });
-        
+    },/*
+    async editItem (item) {
+      this.editedIndex = this.desserts.indexOf(item)
+      this.editedUser = Object.assign({}, item)
+      this.dialog = true
+    }, */
+    close () {
+      this.dialog = false
+      setTimeout(() => {
+        this.editedUser = Object.assign({}, this.defaultUser)
+        this.editedIndex = -1
+        this.getUsers();
+      }, 300)
     },
-    editUser (user) {
-        this.editedIndex = this.desserts.indexOf(item)
-        this.editeduser = Object.assign({}, item)
-        this.dialog = true
-      },
 
-      close () {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedUser = Object.assign({}, this.defaultUser)
-          this.editedIndex = -1
-        }, 300)
-      },
+    save : async function() {
+      this.hasAlert = false;
 
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedUser)
-        } else {
-          this.desserts.push(this.editedUser)
-        }
-        this.close()
-      },
-  }
+        const formData = new FormData();
+
+        formData.append('name', this.editedUser.name);
+        formData.append('email', this.editedUser.email);
+        formData.append('password', 'Gt3');
+        formData.append('password_confirmation', 'Gt3');
+        formData.append('type', this.editedUser.type);
+        formData.append('active', 1);
+        formData.append('nif', this.editedUser.nif);
+
+        
+        if(this.selectedFile) formData.append('photo', this.selectedFile);
+        const headers = { 'Content-Type': 'multipart/form-data'}
+
+        await axios.post('api/register', formData, headers)
+        .then(response=>{
+          
+
+        }).catch(error => {
+          this.hasAlert = true
+          console.log(error)
+        });
+      this.close()
+    },
+  },
 }
-
-
 </script>
