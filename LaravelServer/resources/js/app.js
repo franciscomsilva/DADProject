@@ -14,7 +14,11 @@ import Vuetify from 'vuetify'
 Vue.use(Vuetify)
 import Vuex from 'vuex'
 Vue.use(Vuex)
-
+import VueSocketIO from 'vue-socket.io'
+Vue.use(new VueSocketIO({
+    debug: true,
+    connection: 'http://localhost:8080'
+}));
 
 import store from "./store";
 import router from "./router"

@@ -29,8 +29,8 @@ var io = require('socket.io')(app);
 
 var LoggedUsers = require('./loggedusers.js');
 
-app.listen(8081, function(){
-    console.log('listening on *:8081');
+app.listen(8080, function(){
+    console.log('listening on *:8080');
 });
 
 // ------------------------
@@ -55,14 +55,21 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('chat',msg);
      });
 
-    socket.on('chat-dep', (msg,user) => {
-        if(user){
-            socket.to(`department_${user.department_id}`).emit('chat',msg);
+    socket.on('transfer-user', (id,user) => {
+        console.log(id)
+        let localUser = loggedUsers.userInfoByID(id);
+
+        if(localUser){
+            io.to(localUser.socketID).emit('chat',user);
+            console.log(`Transfer from: ${user.id} to: ${id}`)
+        }else{
+            console.log('Nao logado')
         }
     });
 
-    socket.on('login',(user)=>{
-        socket.join(`department_${user.department_id}`)
+    socket.on('register',(user)=>{
+        console.log(`Registering user: ${user.id} with sockedID:${socket.id}`)
+        socket.join(`transfer-user_${user.id}`)
         loggedUsers.addUserInfo(user,socket.id)
     });
 

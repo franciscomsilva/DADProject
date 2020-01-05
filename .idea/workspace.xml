@@ -10,6 +10,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/LaravelServer" />
   </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/WebSocketServer/package.json" />
+  </component>
   <component name="ProjectId" id="1Ut6hNgCJj6q3V5JcMMOYXVCKDj" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -60,7 +63,7 @@
       <workItem from="1578226152618" duration="13792000" />
       <workItem from="1575795619175" duration="3402000" />
       <workItem from="1575795613861" duration="1046000" />
-      <workItem from="1575795630005" duration="2439000" />
+      <workItem from="1575795630005" duration="10504000" />
     </task>
     <servers />
   </component>

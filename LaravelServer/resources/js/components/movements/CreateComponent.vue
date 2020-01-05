@@ -265,6 +265,10 @@ export default {
 
           await axios.post('api/registerMovement', this.form)
                 .then(response=>{
+                  if(this.form.transfer == 1){
+                    console.log('dsa')
+                    this.$socket.emit(`transfer-user`,this.form.transfer_wallet_id,this.$store.state.user);
+                  }
                   this.$router.push('/movements')
                 }).catch(error => {
                   this.hasAlert = true
@@ -290,7 +294,13 @@ export default {
                 });
       
         }
+    },
+  sockets:{
+    chat(msg){
+      this.allMsgText = msg + '\n' + this.allMsgText;
+      console.log(this.allMsgText);
     }
+  }
       
 }
 
