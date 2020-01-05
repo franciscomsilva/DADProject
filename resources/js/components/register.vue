@@ -154,7 +154,6 @@
         formData.append('type', this.type);
         formData.append('active', this.active);
         formData.append('nif', this.nif);
-        console.log(this.photo)
 
         if(this.photo) formData.append('photo', this.photo);
         const headers = { 'Content-Type': 'multipart/form-data'}

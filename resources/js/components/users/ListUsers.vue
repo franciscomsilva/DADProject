@@ -11,8 +11,11 @@
           align-center
           justify-center
         >
+        <v-col v-if="!$store.state.user || $store.state.user.type === 'o' || $store.state.user.type === 'u'">
+          Não vai dar
+          </v-col>
         
-    <v-card>
+    <v-card v-if="$store.state.user.type === 'a'">
             <v-card-title>
               <v-text-field
                 v-model="search"
@@ -102,7 +105,7 @@
           class="mr-2"
           @click="editUser(item)"
         >
-          edit
+          mdi-cancel
         </v-icon>
         <v-icon
           small
@@ -110,9 +113,6 @@
         >
           delete
         </v-icon>
-      </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="created()">Reset</v-btn>
       </template>
     </v-data-table>
     </v-card>
@@ -147,6 +147,7 @@ export default {
         { text: 'Actions', value: 'action', sortable: false },
         ],
         users: [],
+        user_id_edit:null,
         user:[],        
         selectedFile:null,
         editedIndex: -1,
@@ -154,14 +155,14 @@ export default {
             name: '',
             email: '',
             type: '',
-            acive: '',
+            active: '',
             photo:''
         },
         defaultUser: {
             name: '',
             email: '',
             type: '',
-            acive: '',
+            active: '',
             photo:''
         },
         userTypes: [{text: 'Admin', value: 'a'},{text: 'Operator', value:'o'}]
@@ -188,32 +189,61 @@ export default {
 
   methods: {
     async getUser() {
-      await axios.get("api/users/me")
-      .then(response => {
-        this.user = response.data.data
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      this.user = this.$store.state.user
     },     
     async getUsers() {
           await axios.get("/api/usersList")
           .then(response => {
+           
               this.users = response.data.data
+              this.users.forEach(element => {
+                element.type == 'u' ? element.type = 'User' : element.type == 'a' ?  element.type='Admin' : element.type='Operator'
+              });
+              this.users.forEach(element => {
+                element.active == 1 ? element.active = 'Active' : element.active = 'Disable'
+              });
+              
           })
           .catch(error => {
               console.log(error);
           });
     },
     async editUser (item) {
-      this.editedIndex = this.users.indexOf(item)
-      this.editedUser = Object.assign({}, item)
-      this.dialog = true
+      this.user_id_edit = this.users.indexOf(item) +2
+      if(this.user_id_edit == this.user.id){
+
+      } else{
+          confirm('Are you sure you want to disable this user?') && this.updateUser()
+      }
+       
     }, 
+    updateUser: async function(){
+      const formData = new FormData();
+        formData.append("_method", "put");
+
+        formData.append('active', 0);
+
+      const headers = { 'Content-Type': 'multipart/form-data'}
+      
+      await axios.post('api/users/editStatus/'+this.user_id_edit, formData, headers)
+      .then(response=>{
+      }).catch(error => {
+      this.hasAlert = true
+        console.log(error)
+      });
+      this.getUsers();
+    },
     deleteUser: async function (item) {
-      const user_id = this.users.indexOf(item) +1
-      console.log()
-      confirm('Are you sure you want to delete this item?') &&  await axios.put('api/users/delete/'+user_id)
+      this.user_id_edit = this.users.indexOf(item) +2
+
+      
+          confirm('Are you sure you want to delete this user?') &&  this.delete()
+      
+      
+    },
+    delete: async function (item) {
+      if(!(this.user_id_edit === this.user.id)){
+        await axios.put('api/users/delete/'+user_id)
         .then(response=>{
           
 
@@ -222,7 +252,13 @@ export default {
           console.log(error)
         });
         this.getUsers();
+
+        } else{
+          confirm('Não te podes apagar a ti proprio')
+      }
+
     },
+
     close () {
       this.dialog = false
       setTimeout(() => {
