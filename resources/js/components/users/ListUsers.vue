@@ -144,9 +144,13 @@ export default {
         },
         {text:'Photo',value:'photo'
         },
+        {text: 'Balance', value:'balance'},
         { text: 'Actions', value: 'action', sortable: false },
+        
         ],
+
         users: [],
+        wallet:null,
         user_id_edit:null,
         user:[],        
         selectedFile:null,
@@ -197,12 +201,25 @@ export default {
            
               this.users = response.data.data
               this.users.forEach(element => {
-                element.type == 'u' ? element.type = 'User' : element.type == 'a' ?  element.type='Admin' : element.type='Operator'
-              });
-              this.users.forEach(element => {
                 element.active == 1 ? element.active = 'Active' : element.active = 'Disable'
-              });
-              
+                element.type == 'u' ? element.type = 'User' : element.type == 'a' ?  element.type='Admin' : element.type='Operator'
+                if(element.type === 'u'){
+                  this.getUserWallet(element.id)
+                  if(this.wallet === '0.00'){
+                    element.push('balance','empty')
+                  }
+                }
+              });              
+          })
+          .catch(error => {
+              console.log(error);
+          });
+    },
+    async getUserWallet(user_id) {
+          await axios.get("/api/wallets/"+user_id)
+          .then(response => {
+              console.log(response.data)
+              this.wallet = response.data.data.balance
           })
           .catch(error => {
               console.log(error);
@@ -218,6 +235,7 @@ export default {
        
     }, 
     updateUser: async function(){
+      if(this.users[this.user_id_edit].type === 'u'){
       const formData = new FormData();
         formData.append("_method", "put");
 
@@ -231,7 +249,12 @@ export default {
       this.hasAlert = true
         console.log(error)
       });
-      this.getUsers();
+      this.getUsers();}
+      else{
+        if(!(this.users[this.user_id_edit].type === 'u')){
+          confirm('Não podes dar disable a ops ou adms') 
+        }
+      }
     },
     deleteUser: async function (item) {
       this.user_id_edit = this.users.indexOf(item) +2
@@ -243,7 +266,7 @@ export default {
     },
     delete: async function (item) {
       if(!(this.user_id_edit === this.user.id)){
-        await axios.put('api/users/delete/'+user_id)
+        await axios.put('api/users/delete/'+this.user_id_edit)
         .then(response=>{
           
 
@@ -253,7 +276,8 @@ export default {
         });
         this.getUsers();
 
-        } else{
+        } 
+        if(this.user_id_edit === this.user.id){
           confirm('Não te podes apagar a ti proprio')
       }
 

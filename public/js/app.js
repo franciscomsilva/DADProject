@@ -3013,12 +3013,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this = this;
@@ -3279,11 +3273,15 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Photo',
         value: 'photo'
       }, {
+        text: 'Balance',
+        value: 'balance'
+      }, {
         text: 'Actions',
         value: 'action',
         sortable: false
       }],
       users: [],
+      wallet: null,
       user_id_edit: null,
       user: [],
       selectedFile: null,
@@ -3353,11 +3351,16 @@ __webpack_require__.r(__webpack_exports__);
                 _this.users = response.data.data;
 
                 _this.users.forEach(function (element) {
-                  element.type == 'u' ? element.type = 'User' : element.type == 'a' ? element.type = 'Admin' : element.type = 'Operator';
-                });
-
-                _this.users.forEach(function (element) {
                   element.active == 1 ? element.active = 'Active' : element.active = 'Disable';
+                  element.type == 'u' ? element.type = 'User' : element.type == 'a' ? element.type = 'Admin' : element.type = 'Operator';
+
+                  if (element.type === 'u') {
+                    _this.getUserWallet(element.id);
+
+                    if (_this.wallet === '0.00') {
+                      element.push('balance', 'empty');
+                    }
+                  }
                 });
               })["catch"](function (error) {
                 console.log(error);
@@ -3370,10 +3373,32 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    editUser: function editUser(item) {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function editUser$(_context3) {
+    getUserWallet: function getUserWallet(user_id) {
+      var _this2 = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUserWallet$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/wallets/" + user_id).then(function (response) {
+                console.log(response.data);
+                _this2.wallet = response.data.data.balance;
+              })["catch"](function (error) {
+                console.log(error);
+              }));
+
+            case 2:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      });
+    },
+    editUser: function editUser(item) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function editUser$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
             case 0:
               this.user_id_edit = this.users.indexOf(item) + 2;
 
@@ -3383,107 +3408,119 @@ __webpack_require__.r(__webpack_exports__);
 
             case 2:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
         }
       }, null, this);
     },
     updateUser: function updateUser() {
-      var _this2 = this;
+      var _this3 = this;
 
       var formData, headers;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function updateUser$(_context4) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function updateUser$(_context5) {
         while (1) {
-          switch (_context4.prev = _context4.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
+              if (!(this.users[this.user_id_edit].type === 'u')) {
+                _context5.next = 10;
+                break;
+              }
+
               formData = new FormData();
               formData.append("_method", "put");
               formData.append('active', 0);
               headers = {
                 'Content-Type': 'multipart/form-data'
               };
-              _context4.next = 6;
+              _context5.next = 7;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/users/editStatus/' + this.user_id_edit, formData, headers).then(function (response) {})["catch"](function (error) {
-                _this2.hasAlert = true;
+                _this3.hasAlert = true;
                 console.log(error);
               }));
 
-            case 6:
-              this.getUsers();
-
             case 7:
-            case "end":
-              return _context4.stop();
-          }
-        }
-      }, null, this);
-    },
-    deleteUser: function deleteUser(item) {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function deleteUser$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              this.user_id_edit = this.users.indexOf(item) + 2;
-              confirm('Are you sure you want to delete this user?') && this["delete"]();
+              this.getUsers();
+              _context5.next = 11;
+              break;
 
-            case 2:
+            case 10:
+              if (!(this.users[this.user_id_edit].type === 'u')) {
+                confirm('Não podes dar disable a ops ou adms');
+              }
+
+            case 11:
             case "end":
               return _context5.stop();
           }
         }
       }, null, this);
     },
-    "delete": function _delete(item) {
-      var _this3 = this;
-
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _delete$(_context6) {
+    deleteUser: function deleteUser(item) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function deleteUser$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
-              if (this.user_id_edit === this.user.id) {
-                _context6.next = 6;
-                break;
-              }
+              this.user_id_edit = this.users.indexOf(item) + 2;
+              confirm('Are you sure you want to delete this user?') && this["delete"]();
 
-              _context6.next = 3;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.put('api/users/delete/' + user_id).then(function (response) {})["catch"](function (error) {
-                _this3.hasAlert = true;
-                console.log(error);
-              }));
-
-            case 3:
-              this.getUsers();
-              _context6.next = 7;
-              break;
-
-            case 6:
-              confirm('Não te podes apagar a ti proprio');
-
-            case 7:
+            case 2:
             case "end":
               return _context6.stop();
           }
         }
       }, null, this);
     },
-    close: function close() {
+    "delete": function _delete(item) {
       var _this4 = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _delete$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              if (this.user_id_edit === this.user.id) {
+                _context7.next = 4;
+                break;
+              }
+
+              _context7.next = 3;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.put('api/users/delete/' + this.user_id_edit).then(function (response) {})["catch"](function (error) {
+                _this4.hasAlert = true;
+                console.log(error);
+              }));
+
+            case 3:
+              this.getUsers();
+
+            case 4:
+              if (this.user_id_edit === this.user.id) {
+                confirm('Não te podes apagar a ti proprio');
+              }
+
+            case 5:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, null, this);
+    },
+    close: function close() {
+      var _this5 = this;
 
       this.dialog = false;
       setTimeout(function () {
-        _this4.editedUser = Object.assign({}, _this4.defaultUser);
-        _this4.editedIndex = -1;
+        _this5.editedUser = Object.assign({}, _this5.defaultUser);
+        _this5.editedIndex = -1;
 
-        _this4.getUsers();
+        _this5.getUsers();
       }, 300);
     },
     save: function save() {
-      var _this5 = this;
+      var _this6 = this;
 
       var formData, headers;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function save$(_context7) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function save$(_context8) {
         while (1) {
-          switch (_context7.prev = _context7.next) {
+          switch (_context8.prev = _context8.next) {
             case 0:
               this.hasAlert = false;
               formData = new FormData();
@@ -3498,9 +3535,9 @@ __webpack_require__.r(__webpack_exports__);
               headers = {
                 'Content-Type': 'multipart/form-data'
               };
-              _context7.next = 13;
+              _context8.next = 13;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/register', formData, headers).then(function (response) {})["catch"](function (error) {
-                _this5.hasAlert = true;
+                _this6.hasAlert = true;
                 console.log(error);
               }));
 
@@ -3509,7 +3546,7 @@ __webpack_require__.r(__webpack_exports__);
 
             case 14:
             case "end":
-              return _context7.stop();
+              return _context8.stop();
           }
         }
       }, null, this);
