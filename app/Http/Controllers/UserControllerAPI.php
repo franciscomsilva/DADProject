@@ -78,7 +78,7 @@ class UserControllerAPI extends Controller
 
         if($request->has('photo')) {
             $photo_name = Str::uuid() . '.' . $request->photo->getClientOriginalExtension();
-            $targetDir = storage_path("public/fotos");
+            $targetDir = storage_path("app/public/fotos");
             $request->photo->move($targetDir, $photo_name);
             $user->photo = $photo_name;
         }
@@ -86,14 +86,27 @@ class UserControllerAPI extends Controller
         $user->fill($request->all());
         $user->password = Hash::make($user->password);
         $user->save();
-
-        $user->wallet()->create($request->only('email'));
-
+        if($user->type === 'u'){
+            $user->wallet()->create($request->only('email'));
+        }        
         return response()->json(new UserResource($user), 201);
     }
 
     public function myProfile(Request $request)
     {
         return new UserResource($request->user());
+    }
+
+     /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+        return response()->json(null, 204);
     }
 }

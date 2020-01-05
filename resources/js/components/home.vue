@@ -28,7 +28,11 @@ export default {
 	mounted: function() {
 		this.getWalletCount();
 	}
+
+	
 };
+
+
 </script>
 
 

@@ -34,7 +34,7 @@ const routes = [
     {path:'/edit',component: Edit},
     {path:'/movements',component: ListMovements},
     {path:'/movements/create',component: CreateMovements},
-    {path:'/users',component: ListUsers}
+    {path:'/listUsers',component: ListUsers}
     
 ]
 
@@ -80,7 +80,7 @@ const app = new Vue({
             this.$router.push('/movements')
         },
         listUsers: function(){
-            this.$router.push('/users')
+            this.$router.push('/listUsers')
         }
 
     }

@@ -154,25 +154,23 @@
         formData.append('type', this.type);
         formData.append('active', this.active);
         formData.append('nif', this.nif);
+        console.log(this.photo)
 
         if(this.photo) formData.append('photo', this.photo);
         const headers = { 'Content-Type': 'multipart/form-data'}
 
         await axios.post('api/register', formData, headers)
-                .then(response=>{
-                  /*SAVE TOKEN IN SESSION*/
-                  const token = response.data.access_token
-                  localStorage.setItem('token', token)
-                  axios.defaults.headers.common['Authorization'] = token
+          .then(response=>{
+            /*SAVE TOKEN IN SESSION*/
+            const token = response.data.access_token
+            localStorage.setItem('token', token)
+            axios.defaults.headers.common['Authorization'] = token
 
-                  this.$router.push('/users')
-                }).catch(error => {
-                  this.hasAlert = true
-                  console.log(error)
-                });
-      },
-      onFileSelected(event){
-        this.selectedFile = event.target.files[0]
+            this.$router.push('/login')
+          }).catch(error => {
+            this.hasAlert = true
+            console.log(error)
+          });
       }
     }
   }

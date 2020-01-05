@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Requstoreest $request) {
     return $request->user();
 
 });
-
+Route::post('register', 'UserControllerAPI@store')->name('register');
 //Login
 Route::post('login', 'LoginControllerAPI@login')->name('login');
 Route::middleware('auth:api')->post('logout','LoginControllerAPI@logout');
@@ -42,13 +42,14 @@ Route::middleware('auth:api')->get('categories/debitCategories', 'CategoryContro
 
 
 //User
-Route::post('register', 'UserControllerAPI@store')->name('register');
+
 Route::get('users','UserControllerAPI@index')->name('users')->middleware('auth:api');
 Route::middleware('auth:api')->get('users/me', 'UserControllerAPI@myProfile');
-Route::middleware('auth:api')->get('users', 'UserControllerAPI@index');
+Route::middleware('auth:api')->get('usersList','UserControllerAPI@index');
 Route::middleware('auth:api')->get('users/platformUsers', 'UserControllerAPI@indexPlatformUsers');
-Route::get('users/{id}', 'UserControllerAPI@show');
-Route::put('users/{id}','UserControllerAPI@update');
+Route::middleware('auth:api')->get('users/{id}', 'UserControllerAPI@show');
+Route::middleware('auth:api')->put('users/{id}','UserControllerAPI@update');
+Route::middleware('auth:api')->put('users/delete/{id}','UserControllerAPI@destroy');
 
 
 

@@ -11,25 +11,25 @@
           align-center
           justify-center
         >
-        <v-col link v-show="!$store.state.user"
+        <v-col link v-show="!$store.state.user || !$store.state.user.type === 'a'"
             xs8
             sm8
-            md11> Only for platform users </v-col>
+            md11> N/A </v-col>
           <v-flex link v-show="$store.state.user"
             xs8
             sm8
             md11
           >
-          <v-row align="center">
-            <v-col cols="12">
+          <v-row v-if="$store.state.user.type === 'u'" align="center">
+            <v-col  cols="12">
               <p class="subtitle-2 text-center" >Balance: {{this.wallet.balance}} € </p>
             </v-col>
           </v-row>
           <v-col cols="12">
-          <v-btn v-if="$store.state.user.type === 'o' || $store.state.user.type === 'a'" color="primary" v-on:click.prevent="registerMovement()" >Register New Income</v-btn>
+          <v-btn v-if="$store.state.user.type === 'o'" color="primary" v-on:click.prevent="registerMovement()" >Register New Income</v-btn>
           <v-btn v-if="$store.state.user.type === 'u'" color="primary" v-on:click.prevent="registerMovement()" >Create New Expense</v-btn>
           </v-col>
-          <v-card>
+          <v-card v-if="$store.state.user.type === 'u'">
             <v-card-title>
               <v-text-field
                 v-model="search"
@@ -43,6 +43,7 @@
               :headers="headers"
               :items="movements"
               :search="search"
+              :items-per-page=5
               :sort-by="['date', 'type','category_id','transfer','value','iban','description','source_description','mb_entity_code','type_payment','start_balance','end_balance']"
               :sort-desc="[true, true]"
               class="elevation-1"
@@ -54,7 +55,8 @@
                 nextIcon: 'mdi-plus'
               }"
               
-            ></v-data-table>
+            >
+            </v-data-table>
           </v-card>
           
           </v-flex>
@@ -106,15 +108,32 @@ export default {
         ],
         movements: [],
         wallet:[],
+        user:[],
+        user_id:null,
         user_wallet_id:null
     }
   },
   
   created() {
-      this.getMovements();
+    this.getUser();
   },
 
   methods:{
+    async getUser() {
+      await axios.get("api/users/me")
+      .then(response => {
+        this.user = response.data.data
+        this.user_id = this.user.id
+        if(this.user.type === 'u'){
+          this.user_wallet_id = this.user.id
+          this.getUserWallet();
+          this.getMovements();
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    },
       
     async getMovements() {
           await axios.get("/api/users/movements")
@@ -126,7 +145,6 @@ export default {
               console.log(error);
           });
           this.getUserWallet();
-        
     },
     async getUserWallet() {
           await axios.get("/api/wallets/"+this.user_wallet_id)
@@ -136,15 +154,10 @@ export default {
           .catch(error => {
               console.log(error);
           });
-        
     },
-    
     registerMovement: async function (){
         this.$router.push('/movements/create');
 
-    },
-    sim: async function(){
-      console.log('sim')
     }
   }
 }
