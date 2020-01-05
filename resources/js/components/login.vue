@@ -90,7 +90,7 @@ export default {
                 const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                 return pattern.test(value) || 'Invalid e-mail.'
                 },
-              passsword: value => value == null || value.lenght < 8 || 'Minium of 8 characters'
+              passsword: value => value == null || value.lenght < 8 || 'Minimum of 8 characters'
             },
             hasAlert:null
         }
@@ -115,7 +115,7 @@ export default {
                   })
                   .catch(error => {
                     this.$store.commit("clearUserAndToken");
-
+                    this.hasAlert = true;
                     console.log(error);
                   });
 

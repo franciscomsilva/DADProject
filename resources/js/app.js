@@ -28,13 +28,13 @@ import ListUsers from './components/users/ListUsers'
 
 const routes = [
     {path:'/', redirect: '/home'},
-    {path:'/home', component: HomePage},
-    {path:'/login', component: Login},
-    {path:'/register', component: RegisterAccount},
-    {path:'/edit',component: Edit},
-    {path:'/movements',component: ListMovements},
-    {path:'/movements/create',component: CreateMovements},
-    {path:'/listUsers',component: ListUsers}
+    {path:'/home', component:HomePage},
+    {path:'/login', component:Login},
+    {path:'/register', component:RegisterAccount},
+    {path:'/edit',component:Edit},
+    {path:'/movements',component:ListMovements},
+    {path:'/movements/create',component:CreateMovements},
+    {path:'/users',component:ListUsers}
     
 ]
 
@@ -54,16 +54,16 @@ const app = new Vue({
     },
     methods: {
         homePage: function() {
-            this.$router.push('/')
+            this.$router.push('/').catch(err => {})
         },
         loginAttempt: function() {
-            this.$router.push('/login')
+            this.$router.push('/login').catch(err => {})
         },
         logout: function(){
             axios.post("api/logout")
                 .then(response => {
                     this.$store.commit("clearUserAndToken");
-                    this.$router.push('/')
+                    this.$router.push('/').catch(err => {})
                 })
                 .catch(error => {
                     this.$store.commit("clearUserAndToken");
@@ -71,16 +71,16 @@ const app = new Vue({
                 });
         },
         registerAccount: function() {
-            this.$router.push('/register')
+            this.$router.push('/register').catch(err => {})
         },
-        createMovements: function(){
-            this.$router.push('/registerIncome')
+            createMovements: function(){
+            this.$router.push('/registerIncome').catch(err => {})
         },
         listMovements: function(){
-            this.$router.push('/movements')
+            this.$router.push('/movements').catch(err => {})
         },
         listUsers: function(){
-            this.$router.push('/listUsers')
+            this.$router.push('/users').catch(err => {})
         }
 
     }

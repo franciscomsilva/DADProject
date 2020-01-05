@@ -156,7 +156,7 @@ export default {
           });
     },
     registerMovement: async function (){
-        this.$router.push('/movements/create');
+        await this.$router.push('/movements/create');
 
     }
   }
