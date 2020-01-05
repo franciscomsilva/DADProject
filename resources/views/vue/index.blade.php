@@ -77,6 +77,7 @@
 		<template v-slot:append>
 		   	<div>
 		    	<v-btn block v-show="!$store.state.user" v-on:click.prevent="loginAttempt()">Login</v-btn>
+		        <v-btn block v-show="$store.state.user" v-on:click.prevent="profile()">My Profile</v-btn>
 		    	<v-btn block v-show="$store.state.user" v-on:click.prevent="logout()">Logout</v-btn>
 		    </div>
 		</template>

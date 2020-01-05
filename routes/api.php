@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Requstoreest $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 
 });
@@ -48,7 +48,7 @@ Route::middleware('auth:api')->get('users/me', 'UserControllerAPI@myProfile');
 Route::middleware('auth:api')->get('usersList','UserControllerAPI@index');
 Route::middleware('auth:api')->get('users/platformUsers', 'UserControllerAPI@indexPlatformUsers');
 Route::middleware('auth:api')->get('users/{id}', 'UserControllerAPI@show');
-Route::middleware('auth:api')->put('users/{id}','UserControllerAPI@update');
+Route::middleware('auth:api')->post('users/{id}','UserControllerAPI@update');
 Route::middleware('auth:api')->put('users/delete/{id}','UserControllerAPI@destroy');
 
 

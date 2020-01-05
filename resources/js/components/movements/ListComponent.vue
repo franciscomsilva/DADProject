@@ -120,19 +120,13 @@ export default {
 
   methods:{
     async getUser() {
-      await axios.get("api/users/me")
-      .then(response => {
-        this.user = response.data.data
+        this.user = this.$store.state.user;
         this.user_id = this.user.id
         if(this.user.type === 'u'){
           this.user_wallet_id = this.user.id
           this.getUserWallet();
           this.getMovements();
         }
-      })
-      .catch(error => {
-        console.log(error);
-      });
     },
       
     async getMovements() {

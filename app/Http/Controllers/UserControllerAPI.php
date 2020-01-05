@@ -42,22 +42,30 @@ class UserControllerAPI extends Controller
     {
          $request->validate([
                    'name' => 'required|string|min:3|regex:/^[A-Za-záàâãéèêíóôõúçÁÀÂÃÉÈÍÓÔÕÚÇ ]+$/',
-                   'email' => 'required|email|unique:users,email',
-                   'password' => 'required|min:3|confirmed',
-                   'photo' => 'nullable|image|mimes:jpeg,png,jpg,bmp',
+                   'newPassword' => 'min:3',
+                    'photo' => 'nullable|image|mimes:jpeg,png,jpg,bmp',
                    'nif' => 'nullable|digits:9|regex:/^[0-9]{9}+$/'
          ]);
 
-         if($request->has('photo')) {
-            $name = Str::uuid() . '.' . $request->photo->getClientOriginalExtension();
-            $targetDir = storage_path("app/public/fotos");
-            $request->photo->move($targetDir, $name);
-            $user->photo = $name;
+        $user = User::findOrFail($id);
+          if($request->has('photo')) {
+                   $photo_name = Str::uuid() . '.' . $request->photo->getClientOriginalExtension();
+                   $targetDir = storage_path("app/public/fotos");
+                   $request->photo->move($targetDir, $photo_name);
+                   $user->photo = $photo_name;
+          }
+
+
+        $user->update($request->all());
+
+        if($request->has('oldPassword') && !Hash::check($request->oldPassword, $user->password)){
+            return response()->json("Old password incorrect!");
+        }else{
+            $user->password = Hash::make($request->newPassword);
         }
 
-        $user = User::findOrFail($id);
-        $user->update($request->all());
-        return new UserResource($user);
+        $user->save();
+        return response()->json(new UserResource($user), 201);
     }
 
 
@@ -71,7 +79,7 @@ class UserControllerAPI extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:3|confirmed',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,bmp',
-            'nif' => 'nullable|digits:9|regex:/^[0-9]{9}+$/'    
+             'nif' => 'nullable|digits:9|regex:/^[0-9]{9}+$/'
         ]);
 
         $user = new User();

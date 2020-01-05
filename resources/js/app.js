@@ -17,28 +17,8 @@ Vue.use(Vuex)
 
 
 import store from "./store";
-import HomePage from './components/home'
-import Login from './components/login'
-import RegisterAccount from './components/register'
-import Edit from './components/edit'
-import ListMovements from './components/movements/ListComponent'
-import CreateMovements from './components/movements/CreateComponent'
-import ListUsers from './components/users/ListUsers'
+import router from "./router"
 
-
-const routes = [
-    {path:'/', redirect: '/home'},
-    {path:'/home', component:HomePage},
-    {path:'/login', component:Login},
-    {path:'/register', component:RegisterAccount},
-    {path:'/edit',component:Edit},
-    {path:'/movements',component:ListMovements},
-    {path:'/movements/create',component:CreateMovements},
-    {path:'/users',component:ListUsers}
-    
-]
-
-const router = new VueRouter({ routes })
 
 
 const app = new Vue({
@@ -47,8 +27,8 @@ const app = new Vue({
           iconfont: 'mdi',
         },
       }),
-    router,
     store,
+    router,
     created() {
         this.$store.commit('loadTokenAndUserFromSession');
     },
@@ -76,11 +56,21 @@ const app = new Vue({
             createMovements: function(){
             this.$router.push('/registerIncome').catch(err => {})
         },
+        profile(){
+            this.$router.push('/profile').catch(err => {})
+
+        },
         listMovements: function(){
             this.$router.push('/movements').catch(err => {})
         },
         listUsers: function(){
             this.$router.push('/users').catch(err => {})
+        },
+        isAdmin(){
+            if($store.state.user.type == 'a'){
+                return true;
+            }
+            return false;
         }
 
     }
