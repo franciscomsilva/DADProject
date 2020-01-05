@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="17df179f-db4c-434e-88fd-96aaedf30bc3" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/LaravelServer" />
+  </component>
+  <component name="ProjectId" id="1Ut6hNgCJj6q3V5JcMMOYXVCKDj" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../DAD/Ficha5/05_Laravel_Vue_Updated_Base" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/js/components/users" />
+    </key>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="17df179f-db4c-434e-88fd-96aaedf30bc3" name="Default Changelist" comment="" />
+      <created>1576163662790</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1576163662790</updated>
+      <workItem from="1576163664652" duration="9979000" />
+      <workItem from="1576255156965" duration="632000" />
+      <workItem from="1576489758780" duration="5000" />
+      <workItem from="1576493277315" duration="4000" />
+      <workItem from="1577642476770" duration="723000" />
+      <workItem from="1578225634018" duration="430000" />
+      <workItem from="1578226152618" duration="13792000" />
+      <workItem from="1575795619175" duration="3402000" />
+      <workItem from="1575795613861" duration="1046000" />
+      <workItem from="1575795630005" duration="2439000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="747" y="312" key="FileChooserDialogImpl" timestamp="1576164165979">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="747" y="312" key="FileChooserDialogImpl/0.30.1920.1050@0.30.1920.1050" timestamp="1576164165979" />
+    <state x="623" y="254" key="run.anything.popup" timestamp="1578242128489">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="623" y="254" key="run.anything.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1578242128489" />
+    <state x="623" y="200" width="672" height="676" key="search.everywhere.popup" timestamp="1578247354632">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="623" y="200" width="672" height="676" key="search.everywhere.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1578247354632" />
+  </component>
+</project>
