@@ -124,7 +124,7 @@ io.on('connection', function (socket) {
        if(localUser){
            io.to(localUser.socketID).emit('pm',user);
        }else{
-           console.log('Nao logado')
+           console.log('Not logged in!')
        }
     });
 
