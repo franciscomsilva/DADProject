@@ -50,6 +50,10 @@
               <v-text-field v-model="searchObject.date" label="Date:" hint="YYYY-MM-DD format"
               persistent-hint></v-text-field>
             </div>
+            <div v-if="!(searchObject.date=='')" class="col">
+              <v-text-field v-model="searchObject.end_date" label="End Date:" hint="YYYY-MM-DD format"
+              persistent-hint></v-text-field>
+            </div>
             <div class="col">
               <v-text-field v-model="searchObject.category_id" label="Category:"></v-text-field>
             </div>
@@ -153,7 +157,8 @@ export default {
           date:'',
           category_id:'',
           type_payment:'',
-          email:''
+          email:'',
+          end_date:''
         },
         headers:[{text:'ID', value:'id'},
           {
@@ -230,8 +235,16 @@ export default {
       if(this.searchObject.type_payment !== '') {
         movements = movements.filter(movements => movements.type_payment.toLowerCase().includes(self.searchObject.type_payment.toLowerCase()));
       }
-      if(this.searchObject.date !== '') {
-        movements = movements.filter(movements => movements.date.toLowerCase().includes(self.searchObject.date.toLowerCase()));
+      if(this.searchObject.end_date !== ''){
+        movements.forEach(element => {
+          if(element.date >= self.searchObject.date && element.date <= self.searchObject.end_date){
+            
+          }
+          
+        });
+          }else { if(this.searchObject.date !== ''){
+          movements = movements.filter(movements => movements.date.toLowerCase().includes(self.searchObject.date.toLowerCase()));
+      }
       }
       
       return movements;
@@ -298,10 +311,10 @@ export default {
                 }
                 
                 
-               // this.users.forEach(user => {
-                  //element.transfer_wallet_id == user.id ? element.transfer_wallet_id = user.email : element.transfer_wallet_id = 'N/A'
-               //   element.wallet_id == user.id ? element.wallet_id = user.email : element.wallet_id = 'N/A'
-               // });                
+                // this.users.forEach(user => {
+                //   element.transfer_wallet_id == user.id ? element.transfer_wallet_id = user.email : element.transfer_wallet_id = 'N/A'
+                //   element.wallet_id == user.id ? element.wallet_id = user.email : element.wallet_id = 'N/A'
+                // });                
           })
           })
           .catch(error => {

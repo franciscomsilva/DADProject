@@ -2818,6 +2818,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2830,7 +2834,8 @@ __webpack_require__.r(__webpack_exports__);
         date: '',
         category_id: '',
         type_payment: '',
-        email: ''
+        email: '',
+        end_date: ''
       },
       headers: [{
         text: 'ID',
@@ -2934,10 +2939,16 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
 
-      if (this.searchObject.date !== '') {
-        movements = movements.filter(function (movements) {
-          return movements.date.toLowerCase().includes(self.searchObject.date.toLowerCase());
+      if (this.searchObject.end_date !== '') {
+        movements.forEach(function (element) {
+          if (element.date >= self.searchObject.date && element.date <= self.searchObject.end_date) {}
         });
+      } else {
+        if (this.searchObject.date !== '') {
+          movements = movements.filter(function (movements) {
+            return movements.date.toLowerCase().includes(self.searchObject.date.toLowerCase());
+          });
+        }
       }
 
       return movements;
@@ -3041,7 +3052,7 @@ __webpack_require__.r(__webpack_exports__);
                   if (element.category_id === null) {
                     element.category_id = 'N/A';
                   } // this.users.forEach(user => {
-                  //element.transfer_wallet_id == user.id ? element.transfer_wallet_id = user.email : element.transfer_wallet_id = 'N/A'
+                  //   element.transfer_wallet_id == user.id ? element.transfer_wallet_id = user.email : element.transfer_wallet_id = 'N/A'
                   //   element.wallet_id == user.id ? element.wallet_id = user.email : element.wallet_id = 'N/A'
                   // });                
 
@@ -26289,6 +26300,37 @@ var render = function() {
                                             ],
                                             1
                                           ),
+                                          _vm._v(" "),
+                                          !(_vm.searchObject.date == "")
+                                            ? _c(
+                                                "div",
+                                                { staticClass: "col" },
+                                                [
+                                                  _c("v-text-field", {
+                                                    attrs: {
+                                                      label: "End Date:",
+                                                      hint: "YYYY-MM-DD format",
+                                                      "persistent-hint": ""
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.searchObject
+                                                          .end_date,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.searchObject,
+                                                          "end_date",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "searchObject.end_date"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            : _vm._e(),
                                           _vm._v(" "),
                                           _c(
                                             "div",
