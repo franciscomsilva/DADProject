@@ -28,6 +28,8 @@
               <v-col cols="12">
                 <v-btn v-if="$store.state.user.type === 'o'" color="primary" v-on:click.prevent="registerMovement()" >Register New Income</v-btn>
                 <v-btn v-if="$store.state.user.type === 'u'" color="primary" v-on:click.prevent="registerMovement()" >Create New Expense</v-btn>
+                <v-btn v-if="$store.state.user.type === 'u'" color="primary" v-on:click.prevent="showMovementsStatistics()">Statistics</v-btn>
+
               </v-col>
               <v-card v-if="$store.state.user.type === 'u'">
                 <v-card-title>
@@ -371,6 +373,9 @@
         this.editedMovement = Object.assign({}, item)
         this.dialog = true
       },
+      showMovementsStatistics: async function() {
+        this.$router.push('/movements/statistics');
+      }
     }
   }
 
