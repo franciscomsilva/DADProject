@@ -31,6 +31,7 @@ Route::middleware('auth:api')->get('users/movements','UserMovementsControllerAPI
 
 
 
+
 //Wallets
 Route::middleware('auth:api')->get('wallets/{wallet}', 'WalletControllerAPI@show');
 Route::get('wallets','WalletControllerAPI@index')->name('wallets');

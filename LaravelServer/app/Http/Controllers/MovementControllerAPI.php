@@ -149,19 +149,19 @@ class MovementControllerAPI extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-        $request->validate([
-            'category_id'=>'nullable',
-            'description'=>'nullable|string'
-        ]);
-        $movement = Movement::findOrFail($id);
-        
-        $movement->update($request->all());
-        $movement->save();
-        return $movement;
-    }
+     public function update(Request $request, $id)
+       {
+           //
+           $request->validate([
+               'category_id'=>'nullable',
+               'description'=>'nullable|string'
+           ]);
+           $movement = Movement::findOrFail($id);
+
+           $movement->update($request->all());
+           $movement->save();
+           return $movement;
+       }
 
     /**
      * Remove the specified resource from storage.
