@@ -21,18 +21,14 @@ Vue.use(new VueSocketIO({
 }));
 
 
-import Toasted from "vue-toasted";
-
-Vue.use(Toasted, {
-    position: "bottom-center",
-    duration: 5000,
-    type: "info"
-});
 
 import store from "./store";
-import router from "./router"
+import router from "./router";
+import "./toast";
 
 
+
+//TODO: LOGOUT SOCKET ON PAGE CLOSE/RELOAD
 
 const app = new Vue({
     vuetify: new Vuetify({
@@ -44,7 +40,6 @@ const app = new Vue({
     router,
     created() {
         store.commit('loadTokenAndUserFromSession');
-
         if(this.$store.state.user)
             this.$socket.emit('register',this.$store.state.user);
         //window.addEventListener('beforeunload', this.handler)

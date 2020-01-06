@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="17df179f-db4c-434e-88fd-96aaedf30bc3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/LaravelServer/resources/js/toast.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/components/home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/components/home.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/components/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/components/login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/components/movements/CreateComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/components/movements/CreateComponent.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebSocketServer/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/WebSocketServer/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebSocketServer/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/WebSocketServer/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebSocketServer/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/WebSocketServer/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/router.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +77,8 @@
       <workItem from="1578273806705" duration="116000" />
       <workItem from="1578273937089" duration="192000" />
       <workItem from="1578274141985" duration="3103000" />
-      <workItem from="1578277279640" duration="5224000" />
+      <workItem from="1578277279640" duration="5729000" />
+      <workItem from="1578310778602" duration="7344000" />
     </task>
     <servers />
   </component>
@@ -92,13 +90,17 @@
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
     <state x="747" y="312" key="FileChooserDialogImpl/0.30.1920.1050@0.30.1920.1050" timestamp="1576164165979" />
+    <state x="688" y="288" width="540" height="524" key="StructurePopup" timestamp="1578311570234">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="688" y="288" width="540" height="524" key="StructurePopup/0.30.1920.1050@0.30.1920.1050" timestamp="1578311570234" />
     <state x="623" y="254" key="run.anything.popup" timestamp="1578272620415">
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
     <state x="623" y="254" key="run.anything.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1578272620415" />
-    <state x="623" y="200" width="672" height="676" key="search.everywhere.popup" timestamp="1578247354632">
+    <state x="623" y="200" width="672" height="676" key="search.everywhere.popup" timestamp="1578319119181">
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
-    <state x="623" y="200" width="672" height="676" key="search.everywhere.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1578247354632" />
+    <state x="623" y="200" width="672" height="676" key="search.everywhere.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1578319119181" />
   </component>
 </project>
