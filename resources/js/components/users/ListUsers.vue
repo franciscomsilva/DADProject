@@ -205,10 +205,14 @@ export default {
                 element.type == 'u' ? element.type = 'User' : element.type == 'a' ?  element.type='Admin' : element.type='Operator'
                 if(element.type === 'u'){
                   this.getUserWallet(element.id)
-                  if(this.wallet === '0.00'){
-                    element.push('balance','empty')
+                  if(true){
+                    element['balance'] = 'empty'
+                  } else{
+                    element['balance'] = 'not empty'
                   }
                 }
+                
+              console.log(element)
               });              
           })
           .catch(error => {

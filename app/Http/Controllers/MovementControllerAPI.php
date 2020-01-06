@@ -145,23 +145,14 @@ class MovementControllerAPI extends Controller
     {
         //
         $request->validate([
-            'wallet_id' => 'nullable|required_if:type,i',
-            'type' => 'required|in:e,i', 
-            'transfer' =>'nullable',
-            'transfer_movement_id'=>'nullable',
-            'transfer_wallet_id'=>'nullable',
-            'type_payment'=>'nullable|in:bt,c,mb',
             'category_id'=>'nullable',
-            'iban'=>'nullable|required_if:type_payment,bt|string|min:25|regex:/^[A-Z]{2}[0-9]{23}$/',
-            'mb_entity_code'=>'nullable|digits:5|regex:/^[0-9]{5}$/',
-            'mb_payment_reference'=>'nullable|digits:9|regex:/^[0-9]{9}$/',
-            'description'=>'nullable|string',
-            'source_description'=>'nullable|string',
-            'value'=>'required'
+            'description'=>'nullable|string'
         ]);
         $movement = Movement::findOrFail($id);
+        
         $movement->update($request->all());
-        return new Movement($movement);
+        $movement->save();
+        return $movement;
     }
 
     /**

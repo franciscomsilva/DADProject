@@ -2749,10 +2749,53 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      dialog: null,
       search: '',
       headers: [{
         text: 'Type',
@@ -2793,50 +2836,66 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: 'Value',
         value: 'value'
+      }, {
+        text: 'Actions',
+        value: 'action',
+        sortable: false
       }],
       movements: [],
       wallet: [],
       user: [],
       user_id: null,
-      user_wallet_id: null
+      user_wallet_id: null,
+      editedIndex: -1,
+      editedMovement: {
+        id: '',
+        category_id: '',
+        description: ''
+      },
+      defaultMovement: {
+        id: '',
+        category_id: '',
+        description: ''
+      }
     };
+  },
+  computed: {
+    formTitle: function formTitle() {
+      return this.editedIndex === -1 ? 'Edit Movement' : 'Edit Movement';
+    }
+  },
+  watch: {
+    dialog: function dialog(val) {
+      val || this.close();
+    }
   },
   created: function created() {
     this.getUser();
   },
   methods: {
     getUser: function getUser() {
-      var _this = this;
-
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUser$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("api/users/me").then(function (response) {
-                _this.user = response.data.data;
-                _this.user_id = _this.user.id;
+              this.user = this.$store.state.user;
+              this.user_id = this.user.id;
 
-                if (_this.user.type === 'u') {
-                  _this.user_wallet_id = _this.user.id;
+              if (this.user.type === 'u') {
+                this.user_wallet_id = this.user.id;
+                this.getUserWallet();
+                this.getMovements();
+              }
 
-                  _this.getUserWallet();
-
-                  _this.getMovements();
-                }
-              })["catch"](function (error) {
-                console.log(error);
-              }));
-
-            case 2:
+            case 3:
             case "end":
               return _context.stop();
           }
         }
-      });
+      }, null, this);
     },
     getMovements: function getMovements() {
-      var _this2 = this;
+      var _this = this;
 
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getMovements$(_context2) {
         while (1) {
@@ -2844,8 +2903,14 @@ __webpack_require__.r(__webpack_exports__);
             case 0:
               _context2.next = 2;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users/movements").then(function (response) {
-                _this2.movements = response.data;
-                _this2.user_wallet_id = response.data[0].wallet_id;
+                _this.movements = response.data;
+                _this.user_wallet_id = response.data[0].wallet_id;
+
+                _this.movements.forEach(function (element) {
+                  element.transfer == 1 ? element.transfer = 'Yes' : element.transfer = 'No';
+                  element.type == 'e' ? element.type = 'Expense' : element.type = 'Income';
+                  element.type_payment == 'c' ? element.type_payment = 'Cash' : element.type_payment == 'bt' ? element.type_payment = 'Bank Transfer' : element.type_payment = 'MB Payment';
+                });
               })["catch"](function (error) {
                 console.log(error);
               }));
@@ -2861,7 +2926,7 @@ __webpack_require__.r(__webpack_exports__);
       }, null, this);
     },
     getUserWallet: function getUserWallet() {
-      var _this3 = this;
+      var _this2 = this;
 
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUserWallet$(_context3) {
         while (1) {
@@ -2869,7 +2934,7 @@ __webpack_require__.r(__webpack_exports__);
             case 0:
               _context3.next = 2;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/wallets/" + this.user_wallet_id).then(function (response) {
-                _this3.wallet = response.data;
+                _this2.wallet = response.data;
               })["catch"](function (error) {
                 console.log(error);
               }));
@@ -2894,6 +2959,56 @@ __webpack_require__.r(__webpack_exports__);
           }
         }
       }, null, this);
+    },
+    close: function close() {
+      var _this3 = this;
+
+      this.dialog = false;
+      setTimeout(function () {
+        _this3.editedMovement = Object.assign({}, _this3.defaultMovement);
+        _this3.editedIndex = -1;
+
+        _this3.getMovements();
+      }, 300);
+    },
+    save: function save() {
+      var _this4 = this;
+
+      var formData, headers;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function save$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              formData = new FormData();
+              formData.append('category_id', this.editedMovement.category_id);
+              formData.append('description', this.editedMovement.description);
+              headers = {
+                'Content-Type': 'multipart/form-data'
+              };
+              _context5.next = 6;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/movements/update/' + this.editedMovement.id, formData, headers).then(function (response) {
+                console.log(response.data);
+              })["catch"](function (error) {
+                _this4.hasAlert = true;
+                console.log(error);
+              }));
+
+            case 6:
+              this.getMovements();
+              this.dialog = false;
+
+            case 8:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, null, this);
+    },
+    editMovement: function editMovement(item) {
+      this.movement_id = this.movements.indexOf(item);
+      console.log(this.movement_id);
+      this.editedMovement = Object.assign({}, item);
+      this.dialog = true;
     }
   }
 });
@@ -3357,10 +3472,12 @@ __webpack_require__.r(__webpack_exports__);
                   if (element.type === 'u') {
                     _this.getUserWallet(element.id);
 
-                    if (_this.wallet === '0.00') {
-                      element.push('balance', 'empty');
-                    }
+                    if (true) {
+                      element['balance'] = 'empty';
+                    } else {}
                   }
+
+                  console.log(element);
                 });
               })["catch"](function (error) {
                 console.log(error);
@@ -25913,7 +26030,223 @@ var render = function() {
                                         prevIcon: "mdi-minus",
                                         nextIcon: "mdi-plus"
                                       }
-                                    }
+                                    },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "top",
+                                          fn: function() {
+                                            return [
+                                              _c(
+                                                "v-toolbar",
+                                                {
+                                                  attrs: {
+                                                    flat: "",
+                                                    color: "white"
+                                                  }
+                                                },
+                                                [
+                                                  _c("v-toolbar-title", [
+                                                    _vm._v("Users")
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("v-divider", {
+                                                    staticClass: "mx-4",
+                                                    attrs: {
+                                                      inset: "",
+                                                      vertical: ""
+                                                    }
+                                                  }),
+                                                  _vm._v(" "),
+                                                  _c("v-spacer"),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-dialog",
+                                                    {
+                                                      attrs: {
+                                                        "max-width": "500px"
+                                                      },
+                                                      model: {
+                                                        value: _vm.dialog,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.dialog = $$v
+                                                        },
+                                                        expression: "dialog"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "v-card",
+                                                        { ref: "form" },
+                                                        [
+                                                          _c("v-card-title", [
+                                                            _c(
+                                                              "span",
+                                                              {
+                                                                staticClass:
+                                                                  "headline"
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  _vm._s(
+                                                                    _vm.formTitle
+                                                                  )
+                                                                )
+                                                              ]
+                                                            )
+                                                          ]),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "v-card-text",
+                                                            [
+                                                              _c(
+                                                                "v-container",
+                                                                [
+                                                                  _c(
+                                                                    "v-row",
+                                                                    [
+                                                                      _c(
+                                                                        "v-col",
+                                                                        {
+                                                                          attrs: {
+                                                                            cols:
+                                                                              "12",
+                                                                            sm:
+                                                                              "6",
+                                                                            md:
+                                                                              "4"
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _c(
+                                                                            "v-text-field",
+                                                                            {
+                                                                              attrs: {
+                                                                                label:
+                                                                                  "Description"
+                                                                              },
+                                                                              model: {
+                                                                                value:
+                                                                                  _vm
+                                                                                    .editedMovement
+                                                                                    .description,
+                                                                                callback: function(
+                                                                                  $$v
+                                                                                ) {
+                                                                                  _vm.$set(
+                                                                                    _vm.editedMovement,
+                                                                                    "description",
+                                                                                    $$v
+                                                                                  )
+                                                                                },
+                                                                                expression:
+                                                                                  "editedMovement.description"
+                                                                              }
+                                                                            }
+                                                                          )
+                                                                        ],
+                                                                        1
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  )
+                                                                ],
+                                                                1
+                                                              )
+                                                            ],
+                                                            1
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "v-card-actions",
+                                                            [
+                                                              _c("v-spacer"),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "v-btn",
+                                                                {
+                                                                  attrs: {
+                                                                    color:
+                                                                      "blue darken-1",
+                                                                    text: ""
+                                                                  },
+                                                                  on: {
+                                                                    click:
+                                                                      _vm.close
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    "Cancel"
+                                                                  )
+                                                                ]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "v-btn",
+                                                                {
+                                                                  attrs: {
+                                                                    color:
+                                                                      "blue darken-1",
+                                                                    text: ""
+                                                                  },
+                                                                  on: {
+                                                                    click:
+                                                                      _vm.save
+                                                                  }
+                                                                },
+                                                                [_vm._v("Save")]
+                                                              )
+                                                            ],
+                                                            1
+                                                          )
+                                                        ],
+                                                        1
+                                                      )
+                                                    ],
+                                                    1
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ]
+                                          },
+                                          proxy: true
+                                        },
+                                        {
+                                          key: "item.action",
+                                          fn: function(ref) {
+                                            var item = ref.item
+                                            return [
+                                              _c(
+                                                "v-icon",
+                                                {
+                                                  staticClass: "mr-2",
+                                                  attrs: { small: "" },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.editMovement(
+                                                        item
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\r\n          edit\r\n        "
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      false,
+                                      3954612837
+                                    )
                                   })
                                 ],
                                 1

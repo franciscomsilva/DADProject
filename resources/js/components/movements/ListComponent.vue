@@ -56,6 +56,48 @@
               }"
               
             >
+            <template v-slot:top>
+        <v-toolbar flat color="white">
+          <v-toolbar-title>Users</v-toolbar-title>
+          <v-divider
+            class="mx-4"
+            inset
+            vertical
+          ></v-divider>
+          <v-spacer></v-spacer>
+          <v-dialog v-model="dialog" max-width="500px">
+            <v-card ref="form">
+              <v-card-title>
+                <span class="headline">{{ formTitle }}</span>
+              </v-card-title>
+  
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedMovement.description" label="Description"></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+      </template>
+      <template v-slot:item.action="{ item }">
+        <v-icon
+          small
+          class="mr-2"
+          @click="editMovement(item)"
+        >
+          edit
+        </v-icon>
+      </template>
             </v-data-table>
           </v-card>
           
@@ -76,6 +118,7 @@ export default {
 
   data() {
       return { 
+        dialog:null,
         search:'',
         headers:[{
             text: 'Type',
@@ -104,47 +147,72 @@ export default {
         {text:'End Balance',value:'end_balance'       
         },
         {text:'Value',value:'value'       
-        }
+        },
+        { text: 'Actions', value: 'action', sortable: false }
         ],
         movements: [],
         wallet:[],
         user:[],
         user_id:null,
-        user_wallet_id:null
+        user_wallet_id:null,
+        editedIndex: -1,
+        editedMovement: {
+            id:'',
+            category_id: '',
+            description: ''
+        },
+        defaultMovement: {
+            id:'',
+            category_id: '',
+            description: ''
+        }
+    }
+  },  
+  
+  computed: {
+    formTitle () {
+      return this.editedIndex === -1 ? 'Edit Movement' : 'Edit Movement'
     }
   },
-  
+
+  watch: {
+    dialog (val) {
+      val || this.close()
+    },
+  },
+
   created() {
     this.getUser();
   },
 
   methods:{
     async getUser() {
-      await axios.get("api/users/me")
-      .then(response => {
-        this.user = response.data.data
+        this.user = this.$store.state.user
         this.user_id = this.user.id
         if(this.user.type === 'u'){
           this.user_wallet_id = this.user.id
           this.getUserWallet();
           this.getMovements();
         }
-      })
-      .catch(error => {
-        console.log(error);
-      });
-    },
       
+    },      
     async getMovements() {
           await axios.get("/api/users/movements")
           .then(response => {
               this.movements = response.data
               this.user_wallet_id = response.data[0].wallet_id
+              this.movements.forEach(element => {
+                element.transfer == 1 ? element.transfer = 'Yes' : element.transfer = 'No'
+                element.type == 'e' ? element.type = 'Expense' : element.type = 'Income'
+                element.type_payment == 'c' ? element.type_payment = 'Cash' : element.type_payment == 'bt' ?  element.type_payment='Bank Transfer' : element.type_payment='MB Payment'
+          })
           })
           .catch(error => {
               console.log(error);
           });
           this.getUserWallet();
+          
+    
     },
     async getUserWallet() {
           await axios.get("/api/wallets/"+this.user_wallet_id)
@@ -158,8 +226,42 @@ export default {
     registerMovement: async function (){
         this.$router.push('/movements/create');
 
-    }
-  }
+    },
+    close () {
+      this.dialog = false
+      setTimeout(() => {
+        this.editedMovement = Object.assign({}, this.defaultMovement)
+        this.editedIndex = -1
+        this.getMovements();
+      }, 300)
+    },
+    save : async function() {
+      const formData = new FormData();
+               
+        formData.append('category_id', this.editedMovement.category_id);
+        formData.append('description', this.editedMovement.description);
+        const headers = { 'Content-Type': 'multipart/form-data'}
+
+      
+      await axios.post('api/movements/update/'+this.editedMovement.id, formData,headers)
+      .then(response=>{
+        console.log(response.data)
+      }).catch(error => {
+      this.hasAlert = true
+        console.log(error)
+      });
+      this.getMovements();
+      this.dialog = false
+      },         
+    
+    editMovement (item) {
+      this.movement_id = this.movements.indexOf(item)
+      console.log(this.movement_id)
+        
+        this.editedMovement = Object.assign({}, item)
+        this.dialog = true
+      },
+}
 }
 
 
