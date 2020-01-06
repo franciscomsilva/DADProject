@@ -8,7 +8,6 @@
 		dark
 		app
 	>
-	    
 	    <!-- User info that appears on the drawer -->
 		<template v-slot:prepend>
 	        <v-list>
@@ -70,6 +69,12 @@
 			    </v-list-item-icon>
 			    <v-list-item-title v-on:click.prevent="listUsers()">Users</v-list-item-title>
 			</v-list-item>
+			<v-list-item link v-show="$store.state.user && $store.state.user.type == 'a'">
+            	<v-list-item-icon>
+            		<v-icon>mdi-chart-line-stacked</v-icon>
+            	</v-list-item-icon>
+            	<v-list-item-title v-on:click.prevent="listStatistics()">Statistics</v-list-item-title>
+            </v-list-item>
 		</v-list>
 
 		<!-- Login and Logout buttons -->

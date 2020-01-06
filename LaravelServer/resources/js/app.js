@@ -96,6 +96,9 @@ const app = new Vue({
         listUsers: function(){
             this.$router.push('/users').catch(err => {})
         },
+        listStatistics(){
+            this.$router.push('/plataform/statistics').catch(err => {})
+        },
         isAdmin(){
             if($store.state.user.type == 'a'){
                 return true;
