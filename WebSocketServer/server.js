@@ -59,9 +59,6 @@ let transporter = nodemailer.createTransport({
 io.on('connection', function (socket) {
     console.log('client has connected (socket ID = '+socket.id+')' );
 
-    // Emit message to the same cliente 
-    //socket.emit('my_active_games_changed');
-
     // Handle message sent from the client to the server
     socket.on('tra', (msg) => {
         console.log(msg);
@@ -71,7 +68,8 @@ io.on('connection', function (socket) {
     socket.on('transfer-user', (id,user,amount,email) => {
         let localUser = loggedUsers.userInfoByID(id);
 
-        if(localUser){
+        console.log(localUser)
+        if(localUser && io.sockets.sockets[localUser.socketID] != undefined){
             user.amount = amount;
             io.to(localUser.socketID).emit('transfer',user);
             console.log(`Transfer of ${amount} from: ${user.id} to: ${id}`)
@@ -92,7 +90,7 @@ io.on('connection', function (socket) {
     socket.on('income-user', (id,amount,email) => {
         let localUser = loggedUsers.userInfoByID(id);
 
-        if(localUser){
+        if(localUser && io.sockets.sockets[localUser.socketID] != undefined){
             io.to(localUser.socketID).emit('income',amount);
             console.log(`Income of ${amount} to: ${id}`)
         }else{
