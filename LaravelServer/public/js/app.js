@@ -1948,6 +1948,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2095,7 +2097,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("api/login", this.user).then(function (response) {
         _this.$store.commit("setToken", response.data.access_token);
 
-        _this.$socket.emit('register', response.data.data);
+        _this.$socket.emit('register', _this.user);
 
         return axios.get("api/users/me");
       }).then(function (response) {
@@ -2315,6 +2317,7 @@ __webpack_require__.r(__webpack_exports__);
       incomeCategories: [],
       debitCategories: [],
       users: [],
+      destUser: null,
       wallet: [],
       rules: {
         required: function required(value) {
@@ -2455,10 +2458,20 @@ __webpack_require__.r(__webpack_exports__);
 
             case 7:
               _context4.next = 9;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("api/users/".concat(this.form.transfer_wallet_id)).then(function (response) {
+                _this4.destUser = response.data.data;
+              })["catch"](function (error) {
+                console.log(error);
+              }));
+
+            case 9:
+              _context4.next = 11;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/registerMovement', this.form).then(function (response) {
                 if (_this4.form.transfer == 1) {
-                  _this4.$socket.emit('transfer-user', _this4.form.transfer_wallet_id, _this4.$store.state.user, _this4.form.value);
+                  _this4.$socket.emit('transfer-user', _this4.form.transfer_wallet_id, _this4.$store.state.user, _this4.form.value, _this4.destUser.email);
                 }
+
+                _this4.$toasted.show("Transfer sent!");
 
                 _this4.$router.push('/movements');
               })["catch"](function (error) {
@@ -2466,7 +2479,7 @@ __webpack_require__.r(__webpack_exports__);
                 _this4.errorMsg = "Error creating new movement!";
               }));
 
-            case 9:
+            case 11:
             case "end":
               return _context4.stop();
           }
@@ -2493,15 +2506,23 @@ __webpack_require__.r(__webpack_exports__);
 
             case 5:
               _context5.next = 7;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("api/users/".concat(this.form.wallet_id)).then(function (response) {
+                _this5.destUser = response.data.data;
+              })["catch"](function (error) {
+                console.log(error);
+              }));
+
+            case 7:
+              _context5.next = 9;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/registerMovement', this.form).then(function (response) {
-                _this5.$socket.emit('income-user', _this5.form.wallet_id, _this5.form.value);
+                _this5.$socket.emit('income-user', _this5.form.wallet_id, _this5.form.value, _this5.destUser.email);
 
                 _this5.$toasted.show("Income sent!");
 
                 _this5.$router.push('/home');
               }));
 
-            case 7:
+            case 9:
             case "end":
               return _context5.stop();
           }
@@ -24629,17 +24650,29 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "jumbotron" }, [
-      _c("h1", { staticClass: "text-center" }, [_vm._v(_vm._s(_vm.title))])
-    ]),
-    _vm._v(" "),
-    _c("h2", { staticClass: "text-center" }, [_vm._v("Bien Venidos")]),
-    _vm._v(" "),
-    _c("h4", { staticClass: "text-center" }, [
-      _vm._v("Total ammount of wallets: " + _vm._s(_vm.walletCount))
-    ])
-  ])
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "jumbotron" }, [
+        _c("h1", { staticClass: "text-center" }, [_vm._v(_vm._s(_vm.title))])
+      ]),
+      _vm._v(" "),
+      _c("h2", { staticClass: "text-center" }, [
+        _vm._v("V-Wallet, your own simple Virtual Wallet")
+      ]),
+      _vm._v(" "),
+      _c("v-spacer"),
+      _vm._v(" "),
+      _c("v-divider"),
+      _vm._v(" "),
+      _c("v-spacer"),
+      _vm._v(" "),
+      _c("h4", { staticClass: "text-center" }, [
+        _vm._v("Total ammount of wallets: " + _vm._s(_vm.walletCount))
+      ])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -80431,9 +80464,7 @@ var app = new Vue({
   router: _router__WEBPACK_IMPORTED_MODULE_7__["default"],
   created: function created() {
     _store__WEBPACK_IMPORTED_MODULE_6__["default"].commit('loadTokenAndUserFromSession');
-    /*REGISTER IN SOCKET*/
-
-    if (this.$store.state.user) this.$socket.emit('register', this.$store.state.user);
+    if (this.$store.state.user) this.$socket.emit('register', this.$store.state.user); //window.addEventListener('beforeunload', this.handler)
   },
   sockets: {
     transfer: function transfer(user) {
@@ -80444,6 +80475,14 @@ var app = new Vue({
     }
   },
   methods: {
+    handler: function handler(event) {
+      this.$socket.emit('logout');
+      _store__WEBPACK_IMPORTED_MODULE_6__["default"].commit('loadTokenAndUserFromSession'); //this.$socket.close();
+
+      /*REGISTER IN SOCKET*/
+
+      if (this.$store.state.user) this.$socket.emit('register', this.$store.state.user);
+    },
     homePage: function homePage() {
       this.$router.push('/')["catch"](function (err) {});
     },
@@ -80455,6 +80494,8 @@ var app = new Vue({
 
       axios.post("api/logout").then(function (response) {
         _this.$store.commit("clearUserAndToken");
+
+        _this.$socket.emit('logout', _this.$store.state.user);
 
         _this.$router.push('/')["catch"](function (err) {});
       })["catch"](function (error) {

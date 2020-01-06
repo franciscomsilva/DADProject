@@ -44,9 +44,10 @@ const app = new Vue({
     router,
     created() {
         store.commit('loadTokenAndUserFromSession');
-        /*REGISTER IN SOCKET*/
+
         if(this.$store.state.user)
             this.$socket.emit('register',this.$store.state.user);
+        //window.addEventListener('beforeunload', this.handler)
     },
     sockets:{
         transfer(user) {
@@ -57,6 +58,15 @@ const app = new Vue({
         }
     },
     methods: {
+        handler: function handler(event) {
+            this.$socket.emit('logout');
+            store.commit('loadTokenAndUserFromSession');
+
+            //this.$socket.close();
+            /*REGISTER IN SOCKET*/
+            if(this.$store.state.user)
+                this.$socket.emit('register',this.$store.state.user);
+        },
         homePage: function() {
             this.$router.push('/').catch(err => {})
         },
@@ -67,6 +77,7 @@ const app = new Vue({
             axios.post("api/logout")
                 .then(response => {
                     this.$store.commit("clearUserAndToken");
+                    this.$socket.emit('logout',this.$store.state.user);
                     this.$router.push('/').catch(err => {})
                 })
                 .catch(error => {

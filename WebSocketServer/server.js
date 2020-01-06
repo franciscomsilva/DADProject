@@ -26,6 +26,7 @@ var app = require('http').createServer();
 // Caso não funcione é necessário procurar/investigar soluções alternativas
 
 var io = require('socket.io')(app);
+var nodemailer = require('nodemailer');
 
 var LoggedUsers = require('./loggedusers.js');
 
@@ -43,6 +44,18 @@ app.listen(8080, function(){
 
 let loggedUsers = new LoggedUsers();
 
+/*EMAIL CONFIGURATION*/
+let transporter = nodemailer.createTransport({
+    pool: true,
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, // use TLS
+    auth: {
+        user: "projeto.dad.22.1920@gmail.com",
+        pass: "paiRicardo4000"
+    }
+});
+
 io.on('connection', function (socket) {
     console.log('client has connected (socket ID = '+socket.id+')' );
 
@@ -55,8 +68,7 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('chat',msg);
      });
 
-    socket.on('transfer-user', (id,user,amount) => {
-        console.log(id)
+    socket.on('transfer-user', (id,user,amount,email) => {
         let localUser = loggedUsers.userInfoByID(id);
 
         if(localUser){
@@ -64,24 +76,36 @@ io.on('connection', function (socket) {
             io.to(localUser.socketID).emit('transfer',user);
             console.log(`Transfer of ${amount} from: ${user.id} to: ${id}`)
         }else{
-            console.log(`User ${id} not logged in! Sending email!`)
+            console.log(`User ${id} not logged in! Sending email to ${email}!`)
 
             /*SENDS EMAIL*/
-
+            var message = {
+                from: "virtualWallet@dad.pt",
+                to: email,
+                subject: "You received a transfer",
+                text: user.name + " transfered you " + amount + "€.\n\n V-Wallet, your own simple Virtual Wallet"
+            };
+            transporter.sendMail(message);
         }
     });
 
-    socket.on('income-user', (id,amount) => {
+    socket.on('income-user', (id,amount,email) => {
         let localUser = loggedUsers.userInfoByID(id);
 
         if(localUser){
             io.to(localUser.socketID).emit('income',amount);
             console.log(`Income of ${amount} to: ${id}`)
         }else{
-            console.log(`User ${id} not logged in! Sending email!`)
+            console.log(`User ${id} not logged in! Sending email to ${email}!`)
 
             /*SENDS EMAIL*/
-
+            var message = {
+                from: "virtualWallet@dad.pt",
+                to: email,
+                subject: "You received an income",
+                text: "You received an income of " + amount + "€.\n\n V-Wallet, your own simple Virtual Wallet"
+            };
+            transporter.sendMail(message);
         }
     });
 
@@ -91,9 +115,9 @@ io.on('connection', function (socket) {
         loggedUsers.addUserInfo(user,socket.id)
     });
 
-    socket.on('logout',(user)=>{
-        //socket.leave(`department_${user.department_id}`)
-        loggedUsers.removeUserInfoByID(user.id)
+    socket.on('logout',()=>{
+        console.log(`Removing user with sockedID: ${socket.id}`)
+        loggedUsers.removeUserInfoBySocketID(socket.id)
     });
 
     socket.on('pm',(msg,user)=>{

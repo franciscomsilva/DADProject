@@ -4,8 +4,10 @@
             <h1 class="text-center">{{ title }}</h1>
         </div>
 
-        <h2 class="text-center">Bien Venidos</h2>
-
+        <h2 class="text-center">V-Wallet, your own simple Virtual Wallet</h2>
+        <v-spacer></v-spacer>
+        <v-divider></v-divider>
+        <v-spacer></v-spacer>
         <h4 class="text-center">Total ammount of wallets: {{ walletCount }}</h4>
 	</div>
 </template>

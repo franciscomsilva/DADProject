@@ -187,6 +187,7 @@ export default {
             incomeCategories: [],
             debitCategories: [],
             users: [],
+            destUser: null,
             wallet: [],
             rules: {
                 required: value => !!value || 'Required.',
@@ -275,11 +276,20 @@ export default {
                 return;
             }
 
+
+          await axios.get(`api/users/${this.form.transfer_wallet_id}`)
+            .then(response => {
+              this.destUser = response.data.data;
+            }).catch(error =>  {
+              console.log(error)
+            });
+
           await axios.post('api/registerMovement', this.form)
                 .then(response=>{
                   if(this.form.transfer == 1){
-                    this.$socket.emit('transfer-user',this.form.transfer_wallet_id,this.$store.state.user,this.form.value);
+                    this.$socket.emit('transfer-user',this.form.transfer_wallet_id,this.$store.state.user,this.form.value,this.destUser.email);
                   }
+                  this.$toasted.show(`Transfer sent!`);
                   this.$router.push('/movements')
                 }).catch(error => {
                   this.hasAlert = true;
@@ -296,9 +306,16 @@ export default {
                 return;
             }
 
+          await axios.get(`api/users/${this.form.wallet_id}`)
+                  .then(response => {
+                    this.destUser = response.data.data;
+                  }).catch(error =>  {
+                    console.log(error)
+                  });
+
           await axios.post('api/registerMovement', this.form)
                 .then(response=>{
-                  this.$socket.emit('income-user',this.form.wallet_id,this.form.value);
+                  this.$socket.emit('income-user',this.form.wallet_id,this.form.value,this.destUser.email);
                   this.$toasted.show(`Income sent!`);
                   this.$router.push('/home')
                 })
