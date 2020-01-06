@@ -22,8 +22,7 @@ class MovementControllerAPI extends Controller
      */
     public function index()
     {
-        $movements = request()->all();
-
+        $movements = Movement::get();
         return response()->json($movements);
     }
 
@@ -172,9 +171,5 @@ class MovementControllerAPI extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function movementsPerYear($year){
-
     }
 }

@@ -6,17 +6,17 @@
                     <v-flex xs8 sm8 md11>
                         <v-card>
                             <div>
-                                <apexchart type="area" height="350" :options="lastMonthMovmentsChartOptions" :series="lastMonthSeries"></apexchart>
+                                <apexchart type="area" height="350" :options="lastYearMovmentsChartOptions" :series="lastYearSeries"></apexchart>
+                            </div>
+                        </v-card>
+                        <v-card class="mt-6">
+                            <div>
+                                <apexchart ref="incomesByCategoryChart" type="pie" height="350" :options="incomesByCategoryChartOptions" :series="incomesByCategoryChartSeries"></apexchart>
                             </div>
                         </v-card>
                         <v-card class="mt-6">
                             <div>
                                 <apexchart ref="expensesByCategoryChart" type="pie" height="350" :options="expensesByCategoryChartOptions" :series="expensesByCategoryChartSeries"></apexchart>
-                            </div>
-                        </v-card>
-                        <v-card class="mt-6">
-                            <div>
-                                <apexchart type="pie" height="350" :options="expensesPaymentTypesChartOptions" :series="expensesPaymentTypesChartSeries"></apexchart>
                             </div>
                         </v-card>
                     </v-flex>
@@ -38,9 +38,9 @@
             return {
                 movements: [],
 
-                lastMonthMovmentsChartOptions: {
+                lastYearMovmentsChartOptions: {
                     title: {
-                        text: "Incomes and expenses by day over the last month",
+                        text: "Incomes and expenses by month over time",
                         align: 'center',
                         margin: 25,
                         offsetY: 10,
@@ -78,13 +78,13 @@
                         },
                     }
                 },
-                incomesLastMonth: [],
-                expensesLastMonth: [],
-                lastMonthSeries: [],
+                incomesLastYear: [],
+                expensesLastYear: [],
+                lastYearSeries: [],
 
                 expensesByCategoryChartOptions: {
                     title: {
-                        text: "Expenses by category",
+                        text: "Total amount of expenses by category",
                         align: 'center',
                         margin: 25,
                         offsetY: 10,
@@ -110,13 +110,13 @@
                 expensesByCategoryChartSeries: [],
                 expensesByCategoryChartLabels: [],
 
-                expensesPaymentTypesChartOptions: {
+                incomesByCategoryChartOptions: {
                     title: {
-                        text: "Expenses payment types registered",
+                        text: "Total amount of incomes by category",
                         align: 'center',
                         margin: 25,
                         offsetY: 10,
-                        offsetX: -65,
+                        offsetX: -70,
                         style: {
                             fontSize: '25px'
                         }
@@ -131,117 +131,109 @@
                     dataLabels: {
                         enabled: false
                     },
-                    labels: ["MB payment", "Bank transfer", "Wallet transfer"]
+                    labels: []
                 },
-                expensesPaymentTypesChartSeries: [],
+                incomesCategories: [],
+                incomesByCategory: [],
+                incomesByCategoryChartSeries: [],
+                incomesByCategoryChartLabels: [],
+                
             }
         },
         methods: {
             async getGraphicsData() {
-                await axios.get("/api/users/movements")
-                    .then(async response => {
-                        this.movements = response.data
+                await axios.get("/api/movements/all")
+                .then(async response => {
+                    this.movements = response.data
 
-                        await axios.get("/api/categories/debitCategories")
-                            .then(response => {
-                                this.expensesCategories = response.data
+                    await axios.get("/api/categories/incomeCategories")
+                    .then(response => {
+                        this.incomesCategories = response.data
+                    })
+
+                    await axios.get("/api/categories/debitCategories")
+                    .then(response => {
+                        this.expensesCategories = response.data
+                    })
+                })
+                .then(() => {
+                    var currentDate = new Date()
+                    var currentYear = currentDate.getFullYear()
+                    var currentMonth = currentDate.getMonth() + 1
+                    var splitDate, nextMonth
+                    var currentMovementYear, currentMovementMonth = -1
+                    var incomesCurrentMonth, expensesCurrentMonth
+
+                    this.expensesCategories.forEach(expenseCategory => {
+                        this.expensesByCategory.push({value: 0, id: expenseCategory.id})
+                        this.expensesByCategoryChartLabels.push(expenseCategory.name)
+                    })
+
+                    this.incomesCategories.forEach(incomeCategory => {
+                        this.incomesByCategory.push({value: 0, id: incomeCategory.id})
+                        this.incomesByCategoryChartLabels.push(incomeCategory.name)
+                    })
+
+                    this.movements.forEach(movement => {
+                        splitDate = (movement.date).split("-")
+                        currentMovementYear = splitDate[0]
+                        nextMonth = splitDate[1]
+
+                        if (movement.type === 'e') {
+                            this.expensesByCategory.forEach(expenseByCategory => {
+                                if (movement.category_id == expenseByCategory.id) {
+                                    expenseByCategory.value++
+                                }
                             })
-                    })
-                    .then(() => {
-                        // Variables used to comparison
-                        var currentDate = new Date()
-                        var currentYear = currentDate.getFullYear()
-                        var currentMonth = currentDate.getMonth() + 1
-                        var currentDay = currentDate.getDay()
-                        var currentMovementDay = -1, currentMovementMonth = -1, currentMovementYear, splitDate
-                        var nextDay, nextMonth, nextYear
-
-                        // Variables for the graphic about last 30 days
-                        var incomesCurrentDay, expensesCurrentDay
-                        // Variables for the graphic about expenses by category by month over the time
-                        this.expensesCategories.forEach(expenseCategory => {
-                            this.expensesByCategory.push({value: 0, id: expenseCategory.id})
-                            this.expensesByCategoryChartLabels.push(expenseCategory.name)
-                        })
-                        // Payment types variables
-                        var mbPayment=0, bankTransfer=0, walletTransfer=0
-
-
-                        this.movements.forEach(movement => {
-                            splitDate = (movement.date).split("-")
-
-                            currentMovementYear = parseInt(splitDate[0])
-                            currentMovementMonth = parseInt(splitDate[1])
-                            nextDay = parseInt(splitDate[2])
-
-                            // Divide expenses by categories and payment types
-                            if (movement.type === 'e') {
-                                switch(movement.type_payment) {
-                                    case "mb": mbPayment += parseFloat(movement.value); break;
-                                    case "bt": bankTransfer += parseFloat(movement.value); break;
-                                    default: walletTransfer += parseFloat(movement.value);
+                        } else {
+                            this.incomesByCategory.forEach(incomeByCategory => {
+                                if (movement.category_id == incomeByCategory.id) {
+                                    incomeByCategory.value++
                                 }
+                            })
+                        }
 
-                                this.expensesByCategory.forEach(expenseByCategory => {
-                                    if (movement.category_id == expenseByCategory.id) {
-                                        expenseByCategory.value += parseFloat(movement.value)
-                                    }
-                                })
+                        if (currentMovementMonth != nextMonth) {
+                            if (currentMovementYear != -1) {
+                                this.incomesLastYear.push({y: incomesCurrentMonth, x: movement.date})
+                                this.expensesLastYear.push({y: expensesCurrentMonth, x: movement.date})
                             }
 
+                            currentMovementMonth = nextMonth
+                            incomesCurrentMonth = expensesCurrentMonth = 0
+                        }
 
-                            // Update values by day
-                            if (currentMovementDay != nextDay) {
-                                if (currentMovementDay != -1) {
-                                    this.incomesLastMonth.push({y: incomesCurrentDay, x: movement.date})
-                                    this.expensesLastMonth.push({y: expensesCurrentDay, x: movement.date})
-                                }
-
-                                currentMovementDay = nextDay
-                                incomesCurrentDay = expensesCurrentDay = 0
-                            }
-
-                            // Check if the movement is from last month
-                            if ((currentYear == currentMovementYear &&
-                                (currentMonth == currentMovementMonth ||
-                                    (currentMonth-1 == currentMovementMonth &&
-                                        currentMovementDay >= currentDay))) ||
-                                (currentMonth == 1 &&
-                                    (currentYear-1 == currentMovementYear &&
-                                        currentMovementMonth == 12 &&
-                                        currentMovementDay >= currentDay))) {
-
-
-                                movement.type === 'i' ?
-                                    incomesCurrentDay += parseFloat(movement.value) :
-                                    expensesCurrentDay += parseFloat(movement.value)
-                            }
-                        })
-
-
-                        // Updates series of the last month's chart
-                        this.lastMonthSeries = [{
-                            name: 'Incomes',
-                            data: this.incomesLastMonth
-                        },
-                            {
-                                name: 'Expenses',
-                                data: this.expensesLastMonth
-                            }]
-
-                        // Update expenses by category chart labels
-                        this.$refs.expensesByCategoryChart.updateOptions({labels: this.expensesByCategoryChartLabels})
-
-                        // Update expenses by category series
-                        this.expensesByCategory.forEach(expenseByCategory => {
-                            this.expensesByCategoryChartSeries.push(expenseByCategory.value)
-                        })
-
-                        // Update expenses by payment type series
-                        this.expensesPaymentTypesChartSeries.push(mbPayment)
-                        this.expensesPaymentTypesChartSeries.push(bankTransfer)
-                        this.expensesPaymentTypesChartSeries.push(walletTransfer)
+                        movement.type === 'i' ? 
+                            incomesCurrentMonth++ :
+                            expensesCurrentMonth++
                     })
+
+
+                    // Update total amount of movments by type by month over time chart data
+                    this.lastYearSeries = [{
+                        name: 'Incomes',
+                        data: this.incomesLastYear
+                    },
+                    {
+                        name: 'Expenses',
+                        data: this.expensesLastYear
+                    }]
+
+                    // Update total incomes by category chart labels and series
+                    this.$refs.incomesByCategoryChart.updateOptions({labels: this.incomesByCategoryChartLabels})
+
+                    this.incomesByCategory.forEach(incomeByCategory => {
+                        this.incomesByCategoryChartSeries.push(incomeByCategory.value)
+                    })
+
+
+                    // Update total expenses by category chart labels and series
+                    this.$refs.expensesByCategoryChart.updateOptions({labels: this.expensesByCategoryChartLabels})
+                    
+                    this.expensesByCategory.forEach(expenseByCategory => {
+                        this.expensesByCategoryChartSeries.push(expenseByCategory.value)
+                    })
+                })
             }
         },
         created: function() {

@@ -3493,9 +3493,9 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       movements: [],
-      lastMonthMovmentsChartOptions: {
+      lastYearMovmentsChartOptions: {
         title: {
-          text: "Incomes and expenses by day over the last month",
+          text: "Incomes and expenses by month over time",
           align: 'center',
           margin: 25,
           offsetY: 10,
@@ -3533,12 +3533,12 @@ __webpack_require__.r(__webpack_exports__);
           }
         }
       },
-      incomesLastMonth: [],
-      expensesLastMonth: [],
-      lastMonthSeries: [],
+      incomesLastYear: [],
+      expensesLastYear: [],
+      lastYearSeries: [],
       expensesByCategoryChartOptions: {
         title: {
-          text: "Expenses by category",
+          text: "Total amount of expenses by category",
           align: 'center',
           margin: 25,
           offsetY: 10,
@@ -3563,13 +3563,13 @@ __webpack_require__.r(__webpack_exports__);
       expensesByCategory: [],
       expensesByCategoryChartSeries: [],
       expensesByCategoryChartLabels: [],
-      expensesPaymentTypesChartOptions: {
+      incomesByCategoryChartOptions: {
         title: {
-          text: "Expenses payment types registered",
+          text: "Total amount of incomes by category",
           align: 'center',
           margin: 25,
           offsetY: 10,
-          offsetX: -65,
+          offsetX: -70,
           style: {
             fontSize: '25px'
           }
@@ -3584,9 +3584,12 @@ __webpack_require__.r(__webpack_exports__);
         dataLabels: {
           enabled: false
         },
-        labels: ["MB payment", "Bank transfer", "Wallet transfer"]
+        labels: []
       },
-      expensesPaymentTypesChartSeries: []
+      incomesCategories: [],
+      incomesByCategory: [],
+      incomesByCategoryChartSeries: [],
+      incomesByCategoryChartLabels: []
     };
   },
   methods: {
@@ -3598,36 +3601,37 @@ __webpack_require__.r(__webpack_exports__);
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users/movements").then(function _callee(response) {
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/movements/all").then(function _callee(response) {
                 return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee$(_context) {
                   while (1) {
                     switch (_context.prev = _context.next) {
                       case 0:
                         _this.movements = response.data;
                         _context.next = 3;
+                        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/categories/incomeCategories").then(function (response) {
+                          _this.incomesCategories = response.data;
+                        }));
+
+                      case 3:
+                        _context.next = 5;
                         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/categories/debitCategories").then(function (response) {
                           _this.expensesCategories = response.data;
                         }));
 
-                      case 3:
+                      case 5:
                       case "end":
                         return _context.stop();
                     }
                   }
                 });
               }).then(function () {
-                // Variables used to comparison
                 var currentDate = new Date();
                 var currentYear = currentDate.getFullYear();
                 var currentMonth = currentDate.getMonth() + 1;
-                var currentDay = currentDate.getDay();
-                var currentMovementDay = -1,
-                    currentMovementMonth = -1,
-                    currentMovementYear,
-                    splitDate;
-                var nextDay, nextMonth, nextYear; // Variables for the graphic about last 30 days
-
-                var incomesCurrentDay, expensesCurrentDay; // Variables for the graphic about expenses by category by month over the time
+                var splitDate, nextMonth;
+                var currentMovementYear,
+                    currentMovementMonth = -1;
+                var incomesCurrentMonth, expensesCurrentMonth;
 
                 _this.expensesCategories.forEach(function (expenseCategory) {
                   _this.expensesByCategory.push({
@@ -3636,88 +3640,81 @@ __webpack_require__.r(__webpack_exports__);
                   });
 
                   _this.expensesByCategoryChartLabels.push(expenseCategory.name);
-                }); // Payment types variables
+                });
 
+                _this.incomesCategories.forEach(function (incomeCategory) {
+                  _this.incomesByCategory.push({
+                    value: 0,
+                    id: incomeCategory.id
+                  });
 
-                var mbPayment = 0,
-                    bankTransfer = 0,
-                    walletTransfer = 0;
+                  _this.incomesByCategoryChartLabels.push(incomeCategory.name);
+                });
 
                 _this.movements.forEach(function (movement) {
                   splitDate = movement.date.split("-");
-                  currentMovementYear = parseInt(splitDate[0]);
-                  currentMovementMonth = parseInt(splitDate[1]);
-                  nextDay = parseInt(splitDate[2]); // Divide expenses by categories and payment types
+                  currentMovementYear = splitDate[0];
+                  nextMonth = splitDate[1];
 
                   if (movement.type === 'e') {
-                    switch (movement.type_payment) {
-                      case "mb":
-                        mbPayment += parseFloat(movement.value);
-                        break;
-
-                      case "bt":
-                        bankTransfer += parseFloat(movement.value);
-                        break;
-
-                      default:
-                        walletTransfer += parseFloat(movement.value);
-                    }
-
                     _this.expensesByCategory.forEach(function (expenseByCategory) {
                       if (movement.category_id == expenseByCategory.id) {
-                        expenseByCategory.value += parseFloat(movement.value);
+                        expenseByCategory.value++;
                       }
                     });
-                  } // Update values by day
+                  } else {
+                    _this.incomesByCategory.forEach(function (incomeByCategory) {
+                      if (movement.category_id == incomeByCategory.id) {
+                        incomeByCategory.value++;
+                      }
+                    });
+                  }
 
-
-                  if (currentMovementDay != nextDay) {
-                    if (currentMovementDay != -1) {
-                      _this.incomesLastMonth.push({
-                        y: incomesCurrentDay,
+                  if (currentMovementMonth != nextMonth) {
+                    if (currentMovementYear != -1) {
+                      _this.incomesLastYear.push({
+                        y: incomesCurrentMonth,
                         x: movement.date
                       });
 
-                      _this.expensesLastMonth.push({
-                        y: expensesCurrentDay,
+                      _this.expensesLastYear.push({
+                        y: expensesCurrentMonth,
                         x: movement.date
                       });
                     }
 
-                    currentMovementDay = nextDay;
-                    incomesCurrentDay = expensesCurrentDay = 0;
-                  } // Check if the movement is from last month
-
-
-                  if (currentYear == currentMovementYear && (currentMonth == currentMovementMonth || currentMonth - 1 == currentMovementMonth && currentMovementDay >= currentDay) || currentMonth == 1 && currentYear - 1 == currentMovementYear && currentMovementMonth == 12 && currentMovementDay >= currentDay) {
-                    movement.type === 'i' ? incomesCurrentDay += parseFloat(movement.value) : expensesCurrentDay += parseFloat(movement.value);
+                    currentMovementMonth = nextMonth;
+                    incomesCurrentMonth = expensesCurrentMonth = 0;
                   }
-                }); // Updates series of the last month's chart
+
+                  movement.type === 'i' ? incomesCurrentMonth++ : expensesCurrentMonth++;
+                }); // Update total amount of movments by type by month over time chart data
 
 
-                _this.lastMonthSeries = [{
+                _this.lastYearSeries = [{
                   name: 'Incomes',
-                  data: _this.incomesLastMonth
+                  data: _this.incomesLastYear
                 }, {
                   name: 'Expenses',
-                  data: _this.expensesLastMonth
-                }]; // Update expenses by category chart labels
+                  data: _this.expensesLastYear
+                }]; // Update total incomes by category chart labels and series
+
+                _this.$refs.incomesByCategoryChart.updateOptions({
+                  labels: _this.incomesByCategoryChartLabels
+                });
+
+                _this.incomesByCategory.forEach(function (incomeByCategory) {
+                  _this.incomesByCategoryChartSeries.push(incomeByCategory.value);
+                }); // Update total expenses by category chart labels and series
+
 
                 _this.$refs.expensesByCategoryChart.updateOptions({
                   labels: _this.expensesByCategoryChartLabels
-                }); // Update expenses by category series
-
+                });
 
                 _this.expensesByCategory.forEach(function (expenseByCategory) {
                   _this.expensesByCategoryChartSeries.push(expenseByCategory.value);
-                }); // Update expenses by payment type series
-
-
-                _this.expensesPaymentTypesChartSeries.push(mbPayment);
-
-                _this.expensesPaymentTypesChartSeries.push(bankTransfer);
-
-                _this.expensesPaymentTypesChartSeries.push(walletTransfer);
+                });
               }));
 
             case 2:
@@ -27461,8 +27458,26 @@ var render = function() {
                               attrs: {
                                 type: "area",
                                 height: "350",
-                                options: _vm.lastMonthMovmentsChartOptions,
-                                series: _vm.lastMonthSeries
+                                options: _vm.lastYearMovmentsChartOptions,
+                                series: _vm.lastYearSeries
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("v-card", { staticClass: "mt-6" }, [
+                        _c(
+                          "div",
+                          [
+                            _c("apexchart", {
+                              ref: "incomesByCategoryChart",
+                              attrs: {
+                                type: "pie",
+                                height: "350",
+                                options: _vm.incomesByCategoryChartOptions,
+                                series: _vm.incomesByCategoryChartSeries
                               }
                             })
                           ],
@@ -27481,23 +27496,6 @@ var render = function() {
                                 height: "350",
                                 options: _vm.expensesByCategoryChartOptions,
                                 series: _vm.expensesByCategoryChartSeries
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("v-card", { staticClass: "mt-6" }, [
-                        _c(
-                          "div",
-                          [
-                            _c("apexchart", {
-                              attrs: {
-                                type: "pie",
-                                height: "350",
-                                options: _vm.expensesPaymentTypesChartOptions,
-                                series: _vm.expensesPaymentTypesChartSeries
                               }
                             })
                           ],
