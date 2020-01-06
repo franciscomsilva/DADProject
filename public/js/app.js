@@ -3510,8 +3510,6 @@ __webpack_require__.r(__webpack_exports__);
                       element['balance'] = 'empty';
                     } else {}
                   }
-
-                  console.log(element);
                 });
               })["catch"](function (error) {
                 console.log(error);
@@ -3533,7 +3531,6 @@ __webpack_require__.r(__webpack_exports__);
             case 0:
               _context3.next = 2;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/wallets/" + user_id).then(function (response) {
-                console.log(response.data);
                 _this2.wallet = response.data.data.balance;
               })["catch"](function (error) {
                 console.log(error);
@@ -3572,14 +3569,15 @@ __webpack_require__.r(__webpack_exports__);
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              if (!(this.users[this.user_id_edit].type === 'u')) {
+              console.log(this.users[this.user_id_edit]);
+
+              if (!(this.users[this.user_id_edit].type === 'User')) {
                 _context5.next = 10;
                 break;
               }
 
               formData = new FormData();
-              formData.append("_method", "put");
-              formData.append('active', 0);
+              this.users[this.user_id_edit].active === 'Active' ? formData.append('active', 1) : formData.append('active', 0);
               headers = {
                 'Content-Type': 'multipart/form-data'
               };
@@ -3595,7 +3593,7 @@ __webpack_require__.r(__webpack_exports__);
               break;
 
             case 10:
-              if (!(this.users[this.user_id_edit].type === 'u')) {
+              if (!(this.users[this.user_id_edit].type === 'User')) {
                 confirm('Não podes dar disable a ops ou adms');
               }
 

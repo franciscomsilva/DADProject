@@ -211,8 +211,6 @@ export default {
                     element['balance'] = 'not empty'
                   }
                 }
-                
-              console.log(element)
               });              
           })
           .catch(error => {
@@ -222,7 +220,7 @@ export default {
     async getUserWallet(user_id) {
           await axios.get("/api/wallets/"+user_id)
           .then(response => {
-              console.log(response.data)
+              
               this.wallet = response.data.data.balance
           })
           .catch(error => {
@@ -239,11 +237,10 @@ export default {
        
     }, 
     updateUser: async function(){
-      if(this.users[this.user_id_edit].type === 'u'){
+      console.log(this.users[this.user_id_edit])
+      if(this.users[this.user_id_edit].type === 'User'){
       const formData = new FormData();
-        formData.append("_method", "put");
-
-        formData.append('active', 0);
+        this.users[this.user_id_edit].active === 'Active' ? formData.append('active', 1) : formData.append('active', 0)       
 
       const headers = { 'Content-Type': 'multipart/form-data'}
       
@@ -255,7 +252,7 @@ export default {
       });
       this.getUsers();}
       else{
-        if(!(this.users[this.user_id_edit].type === 'u')){
+        if(!(this.users[this.user_id_edit].type === 'User')){
           confirm('Não podes dar disable a ops ou adms') 
         }
       }
