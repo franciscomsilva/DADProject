@@ -28,6 +28,7 @@ Route::middleware('auth:api')->post('logout','LoginControllerAPI@logout');
 Route::middleware('auth:api')->post('movements/update/{id}','MovementControllerAPI@update');
 Route::middleware('auth:api')->post('registerMovement', 'MovementControllerAPI@store')->name('registerMovement');
 Route::middleware('auth:api')->get('users/movements','UserMovementsControllerAPI@index');
+Route::middleware('auth:api')->get('movements/{year},'MovementControllerAPI@movementsPerYear');
 
 
 

@@ -173,4 +173,8 @@ class MovementControllerAPI extends Controller
     {
         //
     }
+
+    public function movementsPerYear($year){
+
+    }
 }
