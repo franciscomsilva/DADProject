@@ -11,8 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-    <link rel="icon" href="https://cdn4.iconfinder.com/data/icons/cryptocurrency-and-blockchain-set/128/SPLIT-09-512.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"> 
     <?php echo $__env->yieldContent('extrastyles'); ?>
     <link rel="stylesheet" href="<?php echo e(URL::asset('css/app.css')); ?>">
 </head>

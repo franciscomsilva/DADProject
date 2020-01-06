@@ -4,6 +4,7 @@
 	<v-navigation-drawer
 		expand-on-hover
 		dark
+		src="https://media-manager.noticiasaominuto.com/1920/naom_5b0812ce246a2.jpg"
 		app
 	>
 	    
@@ -13,9 +14,9 @@
 	        	<v-list-item>
 	            	<v-list-item-avatar>
 		        		<!-- Guest user avatar -->
-	              		<v-img v-if="!$store.state.user || !$store.state.user.photo" src="<?php echo e(asset('storage/fotos/unknow_user.png')); ?>"></v-img>
+	              		<v-img v-if="!$store.state.user " src="https://www.standingstills.com/pub/media/catalog/product/cache/75eed2686e01eb22cb4050b2f40ddf97/c/a/cad195-1-1.jpg"></v-img>
 						<v-img v-else :src="'<?php echo e(asset('storage/fotos')); ?>/' +  $store.state.user.photo"/>
-		          	</v-list-item-avatar>
+		          	</v-list-item-avatar>	
 		        </v-list-item>
 		        
 	          	<v-list-item link two-line>
@@ -68,12 +69,6 @@
 			    </v-list-item-icon>
 			    <v-list-item-title v-on:click.prevent="listUsers()">Users</v-list-item-title>
 			</v-list-item>
-			<v-list-item link v-show="$store.state.user && $store.state.user.type == 'a'">
-            	<v-list-item-icon>
-            		<v-icon>mdi-chart-line-stacked</v-icon>
-            	</v-list-item-icon>
-            	<v-list-item-title v-on:click.prevent="listStatistics()">Statistics</v-list-item-title>
-            </v-list-item>
 		</v-list>
 
 		<!-- Login and Logout buttons -->
