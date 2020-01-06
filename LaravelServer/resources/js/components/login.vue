@@ -106,11 +106,13 @@ export default {
            axios.post("api/login", this.user)
             .then(response=> {
               this.$store.commit("setToken", response.data.access_token);
-              this.$socket.emit('register',this.user);
+
               return axios.get("api/users/me");
             })
                   .then(response => {
+                    console.log(response)
                     this.$store.commit("setUser", response.data.data);
+                    this.$socket.emit('register',response.data.data);
                     this.$router.push('/home');
 
                   })

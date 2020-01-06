@@ -2097,11 +2097,13 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("api/login", this.user).then(function (response) {
         _this.$store.commit("setToken", response.data.access_token);
 
-        _this.$socket.emit('register', _this.user);
-
         return axios.get("api/users/me");
       }).then(function (response) {
+        console.log(response);
+
         _this.$store.commit("setUser", response.data.data);
+
+        _this.$socket.emit('register', response.data.data);
 
         _this.$router.push('/home');
       })["catch"](function (error) {

@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="17df179f-db4c-434e-88fd-96aaedf30bc3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/LaravelServer/resources/js/toast.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LaravelServer/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/components/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/components/login.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +76,8 @@
       <workItem from="1578273937089" duration="192000" />
       <workItem from="1578274141985" duration="3103000" />
       <workItem from="1578277279640" duration="5729000" />
-      <workItem from="1578310778602" duration="7344000" />
+      <workItem from="1578310778602" duration="7752000" />
+      <workItem from="1578320929147" duration="128000" />
     </task>
     <servers />
   </component>
