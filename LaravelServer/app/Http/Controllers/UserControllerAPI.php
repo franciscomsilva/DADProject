@@ -37,6 +37,17 @@ class UserControllerAPI extends Controller
 
         return response()->json($users);
     }
+    public function updateStatus(Request $request, $id)
+    {
+         $request->validate([
+                   'active' => 'required|in:0,1'
+         ]);
+
+        $user = User::findOrFail($id);
+        $user->update($request->all());
+        return new UserResource($user);
+    }
+    
 
     public function update(Request $request, $id)
     {
@@ -46,6 +57,15 @@ class UserControllerAPI extends Controller
                     'photo' => 'nullable|image|mimes:jpeg,png,jpg,bmp',
                    'nif' => 'nullable|digits:9|regex:/^[0-9]{9}+$/'
          ]);
+
+
+
+            if($request->has('photo')) {
+             $name = Str::uuid() . '.' . $request->photo->getClientOriginalExtension();
+             $targetDir = storage_path("app/public/fotos");
+             $request->photo->move($targetDir, $name);
+             $user->photo = $name;
+         }
 
         $user = User::findOrFail($id);
           if($request->has('photo')) {
@@ -77,7 +97,7 @@ class UserControllerAPI extends Controller
             'active' => 'required|in:1,0', 
             'name' => 'required|string|min:3|regex:/^[A-Za-záàâãéèêíóôõúçÁÀÂÃÉÈÍÓÔÕÚÇ ]+$/',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:3|confirmed',
+            'password' => 'nullable|min:3|confirmed',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,bmp',
              'nif' => 'nullable|digits:9|regex:/^[0-9]{9}+$/'
         ]);

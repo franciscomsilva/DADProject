@@ -3,8 +3,40 @@
   <component name="ChangeListManager">
     <list default="true" id="17df179f-db4c-434e-88fd-96aaedf30bc3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/app/Http/Controllers/MovementControllerAPI.php" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/app/Http/Controllers/MovementControllerAPI.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/app/Http/Controllers/UserControllerAPI.php" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/app/Http/Controllers/UserControllerAPI.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/app/Movement.php" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/app/Movement.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LaravelServer/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/components/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/components/login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/public/storage/fotos/5215f251-b0a2-4c85-82ab-43d0a7d1491b.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/public/storage/fotos/5215f251-b0a2-4c85-82ab-43d0a7d1491b.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/public/storage/fotos/53dba9d1-6997-4036-b52e-4adcd9c25ea1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/public/storage/fotos/53dba9d1-6997-4036-b52e-4adcd9c25ea1.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/public/storage/fotos/5741d2d9-4930-46b9-bf2f-38a825df8bc8.png" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/public/storage/fotos/5741d2d9-4930-46b9-bf2f-38a825df8bc8.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/components/movements/ListComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/components/movements/ListComponent.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/components/register.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/components/register.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/views/vue/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/views/vue/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/052a64dd-a14c-4234-b4ba-c9b7c3cb7bda.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/052a64dd-a14c-4234-b4ba-c9b7c3cb7bda.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/15f0b61f-a151-4189-ae59-173485a13071.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/15f0b61f-a151-4189-ae59-173485a13071.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/26d54618-5d37-410e-afd8-1eb44941f81e.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/26d54618-5d37-410e-afd8-1eb44941f81e.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/2ea70c1a-df81-44d7-91a6-ea624b62a62c.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/2ea70c1a-df81-44d7-91a6-ea624b62a62c.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/3650a7c1-e2d3-48f3-87d3-d40368bdbdee.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/3650a7c1-e2d3-48f3-87d3-d40368bdbdee.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/4ad406e4-9e60-4a11-9c17-317b2a9caeb8.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/4ad406e4-9e60-4a11-9c17-317b2a9caeb8.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/4bb6d787-05fc-412b-a100-2b985e608315.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/4bb6d787-05fc-412b-a100-2b985e608315.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/60c0cebd-ce08-4097-8621-06f85d17955b.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/60c0cebd-ce08-4097-8621-06f85d17955b.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/62e5d224-84af-45a3-bacc-383925956c00.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/62e5d224-84af-45a3-bacc-383925956c00.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/6366d6d2-6ce2-498d-be79-5cfab37ea742.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/6366d6d2-6ce2-498d-be79-5cfab37ea742.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/75f03428-81c7-4ece-8d55-0174885bed45.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/75f03428-81c7-4ece-8d55-0174885bed45.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/8836bd5f-3dc2-4b2f-961a-5695cd1ba19e.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/8836bd5f-3dc2-4b2f-961a-5695cd1ba19e.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/aa2c8e2c-9b2f-48a1-b939-e3553900b130.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/aa2c8e2c-9b2f-48a1-b939-e3553900b130.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/ae78e1d5-4c72-423b-9fa3-f349ca8d66da.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/ae78e1d5-4c72-423b-9fa3-f349ca8d66da.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/b399b547-44bc-472e-a7f9-e2b22c98277d.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/b399b547-44bc-472e-a7f9-e2b22c98277d.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/de9eac64-6f8c-4913-8fef-32ee52178ba3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/de9eac64-6f8c-4913-8fef-32ee52178ba3.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/e3f03698-ea7b-4834-a957-ba39fe565191.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/e3f03698-ea7b-4834-a957-ba39fe565191.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/f254a4d1-ce4c-48e3-a500-d426c9f552fb.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/f254a4d1-ce4c-48e3-a500-d426c9f552fb.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/ffcf610c-d5b8-46ea-8072-a9fe06cba59f.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/ffcf610c-d5b8-46ea-8072-a9fe06cba59f.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/storage/app/public/fotos/c778f250-87bb-46e1-a3aa-6ea874e6df63.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/storage/app/public/fotos/c778f250-87bb-46e1-a3aa-6ea874e6df63.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/storage/fotos/163ec95a-1345-4dd9-a787-7260cee168b9.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/storage/fotos/163ec95a-1345-4dd9-a787-7260cee168b9.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/users/ListUsers.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/users/ListUsers.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +110,8 @@
       <workItem from="1578277279640" duration="5729000" />
       <workItem from="1578310778602" duration="7752000" />
       <workItem from="1578320929147" duration="128000" />
+      <workItem from="1578321516673" duration="105000" />
+      <workItem from="1578321629116" duration="449000" />
     </task>
     <servers />
   </component>

@@ -25,8 +25,10 @@ Route::middleware('auth:api')->post('logout','LoginControllerAPI@logout');
 
 
 //Movements
+Route::middleware('auth:api')->post('movements/update/{id}','MovementControllerAPI@update');
 Route::middleware('auth:api')->post('registerMovement', 'MovementControllerAPI@store')->name('registerMovement');
 Route::middleware('auth:api')->get('users/movements','UserMovementsControllerAPI@index');
+
 
 
 //Wallets
@@ -49,7 +51,10 @@ Route::middleware('auth:api')->get('usersList','UserControllerAPI@index');
 Route::middleware('auth:api')->get('users/platformUsers', 'UserControllerAPI@indexPlatformUsers');
 Route::middleware('auth:api')->get('users/{id}', 'UserControllerAPI@show');
 Route::middleware('auth:api')->post('users/{id}','UserControllerAPI@update');
+Route::middleware('auth:api')->patch('users/editStatus/{id}','UserControllerAPI@updateStatus');
 Route::middleware('auth:api')->put('users/delete/{id}','UserControllerAPI@destroy');
+
+
 
 
 

@@ -27,7 +27,6 @@
                   <v-spacer></v-spacer>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-
                     </template>
                   </v-tooltip>
                   <v-tooltip right>
@@ -60,9 +59,7 @@
                             type="password"
                             v-model="password"
                             :rules="[rules.required,rules.password]"
-
                     ></v-text-field>
-
                     <v-text-field
                             id="passwordConfirmation"
                             label="Password Confirmation"
@@ -71,7 +68,6 @@
                             type="password"
                             v-model="passwordConfirmation"
                             :rules="[rules.required,rules.password,rules.passwordConfirmation]"
-
                     ></v-text-field>
                     <v-text-field
                             id="nif"
@@ -81,7 +77,6 @@
                             type="number"
                             v-model="nif"
                             :rules="[rules.required,rules.nif]"
-
                     ></v-text-field>
                     <v-file-input
                             v-model="photo"
@@ -89,7 +84,6 @@
                             prepend-icon="camera"
                             label="Avatar"
                     ></v-file-input>
-
                   </v-form>
                 </v-card-text>
                 <v-card-actions>
