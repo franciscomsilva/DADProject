@@ -27,7 +27,8 @@
           </v-row>
           <v-col cols="12">
           <v-btn v-if="$store.state.user.type === 'o' || $store.state.user.type === 'a'" color="primary" v-on:click.prevent="registerMovement()" >Register New Income</v-btn>
-          <v-btn v-if="$store.state.user.type === 'u'" color="primary" v-on:click.prevent="registerMovement()" >Create New Expense</v-btn>
+          <v-btn v-if="$store.state.user.type === 'u'" color="primary" v-on:click.prevent="registerMovement()">Create New Expense</v-btn>
+          <v-btn v-if="$store.state.user.type === 'u'" color="primary" v-on:click.prevent="showMovementsStatistics()">Statistics</v-btn>
           </v-col>
           <v-card>
             <v-card-title>
@@ -143,11 +144,16 @@ export default {
         this.$router.push('/movements/create');
 
     },
+
+    showMovementsStatistics: async function() {
+        this.$router.push('/movements/statistics');
+    },
+
     sim: async function(){
       console.log('sim')
     }
   }
-}
+};
 
 
 </script>

@@ -15,7 +15,6 @@ Vue.use(Vuetify)
 import Vuex from 'vuex'
 Vue.use(Vuex)
 
-
 import store from "./store";
 import HomePage from './components/home'
 import Login from './components/login'
@@ -24,6 +23,7 @@ import Edit from './components/edit'
 import ListMovements from './components/movements/ListComponent'
 import CreateMovements from './components/movements/CreateComponent'
 import ListUsers from './components/users/ListUsers'
+import PersonalStatistics from './components/movements/personalStatistics'
 
 
 const routes = [
@@ -34,12 +34,12 @@ const routes = [
     {path:'/edit',component: Edit},
     {path:'/movements',component: ListMovements},
     {path:'/movements/create',component: CreateMovements},
-    {path:'/users',component: ListUsers}
-    
+    {path:'/users',component: ListUsers},
+    {path:'/movements/statistics', component: PersonalStatistics}
 ]
 
-const router = new VueRouter({ routes })
 
+const router = new VueRouter({ routes })
 
 const app = new Vue({
     vuetify: new Vuetify({
@@ -82,6 +82,5 @@ const app = new Vue({
         listUsers: function(){
             this.$router.push('/users')
         }
-
     }
 }).$mount("#app");
