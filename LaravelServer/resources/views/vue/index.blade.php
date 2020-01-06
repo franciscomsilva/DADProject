@@ -6,7 +6,6 @@
 	<v-navigation-drawer
 		expand-on-hover
 		dark
-		src="https://media-manager.noticiasaominuto.com/1920/naom_5b0812ce246a2.jpg"
 		app
 	>
 	    
