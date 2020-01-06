@@ -117,6 +117,7 @@ export default {
             newPassword:null,
             newPasswordConf:null,
             nif:null,
+            photo:null,
             errorMsg:null,
             rules: {
                 required: value => !!value || 'Required.',
@@ -164,23 +165,22 @@ export default {
 
             const formData = new FormData();
 
-            formData.append('name', this.user.name);
 
+            formData.append('name', this.user.name);
 
             if(this.oldPassword != null && this.newPassword != null){
                 formData.append('oldPassword', this.oldPassword);
                 formData.append('newPassword', this.newPassword);
             }
-
-            if(this.nif != null){formData.append('nif', this.user.nif)}
-
+            if(this.user.nif != null){
+                formData.append('nif', this.user.nif)
+            }
             console.log(this.photo)
-            if(this.photo) formData.append('photo', this.photo);
+            if(this.photo){
+                formData.append('photo', this.photo);
+            }
             const headers = { 'Content-Type': 'multipart/form-data'}
-
-
-            console.log(formData)
-            await axios.post(`api/users/${this.user.id}`, formData,headers)
+            await axios.post(`api/users/${this.user.id}`, formData, headers)
                 .then(response=>{
                     this.$store.commit('setUser',response.data);
                     this.errorMsg = "Updated with success!";
@@ -189,7 +189,7 @@ export default {
                 }).catch(error => {
                     this.errorMsg = "Error updating profile!";
                     this.hasAlert = true;
-                    console.log(error)
+                    //console.log(error)
                 });
 
 
