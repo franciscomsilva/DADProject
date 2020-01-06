@@ -2799,23 +2799,56 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       dialog: null,
       search: '',
+      searchObject: {
+        id: '',
+        type: '',
+        date: '',
+        category_id: '',
+        type_payment: '',
+        email: ''
+      },
       headers: [{
+        text: 'ID',
+        value: 'id'
+      }, {
         text: 'Type',
         value: 'type'
       }, {
         text: 'Transfer',
         value: 'transfer'
       }, {
+        text: 'Transfer Wallet Email',
+        value: 'transfer_wallet_id'
+      }, {
         text: 'Type Payment',
         value: 'type_payment'
       }, {
-        text: 'Category ID',
+        text: 'Category',
         value: 'category_id'
       }, {
         text: 'IBAN',
@@ -2853,6 +2886,7 @@ __webpack_require__.r(__webpack_exports__);
       categories: [],
       wallet: [],
       user: [],
+      users: [],
       user_id: null,
       user_wallet_id: null,
       editedIndex: -1,
@@ -2871,6 +2905,42 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     formTitle: function formTitle() {
       return this.editedIndex === -1 ? 'Edit Movement' : 'Edit Movement';
+    },
+    getfilters: function getfilters() {
+      var self = this;
+      var movements = this.movements;
+
+      if (this.searchObject.category_id !== '') {
+        movements = movements.filter(function (movements) {
+          return movements.category_id.includes(self.searchObject.category_id);
+        });
+      }
+
+      if (this.searchObject.type !== '') {
+        movements = movements.filter(function (movements) {
+          return movements.type.toLowerCase().includes(self.searchObject.type.toLowerCase());
+        });
+      }
+
+      if (this.searchObject.id !== '') {
+        movements = movements.filter(function (movements) {
+          return movements.id.toString().includes(self.searchObject.id);
+        });
+      }
+
+      if (this.searchObject.type_payment !== '') {
+        movements = movements.filter(function (movements) {
+          return movements.type_payment.toLowerCase().includes(self.searchObject.type_payment.toLowerCase());
+        });
+      }
+
+      if (this.searchObject.date !== '') {
+        movements = movements.filter(function (movements) {
+          return movements.date.toLowerCase().includes(self.searchObject.date.toLowerCase());
+        });
+      }
+
+      return movements;
     }
   },
   watch: {
@@ -2881,6 +2951,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.getCategories();
     this.getUser();
+    this.getUsers();
   },
   methods: {
     getCategories: function getCategories() {
@@ -2904,10 +2975,31 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    getUser: function getUser() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUser$(_context2) {
+    getUsers: function getUsers() {
+      var _this2 = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUsers$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users").then(function (response) {
+                _this2.users = response.data;
+              })["catch"](function (error) {
+                console.log(error);
+              }));
+
+            case 2:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      });
+    },
+    getUser: function getUser() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUser$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
             case 0:
               this.user = this.$store.state.user;
               this.user_id = this.user.id;
@@ -2920,31 +3012,39 @@ __webpack_require__.r(__webpack_exports__);
 
             case 3:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
       }, null, this);
     },
     getMovements: function getMovements() {
-      var _this2 = this;
+      var _this3 = this;
 
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getMovements$(_context3) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getMovements$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _context3.next = 2;
+              _context4.next = 2;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users/movements").then(function (response) {
-                _this2.movements = response.data;
-                _this2.user_wallet_id = response.data[0].wallet_id;
+                _this3.movements = response.data;
+                _this3.user_wallet_id = response.data[0].wallet_id;
 
-                _this2.movements.forEach(function (element) {
+                _this3.movements.forEach(function (element) {
                   element.transfer == 1 ? element.transfer = 'Yes' : element.transfer = 'No';
                   element.type == 'e' ? element.type = 'Expense' : element.type = 'Income';
                   element.type_payment == 'c' ? element.type_payment = 'Cash' : element.type_payment == 'bt' ? element.type_payment = 'Bank Transfer' : element.type_payment = 'MB Payment';
 
-                  _this2.categories.forEach(function (category) {
+                  _this3.categories.forEach(function (category) {
                     element.category_id == category.id ? element.category_id = category.name : 'n/a';
                   });
+
+                  if (element.category_id === null) {
+                    element.category_id = 'N/A';
+                  } // this.users.forEach(user => {
+                  //element.transfer_wallet_id == user.id ? element.transfer_wallet_id = user.email : element.transfer_wallet_id = 'N/A'
+                  //   element.wallet_id == user.id ? element.wallet_id = user.email : element.wallet_id = 'N/A'
+                  // });                
+
                 });
               })["catch"](function (error) {
                 console.log(error);
@@ -2955,64 +3055,64 @@ __webpack_require__.r(__webpack_exports__);
 
             case 3:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
         }
       }, null, this);
     },
     getUserWallet: function getUserWallet() {
-      var _this3 = this;
+      var _this4 = this;
 
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUserWallet$(_context4) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUserWallet$(_context5) {
         while (1) {
-          switch (_context4.prev = _context4.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
-              _context4.next = 2;
+              _context5.next = 2;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/wallets/" + this.user_wallet_id).then(function (response) {
-                _this3.wallet = response.data;
+                _this4.wallet = response.data;
               })["catch"](function (error) {
                 console.log(error);
               }));
 
             case 2:
             case "end":
-              return _context4.stop();
-          }
-        }
-      }, null, this);
-    },
-    registerMovement: function registerMovement() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function registerMovement$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              this.$router.push('/movements/create');
-
-            case 1:
-            case "end":
               return _context5.stop();
           }
         }
       }, null, this);
     },
+    registerMovement: function registerMovement() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function registerMovement$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              this.$router.push('/movements/create');
+
+            case 1:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, null, this);
+    },
     close: function close() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.dialog = false;
       setTimeout(function () {
-        _this4.editedMovement = Object.assign({}, _this4.defaultMovement);
-        _this4.editedIndex = -1;
+        _this5.editedMovement = Object.assign({}, _this5.defaultMovement);
+        _this5.editedIndex = -1;
 
-        _this4.getMovements();
+        _this5.getMovements();
       }, 300);
     },
     save: function save() {
-      var _this5 = this;
+      var _this6 = this;
 
       var formData, headers;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function save$(_context6) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function save$(_context7) {
         while (1) {
-          switch (_context6.prev = _context6.next) {
+          switch (_context7.prev = _context7.next) {
             case 0:
               formData = new FormData();
               formData.append('category_id', this.editedMovement.category_id);
@@ -3020,11 +3120,11 @@ __webpack_require__.r(__webpack_exports__);
               headers = {
                 'Content-Type': 'multipart/form-data'
               };
-              _context6.next = 6;
+              _context7.next = 6;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/movements/update/' + this.editedMovement.id, formData, headers).then(function (response) {
                 console.log(response.data);
               })["catch"](function (error) {
-                _this5.hasAlert = true;
+                _this6.hasAlert = true;
                 console.log(error);
               }));
 
@@ -3034,7 +3134,7 @@ __webpack_require__.r(__webpack_exports__);
 
             case 8:
             case "end":
-              return _context6.stop();
+              return _context7.stop();
           }
         }
       }, null, this);
@@ -3272,13 +3372,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var q__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! q */ "./node_modules/q/q.js");
 /* harmony import */ var q__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(q__WEBPACK_IMPORTED_MODULE_1__);
 
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -26102,7 +26195,7 @@ var render = function() {
                                       _c("v-text-field", {
                                         attrs: {
                                           "append-icon": "search",
-                                          label: "Search",
+                                          label: "Search all",
                                           "single-line": "",
                                           "hide-details": ""
                                         },
@@ -26113,7 +26206,143 @@ var render = function() {
                                           },
                                           expression: "search"
                                         }
-                                      })
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass: "form-row",
+                                          attrs: {
+                                            "align-center": "",
+                                            "justify-center": ""
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "div",
+                                            { staticClass: "col" },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: { label: "ID:" },
+                                                model: {
+                                                  value: _vm.searchObject.id,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.searchObject,
+                                                      "id",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression: "searchObject.id"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            { staticClass: "col" },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: { label: "Type:" },
+                                                model: {
+                                                  value: _vm.searchObject.type,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.searchObject,
+                                                      "type",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "searchObject.type"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            { staticClass: "col" },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  label: "Date:",
+                                                  hint: "YYYY-MM-DD format",
+                                                  "persistent-hint": ""
+                                                },
+                                                model: {
+                                                  value: _vm.searchObject.date,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.searchObject,
+                                                      "date",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "searchObject.date"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            { staticClass: "col" },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: { label: "Category:" },
+                                                model: {
+                                                  value:
+                                                    _vm.searchObject
+                                                      .category_id,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.searchObject,
+                                                      "category_id",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "searchObject.category_id"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            { staticClass: "col" },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  label: "Type of payment:"
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.searchObject
+                                                      .type_payment,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.searchObject,
+                                                      "type_payment",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "searchObject.type_payment"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        ]
+                                      )
                                     ],
                                     1
                                   ),
@@ -26122,14 +26351,16 @@ var render = function() {
                                     staticClass: "elevation-1",
                                     attrs: {
                                       headers: _vm.headers,
-                                      items: _vm.movements,
+                                      items: _vm.getfilters,
                                       search: _vm.search,
                                       "items-per-page": 5,
                                       "sort-by": [
+                                        "id",
                                         "date",
                                         "type",
                                         "category_id",
                                         "transfer",
+                                        "transfer_wallet_id",
                                         "value",
                                         "iban",
                                         "description",
@@ -26139,7 +26370,7 @@ var render = function() {
                                         "start_balance",
                                         "end_balance"
                                       ],
-                                      "sort-desc": [true, true],
+                                      "sort-desc": [true, true, true],
                                       "footer-props": {
                                         showFirstLastPage: true,
                                         firstIcon: "mdi-arrow-collapse-left",
@@ -26757,7 +26988,7 @@ var render = function() {
                                   _c("v-text-field", {
                                     attrs: {
                                       "append-icon": "search",
-                                      label: "Search",
+                                      label: "Search all",
                                       "single-line": "",
                                       "hide-details": ""
                                     },
@@ -26783,195 +27014,137 @@ var render = function() {
                                   }
                                 },
                                 [
-                                  _c("div", { staticClass: "col" }, [
-                                    _c("label", [_vm._v("Name: ")]),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
+                                  _c(
+                                    "div",
+                                    { staticClass: "col" },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: { label: "Name:" },
+                                        model: {
                                           value: _vm.searchObject.name,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.searchObject,
+                                              "name",
+                                              $$v
+                                            )
+                                          },
                                           expression: "searchObject.name"
                                         }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: { type: "text" },
-                                      domProps: {
-                                        value: _vm.searchObject.name
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.searchObject,
-                                            "name",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    })
-                                  ]),
+                                      })
+                                    ],
+                                    1
+                                  ),
                                   _vm._v(" "),
-                                  _c("div", { staticClass: "col" }, [
-                                    _c("label", [_vm._v("Email: ")]),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
+                                  _c(
+                                    "div",
+                                    { staticClass: "col" },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: { label: "Email:" },
+                                        model: {
                                           value: _vm.searchObject.email,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.searchObject,
+                                              "email",
+                                              $$v
+                                            )
+                                          },
                                           expression: "searchObject.email"
                                         }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: { type: "text" },
-                                      domProps: {
-                                        value: _vm.searchObject.email
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.searchObject,
-                                            "email",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    })
-                                  ]),
+                                      })
+                                    ],
+                                    1
+                                  ),
                                   _vm._v(" "),
-                                  _c("div", { staticClass: "col" }, [
-                                    _c("label", [_vm._v("Type: ")]),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
+                                  _c(
+                                    "div",
+                                    { staticClass: "col" },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: { label: "Type:" },
+                                        model: {
                                           value: _vm.searchObject.type,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.searchObject,
+                                              "type",
+                                              $$v
+                                            )
+                                          },
                                           expression: "searchObject.type"
                                         }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: { type: "text" },
-                                      domProps: {
-                                        value: _vm.searchObject.type
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.searchObject,
-                                            "type",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    })
-                                  ]),
+                                      })
+                                    ],
+                                    1
+                                  ),
                                   _vm._v(" "),
-                                  _c("div", { staticClass: "col" }, [
-                                    _c("label", [_vm._v("Active: ")]),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
+                                  _c(
+                                    "div",
+                                    { staticClass: "col" },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: { label: "Active:" },
+                                        model: {
                                           value: _vm.searchObject.active,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.searchObject,
+                                              "active",
+                                              $$v
+                                            )
+                                          },
                                           expression: "searchObject.active"
                                         }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: { type: "text" },
-                                      domProps: {
-                                        value: _vm.searchObject.active
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.searchObject,
-                                            "active",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    })
-                                  ]),
+                                      })
+                                    ],
+                                    1
+                                  ),
                                   _vm._v(" "),
-                                  _c("div", { staticClass: "col" }, [
-                                    _c("label", [_vm._v("NIF: ")]),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
+                                  _c(
+                                    "div",
+                                    { staticClass: "col" },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: { label: "NIF:" },
+                                        model: {
                                           value: _vm.searchObject.nif,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.searchObject,
+                                              "nif",
+                                              $$v
+                                            )
+                                          },
                                           expression: "searchObject.nif"
                                         }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: { type: "text" },
-                                      domProps: { value: _vm.searchObject.nif },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.searchObject,
-                                            "nif",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    })
-                                  ]),
+                                      })
+                                    ],
+                                    1
+                                  ),
                                   _vm._v(" "),
-                                  _c("div", { staticClass: "col" }, [
-                                    _c("label", [_vm._v("Balance: ")]),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
+                                  _c(
+                                    "div",
+                                    { staticClass: "col" },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: { label: "Balance:" },
+                                        model: {
                                           value: _vm.searchObject.balance,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.searchObject,
+                                              "balance",
+                                              $$v
+                                            )
+                                          },
                                           expression: "searchObject.balance"
                                         }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: { type: "text" },
-                                      domProps: {
-                                        value: _vm.searchObject.balance
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.searchObject,
-                                            "balance",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    })
-                                  ])
+                                      })
+                                    ],
+                                    1
+                                  )
                                 ]
                               ),
                               _vm._v(" "),

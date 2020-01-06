@@ -34,18 +34,37 @@
               <v-text-field
                 v-model="search"
                 append-icon="search"
-                label="Search"
+                label="Search all"
                 single-line
                 hide-details
               ></v-text-field>
+              <div class="form-row" align-center
+          justify-center>
+            <div class="col" >
+              <v-text-field v-model="searchObject.id" label="ID:"></v-text-field>
+            </div>
+            <div class="col">
+              <v-text-field v-model="searchObject.type" label="Type:"></v-text-field>
+            </div>
+            <div class="col">
+              <v-text-field v-model="searchObject.date" label="Date:" hint="YYYY-MM-DD format"
+              persistent-hint></v-text-field>
+            </div>
+            <div class="col">
+              <v-text-field v-model="searchObject.category_id" label="Category:"></v-text-field>
+            </div>
+            <div class="col">
+              <v-text-field v-model="searchObject.type_payment" label="Type of payment:"></v-text-field>
+            </div> 
+            </div>
             </v-card-title>
             <v-data-table
               :headers="headers"
-              :items="movements"
+              :items="getfilters"
               :search="search"
               :items-per-page=5
-              :sort-by="['date', 'type','category_id','transfer','value','iban','description','source_description','mb_entity_code','type_payment','start_balance','end_balance']"
-              :sort-desc="[true, true]"
+              :sort-by="['id','date', 'type','category_id','transfer','transfer_wallet_id','value','iban','description','source_description','mb_entity_code','type_payment','start_balance','end_balance']"
+              :sort-desc="[true, true,true]"
               class="elevation-1"
               :footer-props="{
                 showFirstLastPage: true,
@@ -128,15 +147,26 @@ export default {
       return { 
         dialog:null,
         search:'',
-        headers:[{
+        searchObject:{
+          id:'',
+          type:'',
+          date:'',
+          category_id:'',
+          type_payment:'',
+          email:''
+        },
+        headers:[{text:'ID', value:'id'},
+          {
             text: 'Type',
             value:'type'
         },
         {text:'Transfer',value:'transfer'       
         },
+        {text:'Transfer Wallet Email',value:'transfer_wallet_id'       
+        },
         {text:'Type Payment',value:'type_payment'       
         },
-        {text:'Category ID',value:'category_id'       
+        {text:'Category',value:'category_id'       
         },
         {text:'IBAN',value:'iban'       
         },
@@ -162,6 +192,7 @@ export default {
         categories:[],
         wallet:[],
         user:[],
+        users:[],
         user_id:null,
         user_wallet_id:null,
         editedIndex: -1,
@@ -181,6 +212,29 @@ export default {
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'Edit Movement' : 'Edit Movement'
+    },
+    
+    getfilters(){
+      let self = this;
+      let movements = this.movements;
+
+      if(this.searchObject.category_id !== '') {
+        movements = movements.filter(movements => movements.category_id.includes(self.searchObject.category_id));
+      }
+      if(this.searchObject.type !== '') {
+        movements = movements.filter(movements => movements.type.toLowerCase().includes(self.searchObject.type.toLowerCase()));
+      }
+      if(this.searchObject.id !== '') {
+        movements = movements.filter(movements => movements.id.toString().includes(self.searchObject.id));
+      }
+      if(this.searchObject.type_payment !== '') {
+        movements = movements.filter(movements => movements.type_payment.toLowerCase().includes(self.searchObject.type_payment.toLowerCase()));
+      }
+      if(this.searchObject.date !== '') {
+        movements = movements.filter(movements => movements.date.toLowerCase().includes(self.searchObject.date.toLowerCase()));
+      }
+      
+      return movements;
     }
   },
 
@@ -193,6 +247,7 @@ export default {
   created() {
     this.getCategories();    
     this.getUser();   
+    this.getUsers();
   },
 
   methods:{
@@ -204,6 +259,15 @@ export default {
           .catch(error => {
               console.log(error);
           });     
+    },
+    async getUsers(){
+      await axios.get("/api/users")
+          .then(response => {
+              this.users = response.data         
+          })
+          .catch(error => {
+              console.log(error);
+          }); 
     },
     async getUser() {
         this.user = this.$store.state.user
@@ -225,9 +289,19 @@ export default {
                 element.transfer == 1 ? element.transfer = 'Yes' : element.transfer = 'No'
                 element.type == 'e' ? element.type = 'Expense' : element.type = 'Income'
                 element.type_payment == 'c' ? element.type_payment = 'Cash' : element.type_payment == 'bt' ?  element.type_payment='Bank Transfer' : element.type_payment='MB Payment'
+                
                 this.categories.forEach(category => {
                   element.category_id == category.id ? element.category_id = category.name : 'n/a'
                 });
+                if(element.category_id === null){
+                  element.category_id = 'N/A'
+                }
+                
+                
+               // this.users.forEach(user => {
+                  //element.transfer_wallet_id == user.id ? element.transfer_wallet_id = user.email : element.transfer_wallet_id = 'N/A'
+               //   element.wallet_id == user.id ? element.wallet_id = user.email : element.wallet_id = 'N/A'
+               // });                
           })
           })
           .catch(error => {

@@ -20,37 +20,30 @@
               <v-text-field
                 v-model="search"
                 append-icon="search"
-                label="Search"
+                label="Search all"
                 single-line
                 hide-details
               ></v-text-field>
             </v-card-title>
-            <div class="form-row" align-center
-          justify-center>
-            <div class="col" >
-              <label>Name: </label>
-              <input type="text" class="form-control" v-model="searchObject.name">
-            </div>
-            <div class="col">
-              <label>Email: </label>
-              <input type="text" class="form-control" v-model="searchObject.email">
-            </div>
-            <div class="col">
-              <label>Type: </label>
-              <input type="text" class="form-control" v-model="searchObject.type">
-            </div>
-            <div class="col">
-              <label>Active: </label>
-              <input type="text" class="form-control" v-model="searchObject.active">
-            </div>
-            <div class="col">
-              <label>NIF: </label>
-              <input type="text" class="form-control" v-model="searchObject.nif">
-            </div>
-            <div class="col">
-              <label>Balance: </label>
-              <input type="text" class="form-control" v-model="searchObject.balance">
-            </div>
+            <div class="form-row" align-center justify-center>
+              <div class="col" >
+                <v-text-field v-model="searchObject.name" label="Name:"></v-text-field>
+              </div>
+              <div class="col">
+                <v-text-field v-model="searchObject.email" label="Email:"></v-text-field>
+              </div>
+              <div class="col">
+                <v-text-field v-model="searchObject.type" label="Type:"></v-text-field>
+              </div>
+              <div class="col">
+                <v-text-field v-model="searchObject.active" label="Active:"></v-text-field>
+              </div>
+              <div class="col">
+                <v-text-field v-model="searchObject.nif" label="NIF:"></v-text-field>
+              </div>
+              <div class="col">
+                <v-text-field v-model="searchObject.balance" label="Balance:"></v-text-field>
+              </div>
             </div>
     <v-data-table
       :headers="headers"
