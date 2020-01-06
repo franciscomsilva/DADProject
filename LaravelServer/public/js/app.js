@@ -2095,11 +2095,11 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("api/login", this.user).then(function (response) {
         _this.$store.commit("setToken", response.data.access_token);
 
+        _this.$socket.emit('register', response.data.data);
+
         return axios.get("api/users/me");
       }).then(function (response) {
         _this.$store.commit("setUser", response.data.data);
-
-        _this.$socket.emit('register', response.data.data);
 
         _this.$router.push('/home');
       })["catch"](function (error) {
@@ -2457,7 +2457,7 @@ __webpack_require__.r(__webpack_exports__);
               _context4.next = 9;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/registerMovement', this.form).then(function (response) {
                 if (_this4.form.transfer == 1) {
-                  _this4.$socket.emit("transfer-user", _this4.form.transfer_wallet_id, _this4.$store.state.user, _this4.form.value);
+                  _this4.$socket.emit('transfer-user', _this4.form.transfer_wallet_id, _this4.$store.state.user, _this4.form.value);
                 }
 
                 _this4.$router.push('/movements');
@@ -2494,10 +2494,11 @@ __webpack_require__.r(__webpack_exports__);
             case 5:
               _context5.next = 7;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/registerMovement', this.form).then(function (response) {
-                _this5.$router.push('/movements');
-              })["catch"](function (error) {
-                _this5.hasAlert = true;
-                console.log(error);
+                _this5.$socket.emit('income-user', _this5.form.wallet_id, _this5.form.value);
+
+                _this5.$toasted.show("Income sent!");
+
+                _this5.$router.push('/home');
               }));
 
             case 7:
@@ -2506,11 +2507,6 @@ __webpack_require__.r(__webpack_exports__);
           }
         }
       }, null, this);
-    }
-  },
-  sockets: {
-    chat: function chat(msg) {
-      this.allMsgText = msg + '\n' + this.allMsgText;
     }
   }
 });
@@ -2743,6 +2739,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   sockets: {
     transfer: function transfer(user) {
+      this.getMovements();
+      this.getUserWallet();
+    },
+    income: function income(amount) {
       this.getMovements();
       this.getUserWallet();
     }
@@ -80438,6 +80438,9 @@ var app = new Vue({
   sockets: {
     transfer: function transfer(user) {
       this.$toasted.show("Received transfer of ".concat(user.amount, "\u20AC from ").concat(user.name, "!"));
+    },
+    income: function income(amount) {
+      this.$toasted.show("Received income of ".concat(amount, "\u20AC!"));
     }
   },
   methods: {
@@ -81056,13 +81059,13 @@ var routes = [{
   component: _components_users_ListUsers__WEBPACK_IMPORTED_MODULE_8__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     console.log(_store_js__WEBPACK_IMPORTED_MODULE_9__["default"].state.user);
-    if (_store_js__WEBPACK_IMPORTED_MODULE_9__["default"].state.user.type == 'a') next();else next('/home');
+    if (_store_js__WEBPACK_IMPORTED_MODULE_9__["default"].state.user.type === 'a') next();else next('/home');
   }
 }, {
   path: '/movements',
   component: _components_movements_ListComponent__WEBPACK_IMPORTED_MODULE_6__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store_js__WEBPACK_IMPORTED_MODULE_9__["default"].state.user.type == 'o') next('/movements/create');else next();
+    if (_store_js__WEBPACK_IMPORTED_MODULE_9__["default"].state.user.type === 'o') next('/movements/create');else next();
   }
 }];
 /* harmony default export */ __webpack_exports__["default"] = (new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({

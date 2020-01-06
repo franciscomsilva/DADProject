@@ -21,9 +21,9 @@
                 <v-card-text>
                   <v-form ref="form" >
                     <v-col v-if="($store.state.user.type === 'o' || $store.state.user.type === 'a') && $store.state.user.active === 1" class="d-flex" cols="12" sm="6" >
-                       <v-select 
-                          :rules="[rules.required]" 
-                          v-model="form.type_payment" 
+                       <v-select
+                          :rules="[rules.required]"
+                          v-model="form.type_payment"
                           :items="income_payment_types"
                           label="Type of Payment"
                           >
@@ -38,15 +38,15 @@
                     </v-col>
 
                     <v-col v-if="$store.state.user.type === 'u' && $store.state.user.active === 1 && form.transfer == false" class="d-flex" cols="12" sm="6" >
-                       <v-select 
-                          :rules="[rules.required]" 
-                          v-model="form.type_payment" 
+                       <v-select
+                          :rules="[rules.required]"
+                          v-model="form.type_payment"
                           :items="expense_payment_types"
                           label="Type of Payment"
                           >
                       </v-select>
                     </v-col>
-                    
+
                     <v-row v-if="form.type_payment ==='bt'">
                       <v-col cols="8">
                         <v-text-field
@@ -82,10 +82,10 @@
                     <v-row>
                       <v-col v-if="(($store.state.user.type === 'o' || $store.state.user.type === 'a') || ($store.state.user.type === 'u' && form.transfer == true)) && $store.state.user.active === 1" class="d-flex" cols="12" sm="6" >
 
-                         <v-select 
-                          
-                         :rules="[rules.required]" 
-                         v-model="form.wallet_id" 
+                         <v-select
+
+                         :rules="[rules.required]"
+                         v-model="form.wallet_id"
                          :items="users"
                          item-text="name"
                          item-value="id"
@@ -95,10 +95,10 @@
                       </v-col>
                       <v-col class="d-flex" cols="12" sm="6">
 
-                        <v-select 
-                          
-                         :rules="[rules.required]" 
-                         v-model="form.category_id" 
+                        <v-select
+
+                         :rules="[rules.required]"
+                         v-model="form.category_id"
                          :items="incomeCategories"
                          item-text="name"
                          item-value="id"
@@ -167,7 +167,7 @@ export default {
 
 
     data : function(){
-        
+
         return  {
             form: {
                 wallet_id:null, /* user id */
@@ -182,7 +182,7 @@ export default {
                 mb_payment_reference:null,
                 description:null,
                 source_description:null,
-                value:null        
+                value:null
             },
             incomeCategories: [],
             debitCategories: [],
@@ -207,7 +207,7 @@ export default {
                   return pattern.test(value) || 'Must contain 9 digits'
                 }
 
-                
+
             },
             income_payment_types: [{text: 'Cash', value: 'c'},{text: 'Bank Transfer', value:'bt'}],
             expense_payment_types: [{text: 'Bank Transfer', value:'bt'},{text: 'MB payment', value: 'mb'}],
@@ -221,7 +221,7 @@ export default {
       this.getDebitCategories();
       this.getUsers();
     },
-  
+
     methods:{
 
         async getIncomeCategories() {
@@ -229,7 +229,7 @@ export default {
             await axios.get("/api/categories/incomeCategories")
             .then(response => {
                 this.incomeCategories = response.data
-                
+
             })
             .catch(error => {
                 console.log(error);
@@ -241,12 +241,12 @@ export default {
             await axios.get("/api/categories/debitCategories")
             .then(response => {
                 this.debitCategories = response.data
-                
+
             })
             .catch(error => {
                 console.log(error);
             });
-        },        
+        },
 
         async getUsers() {
 
@@ -278,14 +278,14 @@ export default {
           await axios.post('api/registerMovement', this.form)
                 .then(response=>{
                   if(this.form.transfer == 1){
-                    this.$socket.emit(`transfer-user`,this.form.transfer_wallet_id,this.$store.state.user,this.form.value);
+                    this.$socket.emit('transfer-user',this.form.transfer_wallet_id,this.$store.state.user,this.form.value);
                   }
                   this.$router.push('/movements')
                 }).catch(error => {
                   this.hasAlert = true;
                   this.errorMsg = "Error creating new movement!";
                 });
-      
+
         },
 
         registerIncome: async function (){
@@ -298,20 +298,14 @@ export default {
 
           await axios.post('api/registerMovement', this.form)
                 .then(response=>{
-                  this.$router.push('/movements')
-                }).catch(error => {
-                  this.hasAlert = true
-                  console.log(error)
-                });
-      
+                  this.$socket.emit('income-user',this.form.wallet_id,this.form.value);
+                  this.$toasted.show(`Income sent!`);
+                  this.$router.push('/home')
+                })
+
         }
-    },
-  sockets:{
-    chat(msg){
-      this.allMsgText = msg + '\n' + this.allMsgText;
     }
-  }
-      
+
 }
 
 

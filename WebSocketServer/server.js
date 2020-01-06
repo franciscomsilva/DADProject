@@ -62,11 +62,29 @@ io.on('connection', function (socket) {
         if(localUser){
             user.amount = amount;
             io.to(localUser.socketID).emit('transfer',user);
-            console.log(`Transfer from: ${user.id} to: ${id}`)
+            console.log(`Transfer of ${amount} from: ${user.id} to: ${id}`)
         }else{
-            console.log('Nao logado')
+            console.log(`User ${id} not logged in! Sending email!`)
+
+            /*SENDS EMAIL*/
+
         }
     });
+
+    socket.on('income-user', (id,amount) => {
+        let localUser = loggedUsers.userInfoByID(id);
+
+        if(localUser){
+            io.to(localUser.socketID).emit('income',amount);
+            console.log(`Income of ${amount} to: ${id}`)
+        }else{
+            console.log(`User ${id} not logged in! Sending email!`)
+
+            /*SENDS EMAIL*/
+
+        }
+    });
+
 
     socket.on('register',(user)=>{
         console.log(`Registering user: ${user.id} with sockedID: ${socket.id}`)

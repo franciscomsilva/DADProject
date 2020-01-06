@@ -158,6 +158,10 @@ export default {
     transfer(user){
       this.getMovements();
       this.getUserWallet();
+    },
+    income(amount){
+      this.getMovements();
+      this.getUserWallet();
     }
   }
 }

@@ -20,11 +20,11 @@ const routes = [
     {path: '/movements/create', component: CreateMovements},
     {path: '/users', component: ListUsers, beforeEnter: (to, from, next) => {
             console.log(store.state.user)
-            if (store.state.user.type == 'a') next(); else next('/home')
+            if (store.state.user.type ==='a') next(); else next('/home')
         }
     },
     {path: '/movements', component: ListMovements, beforeEnter: (to, from, next) => {
-            if (store.state.user.type == 'o') next('/movements/create'); else next();
+            if (store.state.user.type === 'o') next('/movements/create'); else next();
         }
     },
 

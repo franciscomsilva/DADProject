@@ -51,6 +51,9 @@ const app = new Vue({
     sockets:{
         transfer(user) {
             this.$toasted.show(`Received transfer of ${user.amount}€ from ${user.name}!`);
+        },
+        income(amount) {
+            this.$toasted.show(`Received income of ${amount}€!`);
         }
     },
     methods: {
