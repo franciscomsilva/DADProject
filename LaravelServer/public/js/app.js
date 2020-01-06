@@ -82077,6 +82077,38 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/statistics/PlataformStatistics.vue":
+/*!********************************************************************!*\
+  !*** ./resources/js/components/statistics/PlataformStatistics.vue ***!
+  \********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+var render, staticRenderFns
+var script = {}
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_0__["default"])(
+  script,
+  render,
+  staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+component.options.__file = "resources/js/components/statistics/PlataformStatistics.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/users/EditComponent.vue":
 /*!*********************************************************!*\
   !*** ./resources/js/components/users/EditComponent.vue ***!
@@ -82235,7 +82267,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_movements_CreateComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/movements/CreateComponent */ "./resources/js/components/movements/CreateComponent.vue");
 /* harmony import */ var _components_users_ListUsers__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/users/ListUsers */ "./resources/js/components/users/ListUsers.vue");
 /* harmony import */ var _components_statistics_PersonalStatistics__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/statistics/PersonalStatistics */ "./resources/js/components/statistics/PersonalStatistics.vue");
-/* harmony import */ var _toast__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./toast */ "./resources/js/toast.js");
+/* harmony import */ var _components_statistics_PlataformStatistics__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/statistics/PlataformStatistics */ "./resources/js/components/statistics/PlataformStatistics.vue");
+/* harmony import */ var _toast__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./toast */ "./resources/js/toast.js");
+
 
 
 
@@ -82304,6 +82338,17 @@ var routes = [{
     } else {
       vue__WEBPACK_IMPORTED_MODULE_0___default.a.toasted.global.unauthorized();
       next('/movements');
+    }
+  }
+}, {
+  path: '/plataform/statistics',
+  component: _components_statistics_PlataformStatistics__WEBPACK_IMPORTED_MODULE_10__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (user.type === 'a') {
+      next();
+    } else {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.toasted.global.unauthorized();
+      next('/home');
     }
   }
 }];
