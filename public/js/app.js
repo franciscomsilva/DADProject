@@ -3397,6 +3397,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3404,6 +3407,9 @@ __webpack_require__.r(__webpack_exports__);
       search: '',
       dialog: false,
       headers: [{
+        text: 'Photo',
+        value: 'photo'
+      }, {
         text: 'User Name',
         value: 'name'
       }, {
@@ -3419,9 +3425,6 @@ __webpack_require__.r(__webpack_exports__);
         text: 'NIF',
         value: 'nif'
       }, {
-        text: 'Photo',
-        value: 'photo'
-      }, {
         text: 'Balance',
         value: 'balance'
       }, {
@@ -3430,7 +3433,7 @@ __webpack_require__.r(__webpack_exports__);
         sortable: false
       }],
       users: [],
-      wallet: null,
+      wallets: [],
       user_id_edit: null,
       user: [],
       selectedFile: null,
@@ -3470,68 +3473,69 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    this.getWallets();
     this.getUsers();
     this.getUser();
   },
   methods: {
-    getUser: function getUser() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUser$(_context) {
+    getWallets: function getWallets() {
+      var _this = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getWallets$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              this.user = this.$store.state.user;
-
-            case 1:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, null, this);
-    },
-    getUsers: function getUsers() {
-      var _this = this;
-
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUsers$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.next = 2;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/usersList").then(function (response) {
-                _this.users = response.data.data;
-
-                _this.users.forEach(function (element) {
-                  element.active == 1 ? element.active = 'Active' : element.active = 'Disable';
-                  element.type == 'u' ? element.type = 'User' : element.type == 'a' ? element.type = 'Admin' : element.type = 'Operator';
-
-                  if (element.type === 'u') {
-                    _this.getUserWallet(element.id);
-
-                    if (true) {
-                      element['balance'] = 'empty';
-                    } else {}
-                  }
-                });
+              _context.next = 2;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/wallets/").then(function (response) {
+                _this.wallets = response.data.data;
               })["catch"](function (error) {
                 console.log(error);
               }));
 
             case 2:
             case "end":
-              return _context2.stop();
+              return _context.stop();
           }
         }
       });
     },
-    getUserWallet: function getUserWallet(user_id) {
+    getUser: function getUser() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUser$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              this.user = this.$store.state.user;
+
+            case 1:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, null, this);
+    },
+    getUsers: function getUsers() {
       var _this2 = this;
 
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUserWallet$(_context3) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUsers$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
               _context3.next = 2;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/wallets/" + user_id).then(function (response) {
-                _this2.wallet = response.data.data.balance;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/usersList").then(function (response) {
+                _this2.users = response.data.data;
+
+                _this2.users.forEach(function (element) {
+                  element.active == 1 ? element.active = 'Active' : element.active = 'Disable';
+                  element.type === 'u' ? element.type = 'User' : element.type === 'a' ? element.type = 'Admin' : element.type = 'Operator';
+
+                  if (element.type === 'User') {
+                    _this2.wallets.forEach(function (wallet) {
+                      if (wallet.email === element.email) {
+                        wallet.balance > 0.00 ? element.balance = 'Not empty' : element.balance = 'Empty';
+                      }
+                    });
+                  }
+                });
               })["catch"](function (error) {
                 console.log(error);
               }));
@@ -3548,13 +3552,14 @@ __webpack_require__.r(__webpack_exports__);
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              this.user_id_edit = this.users.indexOf(item) + 2;
+              this.user_id_edit = this.users.indexOf(item);
+              this.editedUser = Object.assign({}, item);
 
-              if (this.user_id_edit == this.user.id) {} else {
+              if (this.editedUser.id == this.user.id) {} else {
                 confirm('Are you sure you want to disable this user?') && this.updateUser();
               }
 
-            case 2:
+            case 3:
             case "end":
               return _context4.stop();
           }
@@ -3569,35 +3574,31 @@ __webpack_require__.r(__webpack_exports__);
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              console.log(this.users[this.user_id_edit]);
-
-              if (!(this.users[this.user_id_edit].type === 'User')) {
-                _context5.next = 10;
+              if (!(this.editedUser.type === 'User' && this.editedUser.balance === 'Empty')) {
+                _context5.next = 9;
                 break;
               }
 
               formData = new FormData();
-              this.users[this.user_id_edit].active === 'Active' ? formData.append('active', 1) : formData.append('active', 0);
+              this.editedUser.active === 'Active' ? formData.append('active', 0) : formData.append('active', 1);
               headers = {
                 'Content-Type': 'multipart/form-data'
               };
-              _context5.next = 7;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/users/editStatus/' + this.user_id_edit, formData, headers).then(function (response) {})["catch"](function (error) {
+              _context5.next = 6;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/users/editStatus/' + this.editedUser.id, formData, headers).then(function (response) {})["catch"](function (error) {
                 _this3.hasAlert = true;
                 console.log(error);
               }));
 
-            case 7:
+            case 6:
               this.getUsers();
-              _context5.next = 11;
+              _context5.next = 10;
               break;
 
-            case 10:
-              if (!(this.users[this.user_id_edit].type === 'User')) {
-                confirm('Não podes dar disable a ops ou adms');
-              }
+            case 9:
+              confirm('Disable only users with empty wallets');
 
-            case 11:
+            case 10:
             case "end":
               return _context5.stop();
           }
@@ -3609,10 +3610,11 @@ __webpack_require__.r(__webpack_exports__);
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
-              this.user_id_edit = this.users.indexOf(item) + 2;
+              this.user_id_edit = this.users.indexOf(item);
+              this.editedUser = Object.assign({}, item);
               confirm('Are you sure you want to delete this user?') && this["delete"]();
 
-            case 2:
+            case 3:
             case "end":
               return _context6.stop();
           }
@@ -3626,26 +3628,26 @@ __webpack_require__.r(__webpack_exports__);
         while (1) {
           switch (_context7.prev = _context7.next) {
             case 0:
-              if (this.user_id_edit === this.user.id) {
-                _context7.next = 4;
+              if (!(!(this.editedUser.id === this.user.id) || this.editedUser.type === 'User')) {
+                _context7.next = 6;
                 break;
               }
 
               _context7.next = 3;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.put('api/users/delete/' + this.user_id_edit).then(function (response) {})["catch"](function (error) {
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.put('api/users/delete/' + this.editedUser.id).then(function (response) {})["catch"](function (error) {
                 _this4.hasAlert = true;
                 console.log(error);
               }));
 
             case 3:
               this.getUsers();
+              _context7.next = 7;
+              break;
 
-            case 4:
-              if (this.user_id_edit === this.user.id) {
-                confirm('Não te podes apagar a ti proprio');
-              }
+            case 6:
+              confirm('Delete only other admins or operators');
 
-            case 5:
+            case 7:
             case "end":
               return _context7.stop();
           }
@@ -26714,6 +26716,24 @@ var render = function() {
                                 scopedSlots: _vm._u(
                                   [
                                     {
+                                      key: "item.photo",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _c("v-img", {
+                                            staticClass: "img-circle",
+                                            staticStyle: {
+                                              "max-width": "50px"
+                                            },
+                                            attrs: {
+                                              src:
+                                                "/storage/fotos/" + item.photo
+                                            }
+                                          })
+                                        ]
+                                      }
+                                    },
+                                    {
                                       key: "top",
                                       fn: function() {
                                         return [
@@ -27131,7 +27151,7 @@ var render = function() {
                                   ],
                                   null,
                                   false,
-                                  3134803959
+                                  284345249
                                 )
                               })
                             ],
