@@ -243,6 +243,8 @@ export default {
             await axios.get("/api/users/platformUsers")
             .then(response => {
                 this.users = response.data
+              /*FILTERS TO REMOVE LOGGED IN USER*/
+              this.users = this.users.filter(user => user.id != this.$store.state.user.id);
             })
             .catch(error => {
                 console.log(error);
@@ -253,7 +255,7 @@ export default {
             this.form.type = 'e';
             //this.form.wallet_id = user_id;
             this.hasAlert = false;
-            this.form.transfer_wallet_id = this.form.wallet_id;
+            this.form.transfer_wallet_id = 12;
             this.form.wallet_id=null;
             if(this.form.transfer === true){
               this.form.transfer = 1;
@@ -266,7 +268,6 @@ export default {
           await axios.post('api/registerMovement', this.form)
                 .then(response=>{
                   if(this.form.transfer == 1){
-                    console.log('dsa')
                     this.$socket.emit(`transfer-user`,this.form.transfer_wallet_id,this.$store.state.user);
                   }
                   this.$router.push('/movements')

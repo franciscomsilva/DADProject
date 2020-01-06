@@ -131,12 +131,10 @@ export default {
     },
       
     async getMovements() {
-      console.log('GET MOVEMENTS')
           await axios.get("/api/users/movements")
           .then(response => {
               this.movements = response.data
               this.user_wallet_id = response.data[0].wallet_id
-              console.log(this.movements)
           })
           .catch(error => {
               console.log(error);

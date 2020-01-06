@@ -62,11 +62,14 @@ class MovementControllerAPI extends Controller
             'value'=>'required'
         ]);
 
+
         $movement = new Movement();
         
         
         $movement->fill($request->all());
-        
+
+
+
         
         if($movement->type === 'e'){
             $movement->wallet_id = $request->user()->id;
@@ -84,8 +87,13 @@ class MovementControllerAPI extends Controller
         $movement->save();      
 
         $movement->wallet()->update(['balance'=> $movement->end_balance]);
-
         if($movement->transfer === 1){
+            /*CHECKS IF USER TRIES TO TRANSFER TO HIS OWN WALLET*/
+            if($movement->transfer_wallet_id == $request->user()->id){
+              abort(400, 'Cannot transfer to own wallet');
+           }
+
+
             $mirroedMovement = new Movement();
             $mirroedMovement->wallet_id = $movement->transfer_wallet_id;
             $mirroedMovement->type = 'i';

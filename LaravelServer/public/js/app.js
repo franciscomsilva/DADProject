@@ -2401,6 +2401,11 @@ __webpack_require__.r(__webpack_exports__);
               _context3.next = 2;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users/platformUsers").then(function (response) {
                 _this3.users = response.data;
+                /*FILTERS TO REMOVE LOGGED IN USER*/
+
+                _this3.users = _this3.users.filter(function (user) {
+                  return user.id != _this3.$store.state.user.id;
+                });
               })["catch"](function (error) {
                 console.log(error);
               }));
@@ -2422,7 +2427,7 @@ __webpack_require__.r(__webpack_exports__);
               this.form.type = 'e'; //this.form.wallet_id = user_id;
 
               this.hasAlert = false;
-              this.form.transfer_wallet_id = this.form.wallet_id;
+              this.form.transfer_wallet_id = 12;
               this.form.wallet_id = null;
 
               if (this.form.transfer === true) {
@@ -2440,8 +2445,6 @@ __webpack_require__.r(__webpack_exports__);
               _context4.next = 9;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/registerMovement', this.form).then(function (response) {
                 if (_this4.form.transfer == 1) {
-                  console.log('dsa');
-
                   _this4.$socket.emit("transfer-user", _this4.form.transfer_wallet_id, _this4.$store.state.user);
                 }
 
@@ -2673,20 +2676,18 @@ __webpack_require__.r(__webpack_exports__);
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              console.log('GET MOVEMENTS');
-              _context2.next = 3;
+              _context2.next = 2;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users/movements").then(function (response) {
                 _this.movements = response.data;
                 _this.user_wallet_id = response.data[0].wallet_id;
-                console.log(_this.movements);
               })["catch"](function (error) {
                 console.log(error);
               }));
 
-            case 3:
+            case 2:
               this.getUserWallet();
 
-            case 4:
+            case 3:
             case "end":
               return _context2.stop();
           }
