@@ -28,6 +28,7 @@ Route::middleware('auth:api')->post('logout','LoginControllerAPI@logout');
 Route::middleware('auth:api')->post('movements/update/{id}','MovementControllerAPI@update');
 Route::middleware('auth:api')->post('registerMovement', 'MovementControllerAPI@store')->name('registerMovement');
 Route::middleware('auth:api')->get('users/movements','UserMovementsControllerAPI@index');
+Route::middleware('auth:api')->get('movements/all','MovementControllerAPI@index');
 
 
 
@@ -44,7 +45,6 @@ Route::middleware('auth:api')->get('categories/debitCategories', 'CategoryContro
 
 
 //User
-
 Route::get('users','UserControllerAPI@index')->name('users')->middleware('auth:api');
 Route::middleware('auth:api')->get('users/me', 'UserControllerAPI@myProfile');
 Route::middleware('auth:api')->get('usersList','UserControllerAPI@index');
@@ -53,9 +53,3 @@ Route::middleware('auth:api')->get('users/{id}', 'UserControllerAPI@show');
 Route::middleware('auth:api')->post('users/{id}','UserControllerAPI@update');
 Route::middleware('auth:api')->patch('users/editStatus/{id}','UserControllerAPI@updateStatus');
 Route::middleware('auth:api')->put('users/delete/{id}','UserControllerAPI@destroy');
-
-
-
-
-
-

@@ -27,7 +27,7 @@
       :sort-by="['name','email','type','active','nif']"
       :sort-desc="[true, true]"
       class="elevation-1"
-      :items-per-page=5
+      :items-per-page=10
       :footer-props="{
         showFirstLastPage: true,
         firstIcon: 'mdi-arrow-collapse-left',

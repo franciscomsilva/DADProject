@@ -7,7 +7,8 @@ import Edit from "./components/users/EditComponent";
 import ListMovements from "./components/movements/ListComponent";
 import CreateMovements from "./components/movements/CreateComponent";
 import ListUsers from "./components/users/ListUsers";
-import UserStatistics from "./components/users/movements/personalStatistics";
+import UserStatistics from "./components/statistics/PersonalStatistics";
+import PlataformStatistics from "./components/statistics/PlataformStatistics";
 import  "./toast";
 
 Vue.use(VueRouter);
@@ -51,6 +52,15 @@ const routes = [
             } else {
                 Vue.toasted.global.unauthorized();
                 next('/movements');
+            }
+        }
+    },
+    {path: '/plataform/statistics', component: PlataformStatistics, beforeEnter: (to, from, next) => {
+            if (user.type === 'a') {
+                next();
+            } else {
+                Vue.toasted.global.unauthorized();
+                next('/home');
             }
         }
     }

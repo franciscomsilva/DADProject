@@ -3151,6 +3151,587 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/statistics/PersonalStatistics.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/statistics/PersonalStatistics.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-apexcharts */ "./node_modules/vue-apexcharts/dist/vue-apexcharts.js");
+/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_apexcharts__WEBPACK_IMPORTED_MODULE_1__);
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    apexchart: vue_apexcharts__WEBPACK_IMPORTED_MODULE_1___default.a
+  },
+  data: function data() {
+    return {
+      movements: [],
+      lastMonthMovmentsChartOptions: {
+        title: {
+          text: "Incomes and expenses by day over the last month",
+          align: 'center',
+          margin: 25,
+          offsetY: 10,
+          style: {
+            fontSize: '25px'
+          }
+        },
+        noData: {
+          text: 'Loading...'
+        },
+        chart: {
+          height: 350,
+          type: 'area'
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        xaxis: {
+          type: 'datetime',
+          categories: []
+        },
+        yaxis: {
+          title: {
+            text: 'Ammount',
+            offsetX: 5
+          },
+          decimalsInFloat: 2
+        },
+        tooltip: {
+          x: {
+            format: 'dd/MM/yyyy HH:mm'
+          }
+        }
+      },
+      incomesLastMonth: [],
+      expensesLastMonth: [],
+      lastMonthSeries: [],
+      expensesByCategoryChartOptions: {
+        title: {
+          text: "Expenses by category",
+          align: 'center',
+          margin: 25,
+          offsetY: 10,
+          offsetX: -90,
+          style: {
+            fontSize: '25px'
+          }
+        },
+        noData: {
+          text: 'Loading...'
+        },
+        chart: {
+          width: '100%',
+          type: 'pie'
+        },
+        dataLabels: {
+          enabled: false
+        },
+        labels: []
+      },
+      expensesCategories: [],
+      expensesByCategory: [],
+      expensesByCategoryChartSeries: [],
+      expensesByCategoryChartLabels: [],
+      expensesPaymentTypesChartOptions: {
+        title: {
+          text: "Expenses payment types registered",
+          align: 'center',
+          margin: 25,
+          offsetY: 10,
+          offsetX: -65,
+          style: {
+            fontSize: '25px'
+          }
+        },
+        noData: {
+          text: 'Loading...'
+        },
+        chart: {
+          width: '100%',
+          type: 'pie'
+        },
+        dataLabels: {
+          enabled: false
+        },
+        labels: ["MB payment", "Bank transfer", "Wallet transfer"]
+      },
+      expensesPaymentTypesChartSeries: []
+    };
+  },
+  methods: {
+    getGraphicsData: function getGraphicsData() {
+      var _this = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getGraphicsData$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users/movements").then(function _callee(response) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        _this.movements = response.data;
+                        _context.next = 3;
+                        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/categories/debitCategories").then(function (response) {
+                          _this.expensesCategories = response.data;
+                        }));
+
+                      case 3:
+                      case "end":
+                        return _context.stop();
+                    }
+                  }
+                });
+              }).then(function () {
+                // Variables used to comparison
+                var currentDate = new Date();
+                var currentYear = currentDate.getFullYear();
+                var currentMonth = currentDate.getMonth() + 1;
+                var currentDay = currentDate.getDay();
+                var currentMovementDay = -1,
+                    currentMovementMonth = -1,
+                    currentMovementYear,
+                    splitDate;
+                var nextDay, nextMonth, nextYear; // Variables for the graphic about last 30 days
+
+                var incomesCurrentDay, expensesCurrentDay; // Variables for the graphic about expenses by category by month over the time
+
+                _this.expensesCategories.forEach(function (expenseCategory) {
+                  _this.expensesByCategory.push({
+                    value: 0,
+                    id: expenseCategory.id
+                  });
+
+                  _this.expensesByCategoryChartLabels.push(expenseCategory.name);
+                }); // Payment types variables
+
+
+                var mbPayment = 0,
+                    bankTransfer = 0,
+                    walletTransfer = 0;
+
+                _this.movements.forEach(function (movement) {
+                  splitDate = movement.date.split("-");
+                  currentMovementYear = parseInt(splitDate[0]);
+                  currentMovementMonth = parseInt(splitDate[1]);
+                  nextDay = parseInt(splitDate[2]); // Divide expenses by categories and payment types
+
+                  if (movement.type === 'e') {
+                    switch (movement.type_payment) {
+                      case "mb":
+                        mbPayment += parseFloat(movement.value);
+                        break;
+
+                      case "bt":
+                        bankTransfer += parseFloat(movement.value);
+                        break;
+
+                      default:
+                        walletTransfer += parseFloat(movement.value);
+                    }
+
+                    _this.expensesByCategory.forEach(function (expenseByCategory) {
+                      if (movement.category_id == expenseByCategory.id) {
+                        expenseByCategory.value += parseFloat(movement.value);
+                      }
+                    });
+                  } // Update values by day
+
+
+                  if (currentMovementDay != nextDay) {
+                    if (currentMovementDay != -1) {
+                      _this.incomesLastMonth.push({
+                        y: incomesCurrentDay,
+                        x: movement.date
+                      });
+
+                      _this.expensesLastMonth.push({
+                        y: expensesCurrentDay,
+                        x: movement.date
+                      });
+                    }
+
+                    currentMovementDay = nextDay;
+                    incomesCurrentDay = expensesCurrentDay = 0;
+                  } // Check if the movement is from last month
+
+
+                  if (currentYear == currentMovementYear && (currentMonth == currentMovementMonth || currentMonth - 1 == currentMovementMonth && currentMovementDay >= currentDay) || currentMonth == 1 && currentYear - 1 == currentMovementYear && currentMovementMonth == 12 && currentMovementDay >= currentDay) {
+                    movement.type === 'i' ? incomesCurrentDay += parseFloat(movement.value) : expensesCurrentDay += parseFloat(movement.value);
+                  }
+                }); // Updates series of the last month's chart
+
+
+                _this.lastMonthSeries = [{
+                  name: 'Incomes',
+                  data: _this.incomesLastMonth
+                }, {
+                  name: 'Expenses',
+                  data: _this.expensesLastMonth
+                }]; // Update expenses by category chart labels
+
+                _this.$refs.expensesByCategoryChart.updateOptions({
+                  labels: _this.expensesByCategoryChartLabels
+                }); // Update expenses by category series
+
+
+                _this.expensesByCategory.forEach(function (expenseByCategory) {
+                  _this.expensesByCategoryChartSeries.push(expenseByCategory.value);
+                }); // Update expenses by payment type series
+
+
+                _this.expensesPaymentTypesChartSeries.push(mbPayment);
+
+                _this.expensesPaymentTypesChartSeries.push(bankTransfer);
+
+                _this.expensesPaymentTypesChartSeries.push(walletTransfer);
+              }));
+
+            case 2:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      });
+    }
+  },
+  created: function created() {
+    this.getGraphicsData();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/statistics/PlataformStatistics.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/statistics/PlataformStatistics.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-apexcharts */ "./node_modules/vue-apexcharts/dist/vue-apexcharts.js");
+/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_apexcharts__WEBPACK_IMPORTED_MODULE_1__);
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    apexchart: vue_apexcharts__WEBPACK_IMPORTED_MODULE_1___default.a
+  },
+  data: function data() {
+    return {
+      movements: [],
+      lastYearMovmentsChartOptions: {
+        title: {
+          text: "Incomes and expenses by month over time",
+          align: 'center',
+          margin: 25,
+          offsetY: 10,
+          style: {
+            fontSize: '25px'
+          }
+        },
+        noData: {
+          text: 'Loading...'
+        },
+        chart: {
+          height: 350,
+          type: 'area'
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        xaxis: {
+          type: 'datetime',
+          categories: []
+        },
+        yaxis: {
+          title: {
+            text: 'Ammount',
+            offsetX: 5
+          },
+          decimalsInFloat: 2
+        },
+        tooltip: {
+          x: {
+            format: 'dd/MM/yyyy HH:mm'
+          }
+        }
+      },
+      incomesLastYear: [],
+      expensesLastYear: [],
+      lastYearSeries: [],
+      expensesByCategoryChartOptions: {
+        title: {
+          text: "Total amount of expenses by category",
+          align: 'center',
+          margin: 25,
+          offsetY: 10,
+          offsetX: -90,
+          style: {
+            fontSize: '25px'
+          }
+        },
+        noData: {
+          text: 'Loading...'
+        },
+        chart: {
+          width: '100%',
+          type: 'pie'
+        },
+        dataLabels: {
+          enabled: false
+        },
+        labels: []
+      },
+      expensesCategories: [],
+      expensesByCategory: [],
+      expensesByCategoryChartSeries: [],
+      expensesByCategoryChartLabels: [],
+      incomesByCategoryChartOptions: {
+        title: {
+          text: "Total amount of incomes by category",
+          align: 'center',
+          margin: 25,
+          offsetY: 10,
+          offsetX: -70,
+          style: {
+            fontSize: '25px'
+          }
+        },
+        noData: {
+          text: 'Loading...'
+        },
+        chart: {
+          width: '100%',
+          type: 'pie'
+        },
+        dataLabels: {
+          enabled: false
+        },
+        labels: []
+      },
+      incomesCategories: [],
+      incomesByCategory: [],
+      incomesByCategoryChartSeries: [],
+      incomesByCategoryChartLabels: []
+    };
+  },
+  methods: {
+    getGraphicsData: function getGraphicsData() {
+      var _this = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getGraphicsData$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/movements/all").then(function _callee(response) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        _this.movements = response.data;
+                        _context.next = 3;
+                        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/categories/incomeCategories").then(function (response) {
+                          _this.incomesCategories = response.data;
+                        }));
+
+                      case 3:
+                        _context.next = 5;
+                        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/categories/debitCategories").then(function (response) {
+                          _this.expensesCategories = response.data;
+                        }));
+
+                      case 5:
+                      case "end":
+                        return _context.stop();
+                    }
+                  }
+                });
+              }).then(function () {
+                var currentDate = new Date();
+                var currentYear = currentDate.getFullYear();
+                var currentMonth = currentDate.getMonth() + 1;
+                var splitDate, nextMonth;
+                var currentMovementYear,
+                    currentMovementMonth = -1;
+                var incomesCurrentMonth, expensesCurrentMonth;
+
+                _this.expensesCategories.forEach(function (expenseCategory) {
+                  _this.expensesByCategory.push({
+                    value: 0,
+                    id: expenseCategory.id
+                  });
+
+                  _this.expensesByCategoryChartLabels.push(expenseCategory.name);
+                });
+
+                _this.incomesCategories.forEach(function (incomeCategory) {
+                  _this.incomesByCategory.push({
+                    value: 0,
+                    id: incomeCategory.id
+                  });
+
+                  _this.incomesByCategoryChartLabels.push(incomeCategory.name);
+                });
+
+                _this.movements.forEach(function (movement) {
+                  splitDate = movement.date.split("-");
+                  currentMovementYear = splitDate[0];
+                  nextMonth = splitDate[1];
+
+                  if (movement.type === 'e') {
+                    _this.expensesByCategory.forEach(function (expenseByCategory) {
+                      if (movement.category_id == expenseByCategory.id) {
+                        expenseByCategory.value++;
+                      }
+                    });
+                  } else {
+                    _this.incomesByCategory.forEach(function (incomeByCategory) {
+                      if (movement.category_id == incomeByCategory.id) {
+                        incomeByCategory.value++;
+                      }
+                    });
+                  }
+
+                  if (currentMovementMonth != nextMonth) {
+                    if (currentMovementYear != -1) {
+                      _this.incomesLastYear.push({
+                        y: incomesCurrentMonth,
+                        x: movement.date
+                      });
+
+                      _this.expensesLastYear.push({
+                        y: expensesCurrentMonth,
+                        x: movement.date
+                      });
+                    }
+
+                    currentMovementMonth = nextMonth;
+                    incomesCurrentMonth = expensesCurrentMonth = 0;
+                  }
+
+                  movement.type === 'i' ? incomesCurrentMonth++ : expensesCurrentMonth++;
+                }); // Update total amount of movments by type by month over time chart data
+
+
+                _this.lastYearSeries = [{
+                  name: 'Incomes',
+                  data: _this.incomesLastYear
+                }, {
+                  name: 'Expenses',
+                  data: _this.expensesLastYear
+                }]; // Update total incomes by category chart labels and series
+
+                _this.$refs.incomesByCategoryChart.updateOptions({
+                  labels: _this.incomesByCategoryChartLabels
+                });
+
+                _this.incomesByCategory.forEach(function (incomeByCategory) {
+                  _this.incomesByCategoryChartSeries.push(incomeByCategory.value);
+                }); // Update total expenses by category chart labels and series
+
+
+                _this.$refs.expensesByCategoryChart.updateOptions({
+                  labels: _this.expensesByCategoryChartLabels
+                });
+
+                _this.expensesByCategory.forEach(function (expenseByCategory) {
+                  _this.expensesByCategoryChartSeries.push(expenseByCategory.value);
+                });
+              }));
+
+            case 2:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      });
+    }
+  },
+  created: function created() {
+    this.getGraphicsData();
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/users/EditComponent.vue?vue&type=script&lang=js&":
 /*!******************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/users/EditComponent.vue?vue&type=script&lang=js& ***!
@@ -3750,298 +4331,6 @@ __webpack_require__.r(__webpack_exports__);
         }
       }, null, this);
     }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/users/movements/personalStatistics.vue?vue&type=script&lang=js&":
-/*!*********************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/users/movements/personalStatistics.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-apexcharts */ "./node_modules/vue-apexcharts/dist/vue-apexcharts.js");
-/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_apexcharts__WEBPACK_IMPORTED_MODULE_1__);
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    apexchart: vue_apexcharts__WEBPACK_IMPORTED_MODULE_1___default.a
-  },
-  data: function data() {
-    return {
-      movements: [],
-      lastMonthMovmentsChartOptions: {
-        title: {
-          text: "Incomes and expenses by day over the last month",
-          align: 'center',
-          margin: 25,
-          offsetY: 10,
-          style: {
-            fontSize: '25px'
-          }
-        },
-        noData: {
-          text: 'Loading...'
-        },
-        chart: {
-          height: 350,
-          type: 'area'
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'smooth'
-        },
-        xaxis: {
-          type: 'datetime',
-          categories: []
-        },
-        yaxis: {
-          title: {
-            text: 'Ammount',
-            offsetX: 5
-          },
-          decimalsInFloat: 2
-        },
-        tooltip: {
-          x: {
-            format: 'dd/MM/yyyy HH:mm'
-          }
-        }
-      },
-      incomesLastMonth: [],
-      expensesLastMonth: [],
-      lastMonthSeries: [],
-      expensesByCategoryChartOptions: {
-        title: {
-          text: "Expenses by category",
-          align: 'center',
-          margin: 25,
-          offsetY: 10,
-          offsetX: -90,
-          style: {
-            fontSize: '25px'
-          }
-        },
-        noData: {
-          text: 'Loading...'
-        },
-        chart: {
-          width: '100%',
-          type: 'pie'
-        },
-        dataLabels: {
-          enabled: false
-        },
-        labels: []
-      },
-      expensesCategories: [],
-      expensesByCategory: [],
-      expensesByCategoryChartSeries: [],
-      expensesByCategoryChartLabels: [],
-      expensesPaymentTypesChartOptions: {
-        title: {
-          text: "Expenses payment types registered",
-          align: 'center',
-          margin: 25,
-          offsetY: 10,
-          offsetX: -65,
-          style: {
-            fontSize: '25px'
-          }
-        },
-        noData: {
-          text: 'Loading...'
-        },
-        chart: {
-          width: '100%',
-          type: 'pie'
-        },
-        dataLabels: {
-          enabled: false
-        },
-        labels: ["MB payment", "Bank transfer", "Wallet transfer"]
-      },
-      expensesPaymentTypesChartSeries: []
-    };
-  },
-  methods: {
-    getGraphicsData: function getGraphicsData() {
-      var _this = this;
-
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getGraphicsData$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.next = 2;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users/movements").then(function _callee(response) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function _callee$(_context) {
-                  while (1) {
-                    switch (_context.prev = _context.next) {
-                      case 0:
-                        _this.movements = response.data;
-                        _context.next = 3;
-                        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/categories/debitCategories").then(function (response) {
-                          _this.expensesCategories = response.data;
-                        }));
-
-                      case 3:
-                      case "end":
-                        return _context.stop();
-                    }
-                  }
-                });
-              }).then(function () {
-                // Variables used to comparison
-                var currentDate = new Date();
-                var currentYear = currentDate.getFullYear();
-                var currentMonth = currentDate.getMonth() + 1;
-                var currentDay = currentDate.getDay();
-                var currentMovementDay = -1,
-                    currentMovementMonth = -1,
-                    currentMovementYear,
-                    splitDate;
-                var nextDay, nextMonth, nextYear; // Variables for the graphic about last 30 days
-
-                var incomesCurrentDay, expensesCurrentDay; // Variables for the graphic about expenses by category by month over the time
-
-                _this.expensesCategories.forEach(function (expenseCategory) {
-                  _this.expensesByCategory.push({
-                    value: 0,
-                    id: expenseCategory.id
-                  });
-
-                  _this.expensesByCategoryChartLabels.push(expenseCategory.name);
-                }); // Payment types variables
-
-
-                var mbPayment = 0,
-                    bankTransfer = 0,
-                    walletTransfer = 0;
-
-                _this.movements.forEach(function (movement) {
-                  splitDate = movement.date.split("-");
-                  currentMovementYear = parseInt(splitDate[0]);
-                  currentMovementMonth = parseInt(splitDate[1]);
-                  nextDay = parseInt(splitDate[2]); // Divide expenses by categories and payment types
-
-                  if (movement.type === 'e') {
-                    switch (movement.type_payment) {
-                      case "mb":
-                        mbPayment += parseFloat(movement.value);
-                        break;
-
-                      case "bt":
-                        bankTransfer += parseFloat(movement.value);
-                        break;
-
-                      default:
-                        walletTransfer += parseFloat(movement.value);
-                    }
-
-                    _this.expensesByCategory.forEach(function (expenseByCategory) {
-                      if (movement.category_id == expenseByCategory.id) {
-                        expenseByCategory.value += parseFloat(movement.value);
-                      }
-                    });
-                  } // Update values by day
-
-
-                  if (currentMovementDay != nextDay) {
-                    if (currentMovementDay != -1) {
-                      _this.incomesLastMonth.push({
-                        y: incomesCurrentDay,
-                        x: movement.date
-                      });
-
-                      _this.expensesLastMonth.push({
-                        y: expensesCurrentDay,
-                        x: movement.date
-                      });
-                    }
-
-                    currentMovementDay = nextDay;
-                    incomesCurrentDay = expensesCurrentDay = 0;
-                  } // Check if the movement is from last month
-
-
-                  if (currentYear == currentMovementYear && (currentMonth == currentMovementMonth || currentMonth - 1 == currentMovementMonth && currentMovementDay >= currentDay) || currentMonth == 1 && currentYear - 1 == currentMovementYear && currentMovementMonth == 12 && currentMovementDay >= currentDay) {
-                    movement.type === 'i' ? incomesCurrentDay += parseFloat(movement.value) : expensesCurrentDay += parseFloat(movement.value);
-                  }
-                }); // Updates series of the last month's chart
-
-
-                _this.lastMonthSeries = [{
-                  name: 'Incomes',
-                  data: _this.incomesLastMonth
-                }, {
-                  name: 'Expenses',
-                  data: _this.expensesLastMonth
-                }]; // Update expenses by category chart labels
-
-                _this.$refs.expensesByCategoryChart.updateOptions({
-                  labels: _this.expensesByCategoryChartLabels
-                }); // Update expenses by category series
-
-
-                _this.expensesByCategory.forEach(function (expenseByCategory) {
-                  _this.expensesByCategoryChartSeries.push(expenseByCategory.value);
-                }); // Update expenses by payment type series
-
-
-                _this.expensesPaymentTypesChartSeries.push(mbPayment);
-
-                _this.expensesPaymentTypesChartSeries.push(bankTransfer);
-
-                _this.expensesPaymentTypesChartSeries.push(walletTransfer);
-              }));
-
-            case 2:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      });
-    }
-  },
-  created: function created() {
-    this.getGraphicsData();
   }
 });
 
@@ -27019,6 +27308,223 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/statistics/PersonalStatistics.vue?vue&type=template&id=bd4e5b58&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/statistics/PersonalStatistics.vue?vue&type=template&id=bd4e5b58& ***!
+  \********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-app",
+    { attrs: { id: "inspire" } },
+    [
+      _c(
+        "v-content",
+        [
+          _c(
+            "v-container",
+            { attrs: { fluid: "", "fill-height": "", "fill-width": "" } },
+            [
+              _c(
+                "v-layout",
+                { attrs: { "align-center": "", "justify-center": "" } },
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { xs8: "", sm8: "", md11: "" } },
+                    [
+                      _c("v-card", [
+                        _c(
+                          "div",
+                          [
+                            _c("apexchart", {
+                              attrs: {
+                                type: "area",
+                                height: "350",
+                                options: _vm.lastMonthMovmentsChartOptions,
+                                series: _vm.lastMonthSeries
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("v-card", { staticClass: "mt-6" }, [
+                        _c(
+                          "div",
+                          [
+                            _c("apexchart", {
+                              ref: "expensesByCategoryChart",
+                              attrs: {
+                                type: "pie",
+                                height: "350",
+                                options: _vm.expensesByCategoryChartOptions,
+                                series: _vm.expensesByCategoryChartSeries
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("v-card", { staticClass: "mt-6" }, [
+                        _c(
+                          "div",
+                          [
+                            _c("apexchart", {
+                              attrs: {
+                                type: "pie",
+                                height: "350",
+                                options: _vm.expensesPaymentTypesChartOptions,
+                                series: _vm.expensesPaymentTypesChartSeries
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/statistics/PlataformStatistics.vue?vue&type=template&id=c1d56fd0&":
+/*!*********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/statistics/PlataformStatistics.vue?vue&type=template&id=c1d56fd0& ***!
+  \*********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-app",
+    { attrs: { id: "inspire" } },
+    [
+      _c(
+        "v-content",
+        [
+          _c(
+            "v-container",
+            { attrs: { fluid: "", "fill-height": "", "fill-width": "" } },
+            [
+              _c(
+                "v-layout",
+                { attrs: { "align-center": "", "justify-center": "" } },
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { xs8: "", sm8: "", md11: "" } },
+                    [
+                      _c("v-card", [
+                        _c(
+                          "div",
+                          [
+                            _c("apexchart", {
+                              attrs: {
+                                type: "area",
+                                height: "350",
+                                options: _vm.lastYearMovmentsChartOptions,
+                                series: _vm.lastYearSeries
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("v-card", { staticClass: "mt-6" }, [
+                        _c(
+                          "div",
+                          [
+                            _c("apexchart", {
+                              ref: "incomesByCategoryChart",
+                              attrs: {
+                                type: "pie",
+                                height: "350",
+                                options: _vm.incomesByCategoryChartOptions,
+                                series: _vm.incomesByCategoryChartSeries
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("v-card", { staticClass: "mt-6" }, [
+                        _c(
+                          "div",
+                          [
+                            _c("apexchart", {
+                              ref: "expensesByCategoryChart",
+                              attrs: {
+                                type: "pie",
+                                height: "350",
+                                options: _vm.expensesByCategoryChartOptions,
+                                series: _vm.expensesByCategoryChartSeries
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/users/EditComponent.vue?vue&type=template&id=2fad1e31&":
 /*!**********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/users/EditComponent.vue?vue&type=template&id=2fad1e31& ***!
@@ -27341,7 +27847,7 @@ var render = function() {
                           search: _vm.search,
                           "sort-by": ["name", "email", "type", "active", "nif"],
                           "sort-desc": [true, true],
-                          "items-per-page": 5,
+                          "items-per-page": 10,
                           "footer-props": {
                             showFirstLastPage: true,
                             firstIcon: "mdi-arrow-collapse-left",
@@ -27714,114 +28220,6 @@ var render = function() {
                           }
                         ])
                       })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/users/movements/personalStatistics.vue?vue&type=template&id=ab3da500&":
-/*!*************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/users/movements/personalStatistics.vue?vue&type=template&id=ab3da500& ***!
-  \*************************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "v-app",
-    { attrs: { id: "inspire" } },
-    [
-      _c(
-        "v-content",
-        [
-          _c(
-            "v-container",
-            { attrs: { fluid: "", "fill-height": "", "fill-width": "" } },
-            [
-              _c(
-                "v-layout",
-                { attrs: { "align-center": "", "justify-center": "" } },
-                [
-                  _c(
-                    "v-flex",
-                    { attrs: { xs8: "", sm8: "", md11: "" } },
-                    [
-                      _c("v-card", [
-                        _c(
-                          "div",
-                          [
-                            _c("apexchart", {
-                              attrs: {
-                                type: "area",
-                                height: "350",
-                                options: _vm.lastMonthMovmentsChartOptions,
-                                series: _vm.lastMonthSeries
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("v-card", { staticClass: "mt-6" }, [
-                        _c(
-                          "div",
-                          [
-                            _c("apexchart", {
-                              ref: "expensesByCategoryChart",
-                              attrs: {
-                                type: "pie",
-                                height: "350",
-                                options: _vm.expensesByCategoryChartOptions,
-                                series: _vm.expensesByCategoryChartSeries
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("v-card", { staticClass: "mt-6" }, [
-                        _c(
-                          "div",
-                          [
-                            _c("apexchart", {
-                              attrs: {
-                                type: "pie",
-                                height: "350",
-                                options: _vm.expensesPaymentTypesChartOptions,
-                                series: _vm.expensesPaymentTypesChartSeries
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ])
                     ],
                     1
                   )
@@ -81619,6 +82017,9 @@ var app = new Vue({
     listUsers: function listUsers() {
       this.$router.push('/users')["catch"](function (err) {});
     },
+    listStatistics: function listStatistics() {
+      this.$router.push('/plataform/statistics')["catch"](function (err) {});
+    },
     isAdmin: function isAdmin() {
       if ($store.state.user.type == 'a') {
         return true;
@@ -82008,6 +82409,144 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/statistics/PersonalStatistics.vue":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/statistics/PersonalStatistics.vue ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PersonalStatistics_vue_vue_type_template_id_bd4e5b58___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PersonalStatistics.vue?vue&type=template&id=bd4e5b58& */ "./resources/js/components/statistics/PersonalStatistics.vue?vue&type=template&id=bd4e5b58&");
+/* harmony import */ var _PersonalStatistics_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PersonalStatistics.vue?vue&type=script&lang=js& */ "./resources/js/components/statistics/PersonalStatistics.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PersonalStatistics_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PersonalStatistics_vue_vue_type_template_id_bd4e5b58___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PersonalStatistics_vue_vue_type_template_id_bd4e5b58___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/statistics/PersonalStatistics.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/statistics/PersonalStatistics.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/statistics/PersonalStatistics.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalStatistics_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PersonalStatistics.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/statistics/PersonalStatistics.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalStatistics_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/statistics/PersonalStatistics.vue?vue&type=template&id=bd4e5b58&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/statistics/PersonalStatistics.vue?vue&type=template&id=bd4e5b58& ***!
+  \**************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalStatistics_vue_vue_type_template_id_bd4e5b58___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PersonalStatistics.vue?vue&type=template&id=bd4e5b58& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/statistics/PersonalStatistics.vue?vue&type=template&id=bd4e5b58&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalStatistics_vue_vue_type_template_id_bd4e5b58___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonalStatistics_vue_vue_type_template_id_bd4e5b58___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/statistics/PlataformStatistics.vue":
+/*!********************************************************************!*\
+  !*** ./resources/js/components/statistics/PlataformStatistics.vue ***!
+  \********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PlataformStatistics_vue_vue_type_template_id_c1d56fd0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PlataformStatistics.vue?vue&type=template&id=c1d56fd0& */ "./resources/js/components/statistics/PlataformStatistics.vue?vue&type=template&id=c1d56fd0&");
+/* harmony import */ var _PlataformStatistics_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PlataformStatistics.vue?vue&type=script&lang=js& */ "./resources/js/components/statistics/PlataformStatistics.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PlataformStatistics_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PlataformStatistics_vue_vue_type_template_id_c1d56fd0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PlataformStatistics_vue_vue_type_template_id_c1d56fd0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/statistics/PlataformStatistics.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/statistics/PlataformStatistics.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/statistics/PlataformStatistics.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PlataformStatistics_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PlataformStatistics.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/statistics/PlataformStatistics.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PlataformStatistics_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/statistics/PlataformStatistics.vue?vue&type=template&id=c1d56fd0&":
+/*!***************************************************************************************************!*\
+  !*** ./resources/js/components/statistics/PlataformStatistics.vue?vue&type=template&id=c1d56fd0& ***!
+  \***************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PlataformStatistics_vue_vue_type_template_id_c1d56fd0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PlataformStatistics.vue?vue&type=template&id=c1d56fd0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/statistics/PlataformStatistics.vue?vue&type=template&id=c1d56fd0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PlataformStatistics_vue_vue_type_template_id_c1d56fd0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PlataformStatistics_vue_vue_type_template_id_c1d56fd0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/users/EditComponent.vue":
 /*!*********************************************************!*\
   !*** ./resources/js/components/users/EditComponent.vue ***!
@@ -82146,75 +82685,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/users/movements/personalStatistics.vue":
-/*!************************************************************************!*\
-  !*** ./resources/js/components/users/movements/personalStatistics.vue ***!
-  \************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _personalStatistics_vue_vue_type_template_id_ab3da500___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./personalStatistics.vue?vue&type=template&id=ab3da500& */ "./resources/js/components/users/movements/personalStatistics.vue?vue&type=template&id=ab3da500&");
-/* harmony import */ var _personalStatistics_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./personalStatistics.vue?vue&type=script&lang=js& */ "./resources/js/components/users/movements/personalStatistics.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _personalStatistics_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _personalStatistics_vue_vue_type_template_id_ab3da500___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _personalStatistics_vue_vue_type_template_id_ab3da500___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/users/movements/personalStatistics.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/users/movements/personalStatistics.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************************!*\
-  !*** ./resources/js/components/users/movements/personalStatistics.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_personalStatistics_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./personalStatistics.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/users/movements/personalStatistics.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_personalStatistics_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/users/movements/personalStatistics.vue?vue&type=template&id=ab3da500&":
-/*!*******************************************************************************************************!*\
-  !*** ./resources/js/components/users/movements/personalStatistics.vue?vue&type=template&id=ab3da500& ***!
-  \*******************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_personalStatistics_vue_vue_type_template_id_ab3da500___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./personalStatistics.vue?vue&type=template&id=ab3da500& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/users/movements/personalStatistics.vue?vue&type=template&id=ab3da500&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_personalStatistics_vue_vue_type_template_id_ab3da500___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_personalStatistics_vue_vue_type_template_id_ab3da500___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
 /***/ "./resources/js/router.js":
 /*!********************************!*\
   !*** ./resources/js/router.js ***!
@@ -82234,8 +82704,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_movements_ListComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/movements/ListComponent */ "./resources/js/components/movements/ListComponent.vue");
 /* harmony import */ var _components_movements_CreateComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/movements/CreateComponent */ "./resources/js/components/movements/CreateComponent.vue");
 /* harmony import */ var _components_users_ListUsers__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/users/ListUsers */ "./resources/js/components/users/ListUsers.vue");
-/* harmony import */ var _components_users_movements_personalStatistics__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/users/movements/personalStatistics */ "./resources/js/components/users/movements/personalStatistics.vue");
-/* harmony import */ var _toast__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./toast */ "./resources/js/toast.js");
+/* harmony import */ var _components_statistics_PersonalStatistics__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/statistics/PersonalStatistics */ "./resources/js/components/statistics/PersonalStatistics.vue");
+/* harmony import */ var _components_statistics_PlataformStatistics__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/statistics/PlataformStatistics */ "./resources/js/components/statistics/PlataformStatistics.vue");
+/* harmony import */ var _toast__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./toast */ "./resources/js/toast.js");
+
 
 
 
@@ -82297,13 +82769,24 @@ var routes = [{
   }
 }, {
   path: '/movements/statistics',
-  component: _components_users_movements_personalStatistics__WEBPACK_IMPORTED_MODULE_9__["default"],
+  component: _components_statistics_PersonalStatistics__WEBPACK_IMPORTED_MODULE_9__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (user.type === 'u') {
       next();
     } else {
       vue__WEBPACK_IMPORTED_MODULE_0___default.a.toasted.global.unauthorized();
       next('/movements');
+    }
+  }
+}, {
+  path: '/plataform/statistics',
+  component: _components_statistics_PlataformStatistics__WEBPACK_IMPORTED_MODULE_10__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (user.type === 'a') {
+      next();
+    } else {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.toasted.global.unauthorized();
+      next('/home');
     }
   }
 }];
