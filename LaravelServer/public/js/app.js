@@ -2692,23 +2692,70 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       dialog: null,
       search: '',
+      searchObject: {
+        id: '',
+        type: '',
+        date: '',
+        category_id: '',
+        type_payment: '',
+        email: '',
+        end_date: ''
+      },
       headers: [{
+        text: 'ID',
+        value: 'id'
+      }, {
         text: 'Type',
         value: 'type'
       }, {
         text: 'Transfer',
         value: 'transfer'
       }, {
+        text: 'Transfer Wallet Email',
+        value: 'transfer_wallet_id'
+      }, {
         text: 'Type Payment',
         value: 'type_payment'
       }, {
-        text: 'Category ID',
+        text: 'Category',
         value: 'category_id'
       }, {
         text: 'IBAN',
@@ -2743,8 +2790,10 @@ __webpack_require__.r(__webpack_exports__);
         sortable: false
       }],
       movements: [],
+      categories: [],
       wallet: [],
       user: [],
+      users: [],
       user_id: null,
       user_wallet_id: null,
       editedIndex: -1,
@@ -2763,6 +2812,48 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     formTitle: function formTitle() {
       return this.editedIndex === -1 ? 'Edit Movement' : 'Edit Movement';
+    },
+    getfilters: function getfilters() {
+      var self = this;
+      var movements = this.movements;
+
+      if (this.searchObject.category_id !== '') {
+        movements = movements.filter(function (movements) {
+          return movements.category_id.includes(self.searchObject.category_id);
+        });
+      }
+
+      if (this.searchObject.type !== '') {
+        movements = movements.filter(function (movements) {
+          return movements.type.toLowerCase().includes(self.searchObject.type.toLowerCase());
+        });
+      }
+
+      if (this.searchObject.id !== '') {
+        movements = movements.filter(function (movements) {
+          return movements.id.toString().includes(self.searchObject.id);
+        });
+      }
+
+      if (this.searchObject.type_payment !== '') {
+        movements = movements.filter(function (movements) {
+          return movements.type_payment.toLowerCase().includes(self.searchObject.type_payment.toLowerCase());
+        });
+      }
+
+      if (this.searchObject.end_date !== '') {
+        movements.forEach(function (element) {
+          if (element.date >= self.searchObject.date && element.date <= self.searchObject.end_date) {}
+        });
+      } else {
+        if (this.searchObject.date !== '') {
+          movements = movements.filter(function (movements) {
+            return movements.date.toLowerCase().includes(self.searchObject.date.toLowerCase());
+          });
+        }
+      }
+
+      return movements;
     }
   },
   watch: {
@@ -2771,23 +2862,57 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    this.getCategories();
     this.getUser();
-  },
-  sockets: {
-    transfer: function transfer(user) {
-      this.getMovements();
-      this.getUserWallet();
-    },
-    income: function income(amount) {
-      this.getMovements();
-      this.getUserWallet();
-    }
+    this.getUsers();
   },
   methods: {
-    getUser: function getUser() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUser$(_context) {
+    getCategories: function getCategories() {
+      var _this = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getCategories$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/categories").then(function (response) {
+                _this.categories = response.data;
+              })["catch"](function (error) {
+                console.log(error);
+              }));
+
+            case 2:
+            case "end":
+              return _context.stop();
+          }
+        }
+      });
+    },
+    getUsers: function getUsers() {
+      var _this2 = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUsers$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users").then(function (response) {
+                _this2.users = response.data;
+              })["catch"](function (error) {
+                console.log(error);
+              }));
+
+            case 2:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      });
+    },
+    getUser: function getUser() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUser$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
             case 0:
               this.user = this.$store.state.user;
               this.user_id = this.user.id;
@@ -2800,27 +2925,39 @@ __webpack_require__.r(__webpack_exports__);
 
             case 3:
             case "end":
-              return _context.stop();
+              return _context3.stop();
           }
         }
       }, null, this);
     },
     getMovements: function getMovements() {
-      var _this = this;
+      var _this3 = this;
 
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getMovements$(_context2) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getMovements$(_context4) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _context2.next = 2;
+              _context4.next = 2;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users/movements").then(function (response) {
-                _this.movements = response.data;
-                _this.user_wallet_id = response.data[0].wallet_id;
+                _this3.movements = response.data;
+                _this3.user_wallet_id = response.data[0].wallet_id;
 
-                _this.movements.forEach(function (element) {
+                _this3.movements.forEach(function (element) {
                   element.transfer == 1 ? element.transfer = 'Yes' : element.transfer = 'No';
                   element.type == 'e' ? element.type = 'Expense' : element.type = 'Income';
                   element.type_payment == 'c' ? element.type_payment = 'Cash' : element.type_payment == 'bt' ? element.type_payment = 'Bank Transfer' : element.type_payment = 'MB Payment';
+
+                  _this3.categories.forEach(function (category) {
+                    element.category_id == category.id ? element.category_id = category.name : 'n/a';
+                  });
+
+                  if (element.category_id === null) {
+                    element.category_id = 'N/A';
+                  } // this.users.forEach(user => {
+                  //   element.transfer_wallet_id == user.id ? element.transfer_wallet_id = user.email : element.transfer_wallet_id = 'N/A'
+                  //   element.wallet_id == user.id ? element.wallet_id = user.email : element.wallet_id = 'N/A'
+                  // });
+
                 });
               })["catch"](function (error) {
                 console.log(error);
@@ -2831,107 +2968,109 @@ __webpack_require__.r(__webpack_exports__);
 
             case 3:
             case "end":
-              return _context2.stop();
-          }
-        }
-      }, null, this);
-    },
-    getUserWallet: function getUserWallet() {
-      var _this2 = this;
-
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUserWallet$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              _context3.next = 2;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/wallets/" + this.user_wallet_id).then(function (response) {
-                _this2.wallet = response.data;
-              })["catch"](function (error) {
-                console.log(error);
-              }));
-
-            case 2:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, null, this);
-    },
-    registerMovement: function registerMovement() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function registerMovement$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              _context4.next = 2;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(this.$router.push('/movements/create'));
-
-            case 2:
-            case "end":
               return _context4.stop();
           }
         }
       }, null, this);
     },
-    close: function close() {
-      var _this3 = this;
-
-      this.dialog = false;
-      setTimeout(function () {
-        _this3.editedMovement = Object.assign({}, _this3.defaultMovement);
-        _this3.editedIndex = -1;
-
-        _this3.getMovements();
-      }, 300);
-    },
-    save: function save() {
+    getUserWallet: function getUserWallet() {
       var _this4 = this;
 
-      var formData, headers;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function save$(_context5) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUserWallet$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              formData = new FormData();
-              formData.append('category_id', this.editedMovement.category_id);
-              formData.append('description', this.editedMovement.description);
-              headers = {
-                'Content-Type': 'multipart/form-data'
-              };
-              _context5.next = 6;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/movements/update/' + this.editedMovement.id, formData, headers).then(function (response) {
-                console.log(response.data);
+              _context5.next = 2;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/wallets/" + this.user_wallet_id).then(function (response) {
+                _this4.wallet = response.data;
               })["catch"](function (error) {
-                _this4.hasAlert = true;
                 console.log(error);
               }));
 
-            case 6:
-              this.getMovements();
-              this.dialog = false;
-
-            case 8:
+            case 2:
             case "end":
               return _context5.stop();
           }
         }
       }, null, this);
     },
+    registerMovement: function registerMovement() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function registerMovement$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              this.$router.push('/movements/create');
+
+            case 1:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, null, this);
+    },
+    close: function close() {
+      var _this5 = this;
+
+      this.dialog = false;
+      setTimeout(function () {
+        _this5.editedMovement = Object.assign({}, _this5.defaultMovement);
+        _this5.editedIndex = -1;
+
+        _this5.getMovements();
+      }, 300);
+    },
+    save: function save() {
+      var _this6 = this;
+
+      var formData, headers;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function save$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              formData = new FormData();
+              console.log(this.editedMovement.description);
+              formData.append('category_id', this.editedMovement.category_id);
+              formData.append('description', this.editedMovement.description);
+              headers = {
+                'Content-Type': 'multipart/form-data'
+              };
+              console.log(this.editedMovement.id);
+              _context7.next = 8;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/movements/update/' + this.editedMovement.id, formData, {
+                'Content-Type': 'multipart/form-data'
+              }).then(function (response) {
+                console.log(response.data);
+              })["catch"](function (error) {
+                _this6.hasAlert = true;
+                console.log(error);
+              }));
+
+            case 8:
+              this.getMovements();
+              this.dialog = false;
+
+            case 10:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, null, this);
+    },
     editMovement: function editMovement(item) {
       this.movement_id = this.movements.indexOf(item);
-      console.log(this.movement_id);
       this.editedMovement = Object.assign({}, item);
       this.dialog = true;
     },
     showMovementsStatistics: function showMovementsStatistics() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function showMovementsStatistics$(_context6) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function showMovementsStatistics$(_context8) {
         while (1) {
-          switch (_context6.prev = _context6.next) {
+          switch (_context8.prev = _context8.next) {
             case 0:
               this.$router.push('/movements/statistics');
 
             case 1:
             case "end":
-              return _context6.stop();
+              return _context8.stop();
           }
         }
       }, null, this);
@@ -3864,6 +4003,7 @@ __webpack_require__.r(__webpack_exports__);
       newPassword: null,
       newPasswordConf: null,
       nif: null,
+      photo: null,
       errorMsg: null,
       rules: {
         required: function required(value) {
@@ -3948,17 +4088,20 @@ __webpack_require__.r(__webpack_exports__);
                 formData.append('newPassword', this.newPassword);
               }
 
-              if (this.nif != null) {
+              if (this.user.nif != null) {
                 formData.append('nif', this.user.nif);
               }
 
               console.log(this.photo);
-              if (this.photo) formData.append('photo', this.photo);
+
+              if (this.photo) {
+                formData.append('photo', this.photo);
+              }
+
               headers = {
                 'Content-Type': 'multipart/form-data'
               };
-              console.log(formData);
-              _context2.next = 13;
+              _context2.next = 12;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post("api/users/".concat(this.user.id), formData, headers).then(function (response) {
                 _this3.$store.commit('setUser', response.data);
 
@@ -3968,11 +4111,10 @@ __webpack_require__.r(__webpack_exports__);
                 _this3.$router.push('/home');
               })["catch"](function (error) {
                 _this3.errorMsg = "Error updating profile!";
-                _this3.hasAlert = true;
-                console.log(error);
+                _this3.hasAlert = true; //console.log(error)
               }));
 
-            case 13:
+            case 12:
             case "end":
               return _context2.stop();
           }
@@ -26740,7 +26882,7 @@ var render = function() {
                                       _c("v-text-field", {
                                         attrs: {
                                           "append-icon": "search",
-                                          label: "Search",
+                                          label: "Search all",
                                           "single-line": "",
                                           "hide-details": ""
                                         },
@@ -26751,7 +26893,174 @@ var render = function() {
                                           },
                                           expression: "search"
                                         }
-                                      })
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass: "form-row",
+                                          attrs: {
+                                            "align-center": "",
+                                            "justify-center": ""
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "div",
+                                            { staticClass: "col" },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: { label: "ID:" },
+                                                model: {
+                                                  value: _vm.searchObject.id,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.searchObject,
+                                                      "id",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression: "searchObject.id"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            { staticClass: "col" },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: { label: "Type:" },
+                                                model: {
+                                                  value: _vm.searchObject.type,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.searchObject,
+                                                      "type",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "searchObject.type"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            { staticClass: "col" },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  label: "Date:",
+                                                  hint: "YYYY-MM-DD format",
+                                                  "persistent-hint": ""
+                                                },
+                                                model: {
+                                                  value: _vm.searchObject.date,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.searchObject,
+                                                      "date",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "searchObject.date"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          !(_vm.searchObject.date == "")
+                                            ? _c(
+                                                "div",
+                                                { staticClass: "col" },
+                                                [
+                                                  _c("v-text-field", {
+                                                    attrs: {
+                                                      label: "End Date:",
+                                                      hint: "YYYY-MM-DD format",
+                                                      "persistent-hint": ""
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.searchObject
+                                                          .end_date,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.searchObject,
+                                                          "end_date",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "searchObject.end_date"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            { staticClass: "col" },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: { label: "Category:" },
+                                                model: {
+                                                  value:
+                                                    _vm.searchObject
+                                                      .category_id,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.searchObject,
+                                                      "category_id",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "searchObject.category_id"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            { staticClass: "col" },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  label: "Type of payment:"
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.searchObject
+                                                      .type_payment,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.searchObject,
+                                                      "type_payment",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "searchObject.type_payment"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        ]
+                                      )
                                     ],
                                     1
                                   ),
@@ -26760,14 +27069,16 @@ var render = function() {
                                     staticClass: "elevation-1",
                                     attrs: {
                                       headers: _vm.headers,
-                                      items: _vm.movements,
+                                      items: _vm.getfilters,
                                       search: _vm.search,
                                       "items-per-page": 5,
                                       "sort-by": [
+                                        "id",
                                         "date",
                                         "type",
                                         "category_id",
                                         "transfer",
+                                        "transfer_wallet_id",
                                         "value",
                                         "iban",
                                         "description",
@@ -26777,7 +27088,7 @@ var render = function() {
                                         "start_balance",
                                         "end_balance"
                                       ],
-                                      "sort-desc": [true, true],
+                                      "sort-desc": [true, true, true],
                                       "footer-props": {
                                         showFirstLastPage: true,
                                         firstIcon: "mdi-arrow-collapse-left",
@@ -26903,6 +27214,41 @@ var render = function() {
                                                                           )
                                                                         ],
                                                                         1
+                                                                      ),
+                                                                      _vm._v(
+                                                                        " "
+                                                                      ),
+                                                                      _c(
+                                                                        "v-select",
+                                                                        {
+                                                                          attrs: {
+                                                                            items:
+                                                                              _vm.categories,
+                                                                            "item-text":
+                                                                              "name",
+                                                                            "item-value":
+                                                                              "id",
+                                                                            label:
+                                                                              "Category"
+                                                                          },
+                                                                          model: {
+                                                                            value:
+                                                                              _vm
+                                                                                .editedMovement
+                                                                                .category_id,
+                                                                            callback: function(
+                                                                              $$v
+                                                                            ) {
+                                                                              _vm.$set(
+                                                                                _vm.editedMovement,
+                                                                                "category_id",
+                                                                                $$v
+                                                                              )
+                                                                            },
+                                                                            expression:
+                                                                              "editedMovement.category_id"
+                                                                          }
+                                                                        }
                                                                       )
                                                                     ],
                                                                     1
@@ -26990,7 +27336,7 @@ var render = function() {
                                                 },
                                                 [
                                                   _vm._v(
-                                                    "\r\n          edit\r\n        "
+                                                    "\n                    edit\n                  "
                                                   )
                                                 ]
                                               )
@@ -27000,7 +27346,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      3954612837
+                                      1162089737
                                     )
                                   })
                                 ],
@@ -82900,7 +83246,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_toasted__WEBPACK_IMPORTED_MODULE_1___default.a, {
-  position: "bottom-center",
+  position: "top-right",
   duration: 5000,
   type: "info"
 });
@@ -82931,8 +83277,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.toasted.register('unauthorized', 'Una
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\Software\laragon\www\DADProject\LaravelServer\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\Software\laragon\www\DADProject\LaravelServer\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/fsilva/dev/Projects/DADProject/LaravelServer/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/fsilva/dev/Projects/DADProject/LaravelServer/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

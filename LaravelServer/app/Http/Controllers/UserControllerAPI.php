@@ -49,44 +49,29 @@ class UserControllerAPI extends Controller
     }
     
 
-    public function update(Request $request, $id)
-    {
-         $request->validate([
-                   'name' => 'required|string|min:3|regex:/^[A-Za-záàâãéèêíóôõúçÁÀÂÃÉÈÍÓÔÕÚÇ ]+$/',
-                   'newPassword' => 'min:3',
-                    'photo' => 'nullable|image|mimes:jpeg,png,jpg,bmp',
-                   'nif' => 'nullable|digits:9|regex:/^[0-9]{9}+$/'
-         ]);
-
-
-
-            if($request->has('photo')) {
-             $name = Str::uuid() . '.' . $request->photo->getClientOriginalExtension();
-             $targetDir = storage_path("app/public/fotos");
-             $request->photo->move($targetDir, $name);
-             $user->photo = $name;
-         }
-
-        $user = User::findOrFail($id);
-          if($request->has('photo')) {
-                   $photo_name = Str::uuid() . '.' . $request->photo->getClientOriginalExtension();
-                   $targetDir = storage_path("app/public/fotos");
-                   $request->photo->move($targetDir, $photo_name);
-                   $user->photo = $photo_name;
-          }
-
-
-        $user->update($request->all());
-
-        if($request->has('oldPassword') && !Hash::check($request->oldPassword, $user->password)){
-            return response()->json("Old password incorrect!");
-        }else{
-            $user->password = Hash::make($request->newPassword);
+     public function update(Request $request, $id)
+        {
+             $request->validate([
+                       'name' => 'required|string|min:3|regex:/^[A-Za-záàâãéèêíóôõúçÁÀÂÃÉÈÍÓÔÕÚÇ ]+$/',
+                       'newPassword' => 'min:3',
+                        'photo' => 'nullable|image|mimes:jpeg,png,jpg,bmp'
+             ]);
+            $user = User::findOrFail($id);
+            $user->update($request->all());
+                 if($request->has('photo')) {
+                               $photo_name = Str::uuid() . '.' . $request->photo->getClientOriginalExtension();
+                               $targetDir = storage_path("app/public/fotos");
+                               $request->photo->move($targetDir, $photo_name);
+                               $user->photo = $photo_name;
+                      }
+            if($request->has('oldPassword') && !Hash::check($request->oldPassword, $user->password)){
+                return response()->json("Old password incorrect!");
+            }else{
+                $user->password = Hash::make($request->newPassword);
+            }
+            $user->save();
+            return response()->json(new UserResource($user), 201);
         }
-
-        $user->save();
-        return response()->json(new UserResource($user), 201);
-    }
 
 
     public function store(Request $request)

@@ -32,6 +32,7 @@ Route::middleware('auth:api')->get('movements/all','MovementControllerAPI@index'
 
 
 
+
 //Wallets
 Route::middleware('auth:api')->get('wallets/{wallet}', 'WalletControllerAPI@show');
 Route::get('wallets','WalletControllerAPI@index')->name('wallets');

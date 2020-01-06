@@ -75,12 +75,13 @@
                 :rules="[rules.nif]"
 
         ></v-text-field>
-        <v-file-input
-                v-model="photo"
-                placeholder="Pick an avatar"
-                prepend-icon="camera"
-                label="Avatar"
-        ></v-file-input>
+            <v-file-input
+                    v-model="photo"
+                    placeholder="Pick an avatar"
+                    prepend-icon="camera"
+                    label="Avatar"
+            ></v-file-input>
+
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-alert color="red"
@@ -113,11 +114,11 @@ export default {
             },
             selectedFile:null,
             name: null,
+            photo: null,
             oldPassword: null,
             newPassword:null,
             newPasswordConf:null,
             nif:null,
-            photo:null,
             errorMsg:null,
             rules: {
                 required: value => !!value || 'Required.',
@@ -165,14 +166,16 @@ export default {
 
             const formData = new FormData();
 
-
             formData.append('name', this.user.name);
+
 
             if(this.oldPassword != null && this.newPassword != null){
                 formData.append('oldPassword', this.oldPassword);
                 formData.append('newPassword', this.newPassword);
             }
+
             if(this.user.nif != null){
+
                 formData.append('nif', this.user.nif)
             }
             console.log(this.photo)
@@ -180,7 +183,13 @@ export default {
                 formData.append('photo', this.photo);
             }
             const headers = { 'Content-Type': 'multipart/form-data'}
-            await axios.post(`api/users/${this.user.id}`, formData, headers)
+
+
+            await axios.post(`api/users/${this.user.id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
                 .then(response=>{
                     this.$store.commit('setUser',response.data);
                     this.errorMsg = "Updated with success!";
