@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="17df179f-db4c-434e-88fd-96aaedf30bc3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/app/Http/Controllers/MovementControllerAPI.php" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/app/Http/Controllers/MovementControllerAPI.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/app/Http/Controllers/UserControllerAPI.php" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/app/Http/Controllers/UserControllerAPI.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/app/Movement.php" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/app/Movement.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/public/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/public/storage/fotos/5215f251-b0a2-4c85-82ab-43d0a7d1491b.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/public/storage/fotos/5215f251-b0a2-4c85-82ab-43d0a7d1491b.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/public/storage/fotos/53dba9d1-6997-4036-b52e-4adcd9c25ea1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/public/storage/fotos/53dba9d1-6997-4036-b52e-4adcd9c25ea1.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/public/storage/fotos/5741d2d9-4930-46b9-bf2f-38a825df8bc8.png" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/public/storage/fotos/5741d2d9-4930-46b9-bf2f-38a825df8bc8.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/components/movements/ListComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/components/movements/ListComponent.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/components/register.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/components/register.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/views/vue/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/views/vue/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/052a64dd-a14c-4234-b4ba-c9b7c3cb7bda.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/052a64dd-a14c-4234-b4ba-c9b7c3cb7bda.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/15f0b61f-a151-4189-ae59-173485a13071.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/15f0b61f-a151-4189-ae59-173485a13071.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/26d54618-5d37-410e-afd8-1eb44941f81e.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/26d54618-5d37-410e-afd8-1eb44941f81e.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/2ea70c1a-df81-44d7-91a6-ea624b62a62c.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/2ea70c1a-df81-44d7-91a6-ea624b62a62c.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/3650a7c1-e2d3-48f3-87d3-d40368bdbdee.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/3650a7c1-e2d3-48f3-87d3-d40368bdbdee.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/4ad406e4-9e60-4a11-9c17-317b2a9caeb8.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/4ad406e4-9e60-4a11-9c17-317b2a9caeb8.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/4bb6d787-05fc-412b-a100-2b985e608315.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/4bb6d787-05fc-412b-a100-2b985e608315.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/60c0cebd-ce08-4097-8621-06f85d17955b.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/60c0cebd-ce08-4097-8621-06f85d17955b.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/62e5d224-84af-45a3-bacc-383925956c00.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/62e5d224-84af-45a3-bacc-383925956c00.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/6366d6d2-6ce2-498d-be79-5cfab37ea742.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/6366d6d2-6ce2-498d-be79-5cfab37ea742.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/75f03428-81c7-4ece-8d55-0174885bed45.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/75f03428-81c7-4ece-8d55-0174885bed45.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/8836bd5f-3dc2-4b2f-961a-5695cd1ba19e.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/8836bd5f-3dc2-4b2f-961a-5695cd1ba19e.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/aa2c8e2c-9b2f-48a1-b939-e3553900b130.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/aa2c8e2c-9b2f-48a1-b939-e3553900b130.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/ae78e1d5-4c72-423b-9fa3-f349ca8d66da.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/ae78e1d5-4c72-423b-9fa3-f349ca8d66da.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/b399b547-44bc-472e-a7f9-e2b22c98277d.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/b399b547-44bc-472e-a7f9-e2b22c98277d.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/de9eac64-6f8c-4913-8fef-32ee52178ba3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/de9eac64-6f8c-4913-8fef-32ee52178ba3.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/e3f03698-ea7b-4834-a957-ba39fe565191.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/e3f03698-ea7b-4834-a957-ba39fe565191.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/f254a4d1-ce4c-48e3-a500-d426c9f552fb.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/f254a4d1-ce4c-48e3-a500-d426c9f552fb.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/ffcf610c-d5b8-46ea-8072-a9fe06cba59f.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/public/fotos/ffcf610c-d5b8-46ea-8072-a9fe06cba59f.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/storage/app/public/fotos/c778f250-87bb-46e1-a3aa-6ea874e6df63.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/storage/app/public/fotos/c778f250-87bb-46e1-a3aa-6ea874e6df63.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/storage/storage/fotos/163ec95a-1345-4dd9-a787-7260cee168b9.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/storage/storage/fotos/163ec95a-1345-4dd9-a787-7260cee168b9.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/users/ListUsers.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/users/ListUsers.vue" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/WebSocketServer/package.json" />
+  </component>
+  <component name="ProjectId" id="1Ut6hNgCJj6q3V5JcMMOYXVCKDj" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../DAD/Ficha5/05_Laravel_Vue_Updated_Base" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/js/components/users" />
+    </key>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="17df179f-db4c-434e-88fd-96aaedf30bc3" name="Default Changelist" comment="" />
+      <created>1576163662790</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1576163662790</updated>
+      <workItem from="1576163664652" duration="9979000" />
+      <workItem from="1576255156965" duration="632000" />
+      <workItem from="1576489758780" duration="5000" />
+      <workItem from="1576493277315" duration="4000" />
+      <workItem from="1577642476770" duration="723000" />
+      <workItem from="1578225634018" duration="430000" />
+      <workItem from="1578226152618" duration="13792000" />
+      <workItem from="1575795619175" duration="3402000" />
+      <workItem from="1575795613861" duration="1046000" />
+      <workItem from="1575795630005" duration="13384000" />
+      <workItem from="1578270880010" duration="1456000" />
+      <workItem from="1578272360908" duration="352000" />
+      <workItem from="1578272727606" duration="1013000" />
+      <workItem from="1578273750312" duration="48000" />
+      <workItem from="1578273806705" duration="116000" />
+      <workItem from="1578273937089" duration="192000" />
+      <workItem from="1578274141985" duration="3103000" />
+      <workItem from="1578277279640" duration="5729000" />
+      <workItem from="1578310778602" duration="7752000" />
+      <workItem from="1578320929147" duration="128000" />
+      <workItem from="1578321516673" duration="105000" />
+      <workItem from="1578321629116" duration="449000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="747" y="312" key="FileChooserDialogImpl" timestamp="1576164165979">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="747" y="312" key="FileChooserDialogImpl/0.30.1920.1050@0.30.1920.1050" timestamp="1576164165979" />
+    <state x="688" y="288" width="540" height="524" key="StructurePopup" timestamp="1578311570234">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="688" y="288" width="540" height="524" key="StructurePopup/0.30.1920.1050@0.30.1920.1050" timestamp="1578311570234" />
+    <state x="623" y="254" key="run.anything.popup" timestamp="1578272620415">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="623" y="254" key="run.anything.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1578272620415" />
+    <state x="623" y="200" width="672" height="676" key="search.everywhere.popup" timestamp="1578319119181">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="623" y="200" width="672" height="676" key="search.everywhere.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1578319119181" />
+  </component>
+</project>

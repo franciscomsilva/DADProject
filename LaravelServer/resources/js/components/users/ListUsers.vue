@@ -1,9 +1,7 @@
 <template>
-<div id="app">
   <v-app id="inspire"  >
     <v-content>
       <v-container
-        fluid
         fill-height
         fill-width
       >
@@ -11,11 +9,8 @@
           align-center
           justify-center
         >
-        <v-col v-if="!$store.state.user || $store.state.user.type === 'o' || $store.state.user.type === 'u'">
-          Não vai dar
-          </v-col>
         
-    <v-card v-if="$store.state.user.type === 'a'">
+    <v-card>
             <v-card-title>
               <v-text-field
                 v-model="search"
@@ -105,7 +100,7 @@
           class="mr-2"
           @click="editUser(item)"
         >
-          mdi-cancel
+          edit
         </v-icon>
         <v-icon
           small
@@ -114,13 +109,15 @@
           delete
         </v-icon>
       </template>
+      <template v-slot:no-data>
+        <v-btn color="primary" @click="created()">Reset</v-btn>
+      </template>
     </v-data-table>
     </v-card>
   </v-layout>
       </v-container>
     </v-content>
   </v-app>
-</div>
 </template>
 
 <script>
@@ -144,14 +141,9 @@ export default {
         },
         {text:'Photo',value:'photo'
         },
-        {text: 'Balance', value:'balance'},
         { text: 'Actions', value: 'action', sortable: false },
-        
         ],
-
         users: [],
-        wallet:null,
-        user_id_edit:null,
         user:[],        
         selectedFile:null,
         editedIndex: -1,
@@ -159,14 +151,14 @@ export default {
             name: '',
             email: '',
             type: '',
-            active: '',
+            acive: '',
             photo:''
         },
         defaultUser: {
             name: '',
             email: '',
             type: '',
-            active: '',
+            acive: '',
             photo:''
         },
         userTypes: [{text: 'Admin', value: 'a'},{text: 'Operator', value:'o'}]
@@ -193,84 +185,32 @@ export default {
 
   methods: {
     async getUser() {
-      this.user = this.$store.state.user
+      await axios.get("api/users/me")
+      .then(response => {
+        this.user = response.data.data
+      })
+      .catch(error => {
+        console.log(error);
+      });
     },     
     async getUsers() {
           await axios.get("/api/usersList")
           .then(response => {
-           
               this.users = response.data.data
-              this.users.forEach(element => {
-                element.active == 1 ? element.active = 'Active' : element.active = 'Disable'
-                element.type == 'u' ? element.type = 'User' : element.type == 'a' ?  element.type='Admin' : element.type='Operator'
-                if(element.type === 'u'){
-                  this.getUserWallet(element.id)
-                  if(true){
-                    element['balance'] = 'empty'
-                  } else{
-                    element['balance'] = 'not empty'
-                  }
-                }
-                
-              console.log(element)
-              });              
-          })
-          .catch(error => {
-              console.log(error);
-          });
-    },
-    async getUserWallet(user_id) {
-          await axios.get("/api/wallets/"+user_id)
-          .then(response => {
-              console.log(response.data)
-              this.wallet = response.data.data.balance
           })
           .catch(error => {
               console.log(error);
           });
     },
     async editUser (item) {
-      this.user_id_edit = this.users.indexOf(item) +2
-      if(this.user_id_edit == this.user.id){
-
-      } else{
-          confirm('Are you sure you want to disable this user?') && this.updateUser()
-      }
-       
+      this.editedIndex = this.users.indexOf(item)
+      this.editedUser = Object.assign({}, item)
+      this.dialog = true
     }, 
-    updateUser: async function(){
-      if(this.users[this.user_id_edit].type === 'u'){
-      const formData = new FormData();
-        formData.append("_method", "put");
-
-        formData.append('active', 0);
-
-      const headers = { 'Content-Type': 'multipart/form-data'}
-      
-      await axios.post('api/users/editStatus/'+this.user_id_edit, formData, headers)
-      .then(response=>{
-      }).catch(error => {
-      this.hasAlert = true
-        console.log(error)
-      });
-      this.getUsers();}
-      else{
-        if(!(this.users[this.user_id_edit].type === 'u')){
-          confirm('Não podes dar disable a ops ou adms') 
-        }
-      }
-    },
     deleteUser: async function (item) {
-      this.user_id_edit = this.users.indexOf(item) +2
-
-      
-          confirm('Are you sure you want to delete this user?') &&  this.delete()
-      
-      
-    },
-    delete: async function (item) {
-      if(!(this.user_id_edit === this.user.id)){
-        await axios.put('api/users/delete/'+this.user_id_edit)
+      const user_id = this.users.indexOf(item) +1
+      console.log()
+      confirm('Are you sure you want to delete this item?') &&  await axios.put('api/users/delete/'+user_id)
         .then(response=>{
           
 
@@ -279,14 +219,7 @@ export default {
           console.log(error)
         });
         this.getUsers();
-
-        } 
-        if(this.user_id_edit === this.user.id){
-          confirm('Não te podes apagar a ti proprio')
-      }
-
     },
-
     close () {
       this.dialog = false
       setTimeout(() => {
