@@ -25,9 +25,36 @@
                 hide-details
               ></v-text-field>
             </v-card-title>
+            <div class="form-row" align-center
+          justify-center>
+            <div class="col" >
+              <label>Name: </label>
+              <input type="text" class="form-control" v-model="searchObject.name">
+            </div>
+            <div class="col">
+              <label>Email: </label>
+              <input type="text" class="form-control" v-model="searchObject.email">
+            </div>
+            <div class="col">
+              <label>Type: </label>
+              <input type="text" class="form-control" v-model="searchObject.type">
+            </div>
+            <div class="col">
+              <label>Active: </label>
+              <input type="text" class="form-control" v-model="searchObject.active">
+            </div>
+            <div class="col">
+              <label>NIF: </label>
+              <input type="text" class="form-control" v-model="searchObject.nif">
+            </div>
+            <div class="col">
+              <label>Balance: </label>
+              <input type="text" class="form-control" v-model="searchObject.balance">
+            </div>
+            </div>
     <v-data-table
       :headers="headers"
-      :items="users"
+      :items="getfilters"
       :search="search"
       :sort-by="['name','email','type','active','nif']"
       :sort-desc="[true, true]"
@@ -133,6 +160,14 @@ export default {
   data: () => ({
         search:'',
         dialog: false,
+        searchObject:{
+          name:'',
+          nif:'',
+          email:'',
+          type:'',
+          active:'',
+          balance:''
+        },
         headers:[{
             text: 'Photo',
             value:'photo'
@@ -148,8 +183,7 @@ export default {
         {text:'NIF',value:'nif'       
         },
         {text: 'Balance', value:'balance'},
-        { text: 'Actions', value: 'action', sortable: false },
-        
+        { text: 'Actions', value: 'action', sortable: false }        
         ],
 
         users: [],
@@ -180,6 +214,30 @@ export default {
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'New Admin/Operator' : 'edit'
+    },
+    getfilters(){
+      let self = this;
+      let users = this.users;
+      if(this.searchObject.name !== '') {
+        users = users.filter(users => users.name.toLowerCase().includes(self.searchObject.name.toLowerCase()));
+      }
+      if(this.searchObject.email !== '') {
+        users = users.filter(users => users.email.toLowerCase().includes(self.searchObject.email.toLowerCase()));
+      }
+      if(this.searchObject.type !== '') {
+        users = users.filter(users => users.type.toLowerCase().includes(self.searchObject.type.toLowerCase()));
+      }
+      if(this.searchObject.nif !== '') {
+        users = users.filter(users => users.nif.includes(self.searchObject.nif));
+      }
+      if(this.searchObject.active !== '') {
+        users = users.filter(users => users.active.toLowerCase().includes(self.searchObject.active.toLowerCase()));
+      }
+      if(this.searchObject.balance !== '') {
+        users = users.filter(users => users.balance.toLowerCase().includes(self.searchObject.balance.toLowerCase()));
+      }
+
+      return users;
     }
   },
 
@@ -215,16 +273,21 @@ export default {
           .then(response => {                       
               this.users = response.data.data
               this.users.forEach(element => {
-                element.active == 1 ? element.active = 'Active' : element.active = 'Disable'
+                element.active == 1 ? element.active = 'Active' : element.active = 'Inactive'
                 element.type === 'u' ? element.type = 'User' : element.type === 'a' ?  element.type='Admin' : element.type='Operator'
                 
                 if(element.type === 'User'){
 
                   this.wallets.forEach(wallet => {
                     if(wallet.email === element.email){
-                      wallet.balance > 0.00 ? element.balance = 'Not empty' : element.balance = 'Empty'
+                      wallet.balance > 0.00 ? element.balance = 'Has money' : element.balance = 'Empty'
                     }
                   });
+                }else{
+                  element.balance = ''
+                }
+                if(element.nif === null){
+                  element.nif = ''
                 }
               });              
           })

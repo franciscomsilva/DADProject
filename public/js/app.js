@@ -3400,12 +3400,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       search: '',
       dialog: false,
+      searchObject: {
+        name: '',
+        nif: '',
+        email: '',
+        type: '',
+        active: '',
+        balance: ''
+      },
       headers: [{
         text: 'Photo',
         value: 'photo'
@@ -3465,6 +3500,48 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     formTitle: function formTitle() {
       return this.editedIndex === -1 ? 'New Admin/Operator' : 'edit';
+    },
+    getfilters: function getfilters() {
+      var self = this;
+      var users = this.users;
+
+      if (this.searchObject.name !== '') {
+        users = users.filter(function (users) {
+          return users.name.toLowerCase().includes(self.searchObject.name.toLowerCase());
+        });
+      }
+
+      if (this.searchObject.email !== '') {
+        users = users.filter(function (users) {
+          return users.email.toLowerCase().includes(self.searchObject.email.toLowerCase());
+        });
+      }
+
+      if (this.searchObject.type !== '') {
+        users = users.filter(function (users) {
+          return users.type.toLowerCase().includes(self.searchObject.type.toLowerCase());
+        });
+      }
+
+      if (this.searchObject.nif !== '') {
+        users = users.filter(function (users) {
+          return users.nif.includes(self.searchObject.nif);
+        });
+      }
+
+      if (this.searchObject.active !== '') {
+        users = users.filter(function (users) {
+          return users.active.toLowerCase().includes(self.searchObject.active.toLowerCase());
+        });
+      }
+
+      if (this.searchObject.balance !== '') {
+        users = users.filter(function (users) {
+          return users.balance.toLowerCase().includes(self.searchObject.balance.toLowerCase());
+        });
+      }
+
+      return users;
     }
   },
   watch: {
@@ -3525,15 +3602,21 @@ __webpack_require__.r(__webpack_exports__);
                 _this2.users = response.data.data;
 
                 _this2.users.forEach(function (element) {
-                  element.active == 1 ? element.active = 'Active' : element.active = 'Disable';
+                  element.active == 1 ? element.active = 'Active' : element.active = 'Inactive';
                   element.type === 'u' ? element.type = 'User' : element.type === 'a' ? element.type = 'Admin' : element.type = 'Operator';
 
                   if (element.type === 'User') {
                     _this2.wallets.forEach(function (wallet) {
                       if (wallet.email === element.email) {
-                        wallet.balance > 0.00 ? element.balance = 'Not empty' : element.balance = 'Empty';
+                        wallet.balance > 0.00 ? element.balance = 'Has money' : element.balance = 'Empty';
                       }
                     });
+                  } else {
+                    element.balance = '';
+                  }
+
+                  if (element.nif === null) {
+                    element.nif = '';
                   }
                 });
               })["catch"](function (error) {
@@ -26690,11 +26773,213 @@ var render = function() {
                                 1
                               ),
                               _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "form-row",
+                                  attrs: {
+                                    "align-center": "",
+                                    "justify-center": ""
+                                  }
+                                },
+                                [
+                                  _c("div", { staticClass: "col" }, [
+                                    _c("label", [_vm._v("Name: ")]),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.searchObject.name,
+                                          expression: "searchObject.name"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: { type: "text" },
+                                      domProps: {
+                                        value: _vm.searchObject.name
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.searchObject,
+                                            "name",
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "col" }, [
+                                    _c("label", [_vm._v("Email: ")]),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.searchObject.email,
+                                          expression: "searchObject.email"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: { type: "text" },
+                                      domProps: {
+                                        value: _vm.searchObject.email
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.searchObject,
+                                            "email",
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "col" }, [
+                                    _c("label", [_vm._v("Type: ")]),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.searchObject.type,
+                                          expression: "searchObject.type"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: { type: "text" },
+                                      domProps: {
+                                        value: _vm.searchObject.type
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.searchObject,
+                                            "type",
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "col" }, [
+                                    _c("label", [_vm._v("Active: ")]),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.searchObject.active,
+                                          expression: "searchObject.active"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: { type: "text" },
+                                      domProps: {
+                                        value: _vm.searchObject.active
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.searchObject,
+                                            "active",
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "col" }, [
+                                    _c("label", [_vm._v("NIF: ")]),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.searchObject.nif,
+                                          expression: "searchObject.nif"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: { type: "text" },
+                                      domProps: { value: _vm.searchObject.nif },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.searchObject,
+                                            "nif",
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "col" }, [
+                                    _c("label", [_vm._v("Balance: ")]),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.searchObject.balance,
+                                          expression: "searchObject.balance"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: { type: "text" },
+                                      domProps: {
+                                        value: _vm.searchObject.balance
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.searchObject,
+                                            "balance",
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    })
+                                  ])
+                                ]
+                              ),
+                              _vm._v(" "),
                               _c("v-data-table", {
                                 staticClass: "elevation-1",
                                 attrs: {
                                   headers: _vm.headers,
-                                  items: _vm.users,
+                                  items: _vm.getfilters,
                                   search: _vm.search,
                                   "sort-by": [
                                     "name",
