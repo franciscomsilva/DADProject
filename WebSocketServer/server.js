@@ -50,17 +50,18 @@ io.on('connection', function (socket) {
     //socket.emit('my_active_games_changed');
 
     // Handle message sent from the client to the server
-    socket.on('chat', (msg) => {
+    socket.on('tra', (msg) => {
         console.log(msg);
         socket.broadcast.emit('chat',msg);
      });
 
-    socket.on('transfer-user', (id,user) => {
+    socket.on('transfer-user', (id,user,amount) => {
         console.log(id)
         let localUser = loggedUsers.userInfoByID(id);
 
         if(localUser){
-            io.to(localUser.socketID).emit('chat',user);
+            user.amount = amount;
+            io.to(localUser.socketID).emit('transfer',user);
             console.log(`Transfer from: ${user.id} to: ${id}`)
         }else{
             console.log('Nao logado')
@@ -68,8 +69,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('register',(user)=>{
-        console.log(`Registering user: ${user.id} with sockedID:${socket.id}`)
-        socket.join(`transfer-user_${user.id}`)
+        console.log(`Registering user: ${user.id} with sockedID: ${socket.id}`)
         loggedUsers.addUserInfo(user,socket.id)
     });
 
@@ -82,7 +82,7 @@ io.on('connection', function (socket) {
        let localUser = loggedUsers.userInfoByID(user.id);
 
        if(localUser){
-           io.to(localUser.socketID).emit('pm',msg);
+           io.to(localUser.socketID).emit('pm',user);
        }else{
            console.log('Nao logado')
        }

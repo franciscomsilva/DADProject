@@ -116,7 +116,6 @@ export default {
   
   created() {
     this.getUser();
-    this.$socket.emit('register',this.$store.state.user);
   },
 
   methods:{
@@ -156,7 +155,7 @@ export default {
     }
   },
   sockets:{
-    chat(msg){
+    transfer(user){
       this.getMovements();
       this.getUserWallet();
     }

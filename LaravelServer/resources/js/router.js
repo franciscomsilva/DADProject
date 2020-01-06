@@ -17,13 +17,16 @@ const routes = [
     {path: '/login', component: Login},
     {path: '/register', component: RegisterAccount},
     {path: '/profile', component: Edit},
-    {path: '/movements', component: ListMovements},
     {path: '/movements/create', component: CreateMovements},
-    {
-        path: '/users', component: ListUsers, beforeEnter: (to, from, next) => {
+    {path: '/users', component: ListUsers, beforeEnter: (to, from, next) => {
+            console.log(store.state.user)
             if (store.state.user.type == 'a') next(); else next('/home')
         }
-    }
+    },
+    {path: '/movements', component: ListMovements, beforeEnter: (to, from, next) => {
+            if (store.state.user.type == 'o') next('/movements/create'); else next();
+        }
+    },
 
 ]
 

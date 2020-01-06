@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="17df179f-db4c-434e-88fd-96aaedf30bc3" name="Default Changelist" comment="" />
+    <list default="true" id="17df179f-db4c-434e-88fd-96aaedf30bc3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/public/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/components/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/components/login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/components/movements/CreateComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/components/movements/CreateComponent.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/components/movements/ListComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/components/movements/ListComponent.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LaravelServer/resources/js/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/LaravelServer/resources/js/router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebSocketServer/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/WebSocketServer/server.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/LaravelServer" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="PackageJsonUpdateNotifier">
     <dismissed value="$PROJECT_DIR$/WebSocketServer/package.json" />
@@ -63,7 +74,14 @@
       <workItem from="1578226152618" duration="13792000" />
       <workItem from="1575795619175" duration="3402000" />
       <workItem from="1575795613861" duration="1046000" />
-      <workItem from="1575795630005" duration="13142000" />
+      <workItem from="1575795630005" duration="13384000" />
+      <workItem from="1578270880010" duration="1456000" />
+      <workItem from="1578272360908" duration="352000" />
+      <workItem from="1578272727606" duration="1013000" />
+      <workItem from="1578273750312" duration="48000" />
+      <workItem from="1578273806705" duration="116000" />
+      <workItem from="1578273937089" duration="192000" />
+      <workItem from="1578274141985" duration="1559000" />
     </task>
     <servers />
   </component>
@@ -75,10 +93,10 @@
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
     <state x="747" y="312" key="FileChooserDialogImpl/0.30.1920.1050@0.30.1920.1050" timestamp="1576164165979" />
-    <state x="623" y="254" key="run.anything.popup" timestamp="1578242128489">
+    <state x="623" y="254" key="run.anything.popup" timestamp="1578272620415">
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
-    <state x="623" y="254" key="run.anything.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1578242128489" />
+    <state x="623" y="254" key="run.anything.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1578272620415" />
     <state x="623" y="200" width="672" height="676" key="search.everywhere.popup" timestamp="1578247354632">
       <screen x="0" y="30" width="1920" height="1050" />
     </state>

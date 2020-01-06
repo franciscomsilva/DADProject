@@ -278,7 +278,7 @@ export default {
           await axios.post('api/registerMovement', this.form)
                 .then(response=>{
                   if(this.form.transfer == 1){
-                    this.$socket.emit(`transfer-user`,this.form.transfer_wallet_id,this.$store.state.user);
+                    this.$socket.emit(`transfer-user`,this.form.transfer_wallet_id,this.$store.state.user,this.form.value);
                   }
                   this.$router.push('/movements')
                 }).catch(error => {

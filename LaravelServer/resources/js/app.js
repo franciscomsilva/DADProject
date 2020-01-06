@@ -20,6 +20,15 @@ Vue.use(new VueSocketIO({
     connection: 'http://localhost:8080'
 }));
 
+
+import Toasted from "vue-toasted";
+
+Vue.use(Toasted, {
+    position: "bottom-center",
+    duration: 5000,
+    type: "info"
+});
+
 import store from "./store";
 import router from "./router"
 
@@ -34,7 +43,15 @@ const app = new Vue({
     store,
     router,
     created() {
-        this.$store.commit('loadTokenAndUserFromSession');
+        store.commit('loadTokenAndUserFromSession');
+        /*REGISTER IN SOCKET*/
+        if(this.$store.state.user)
+            this.$socket.emit('register',this.$store.state.user);
+    },
+    sockets:{
+        transfer(user) {
+            this.$toasted.show(`Received transfer of ${user.amount}€ from ${user.name}!`);
+        }
     },
     methods: {
         homePage: function() {
