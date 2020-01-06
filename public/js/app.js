@@ -2791,6 +2791,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2842,6 +2850,7 @@ __webpack_require__.r(__webpack_exports__);
         sortable: false
       }],
       movements: [],
+      categories: [],
       wallet: [],
       user: [],
       user_id: null,
@@ -2870,13 +2879,35 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    this.getCategories();
     this.getUser();
   },
   methods: {
-    getUser: function getUser() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUser$(_context) {
+    getCategories: function getCategories() {
+      var _this = this;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getCategories$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/categories").then(function (response) {
+                _this.categories = response.data;
+              })["catch"](function (error) {
+                console.log(error);
+              }));
+
+            case 2:
+            case "end":
+              return _context.stop();
+          }
+        }
+      });
+    },
+    getUser: function getUser() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUser$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
             case 0:
               this.user = this.$store.state.user;
               this.user_id = this.user.id;
@@ -2889,27 +2920,31 @@ __webpack_require__.r(__webpack_exports__);
 
             case 3:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
       }, null, this);
     },
     getMovements: function getMovements() {
-      var _this = this;
+      var _this2 = this;
 
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getMovements$(_context2) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getMovements$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
-              _context2.next = 2;
+              _context3.next = 2;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/users/movements").then(function (response) {
-                _this.movements = response.data;
-                _this.user_wallet_id = response.data[0].wallet_id;
+                _this2.movements = response.data;
+                _this2.user_wallet_id = response.data[0].wallet_id;
 
-                _this.movements.forEach(function (element) {
+                _this2.movements.forEach(function (element) {
                   element.transfer == 1 ? element.transfer = 'Yes' : element.transfer = 'No';
                   element.type == 'e' ? element.type = 'Expense' : element.type = 'Income';
                   element.type_payment == 'c' ? element.type_payment = 'Cash' : element.type_payment == 'bt' ? element.type_payment = 'Bank Transfer' : element.type_payment = 'MB Payment';
+
+                  _this2.categories.forEach(function (category) {
+                    element.category_id == category.id ? element.category_id = category.name : 'n/a';
+                  });
                 });
               })["catch"](function (error) {
                 console.log(error);
@@ -2920,64 +2955,64 @@ __webpack_require__.r(__webpack_exports__);
 
             case 3:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
       }, null, this);
     },
     getUserWallet: function getUserWallet() {
-      var _this2 = this;
+      var _this3 = this;
 
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUserWallet$(_context3) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getUserWallet$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _context3.next = 2;
+              _context4.next = 2;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/api/wallets/" + this.user_wallet_id).then(function (response) {
-                _this2.wallet = response.data;
+                _this3.wallet = response.data;
               })["catch"](function (error) {
                 console.log(error);
               }));
 
             case 2:
             case "end":
-              return _context3.stop();
-          }
-        }
-      }, null, this);
-    },
-    registerMovement: function registerMovement() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function registerMovement$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              this.$router.push('/movements/create');
-
-            case 1:
-            case "end":
               return _context4.stop();
           }
         }
       }, null, this);
     },
+    registerMovement: function registerMovement() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function registerMovement$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              this.$router.push('/movements/create');
+
+            case 1:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, null, this);
+    },
     close: function close() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.dialog = false;
       setTimeout(function () {
-        _this3.editedMovement = Object.assign({}, _this3.defaultMovement);
-        _this3.editedIndex = -1;
+        _this4.editedMovement = Object.assign({}, _this4.defaultMovement);
+        _this4.editedIndex = -1;
 
-        _this3.getMovements();
+        _this4.getMovements();
       }, 300);
     },
     save: function save() {
-      var _this4 = this;
+      var _this5 = this;
 
       var formData, headers;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function save$(_context5) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function save$(_context6) {
         while (1) {
-          switch (_context5.prev = _context5.next) {
+          switch (_context6.prev = _context6.next) {
             case 0:
               formData = new FormData();
               formData.append('category_id', this.editedMovement.category_id);
@@ -2985,11 +3020,11 @@ __webpack_require__.r(__webpack_exports__);
               headers = {
                 'Content-Type': 'multipart/form-data'
               };
-              _context5.next = 6;
+              _context6.next = 6;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('api/movements/update/' + this.editedMovement.id, formData, headers).then(function (response) {
                 console.log(response.data);
               })["catch"](function (error) {
-                _this4.hasAlert = true;
+                _this5.hasAlert = true;
                 console.log(error);
               }));
 
@@ -2999,14 +3034,13 @@ __webpack_require__.r(__webpack_exports__);
 
             case 8:
             case "end":
-              return _context5.stop();
+              return _context6.stop();
           }
         }
       }, null, this);
     },
     editMovement: function editMovement(item) {
       this.movement_id = this.movements.indexOf(item);
-      console.log(this.movement_id);
       this.editedMovement = Object.assign({}, item);
       this.dialog = true;
     }
@@ -26148,6 +26182,41 @@ var render = function() {
                                                                           )
                                                                         ],
                                                                         1
+                                                                      ),
+                                                                      _vm._v(
+                                                                        " "
+                                                                      ),
+                                                                      _c(
+                                                                        "v-select",
+                                                                        {
+                                                                          attrs: {
+                                                                            items:
+                                                                              _vm.categories,
+                                                                            "item-text":
+                                                                              "name",
+                                                                            "item-value":
+                                                                              "id",
+                                                                            label:
+                                                                              "Category"
+                                                                          },
+                                                                          model: {
+                                                                            value:
+                                                                              _vm
+                                                                                .editedMovement
+                                                                                .category_id,
+                                                                            callback: function(
+                                                                              $$v
+                                                                            ) {
+                                                                              _vm.$set(
+                                                                                _vm.editedMovement,
+                                                                                "category_id",
+                                                                                $$v
+                                                                              )
+                                                                            },
+                                                                            expression:
+                                                                              "editedMovement.category_id"
+                                                                          }
+                                                                        }
                                                                       )
                                                                     ],
                                                                     1
@@ -26245,7 +26314,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      3954612837
+                                      322122249
                                     )
                                   })
                                 ],

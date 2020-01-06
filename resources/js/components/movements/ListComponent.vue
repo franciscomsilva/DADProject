@@ -77,7 +77,15 @@
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedMovement.description" label="Description"></v-text-field>
                     </v-col>
+                    <v-select 
+                         v-model="editedMovement.category_id" 
+                         :items="categories"
+                         item-text="name"
+                         item-value="id"
+                         label="Category">
+                        </v-select>
                   </v-row>
+
                 </v-container>
               </v-card-text>
               <v-card-actions>
@@ -151,6 +159,7 @@ export default {
         { text: 'Actions', value: 'action', sortable: false }
         ],
         movements: [],
+        categories:[],
         wallet:[],
         user:[],
         user_id:null,
@@ -182,10 +191,20 @@ export default {
   },
 
   created() {
-    this.getUser();
+    this.getCategories();    
+    this.getUser();   
   },
 
   methods:{
+    async getCategories(){
+      await axios.get("/api/categories")
+          .then(response => {
+              this.categories = response.data            
+          })
+          .catch(error => {
+              console.log(error);
+          });     
+    },
     async getUser() {
         this.user = this.$store.state.user
         this.user_id = this.user.id
@@ -200,11 +219,15 @@ export default {
           await axios.get("/api/users/movements")
           .then(response => {
               this.movements = response.data
+              
               this.user_wallet_id = response.data[0].wallet_id
               this.movements.forEach(element => {
                 element.transfer == 1 ? element.transfer = 'Yes' : element.transfer = 'No'
                 element.type == 'e' ? element.type = 'Expense' : element.type = 'Income'
                 element.type_payment == 'c' ? element.type_payment = 'Cash' : element.type_payment == 'bt' ?  element.type_payment='Bank Transfer' : element.type_payment='MB Payment'
+                this.categories.forEach(category => {
+                  element.category_id == category.id ? element.category_id = category.name : 'n/a'
+                });
           })
           })
           .catch(error => {
@@ -254,12 +277,11 @@ export default {
       this.dialog = false
       },         
     
-    editMovement (item) {
+    editMovement (item) {      
       this.movement_id = this.movements.indexOf(item)
-      console.log(this.movement_id)
-        
-        this.editedMovement = Object.assign({}, item)
-        this.dialog = true
+             
+      this.editedMovement = Object.assign({}, item)
+      this.dialog = true
       },
 }
 }
