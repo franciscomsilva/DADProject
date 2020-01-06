@@ -2281,6 +2281,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2340,7 +2349,8 @@ __webpack_require__.r(__webpack_exports__);
         text: 'MB payment',
         value: 'mb'
       }],
-      hasAlert: null
+      hasAlert: null,
+      errorMsg: null
     };
   },
   created: function created() {
@@ -2427,7 +2437,7 @@ __webpack_require__.r(__webpack_exports__);
               this.form.type = 'e'; //this.form.wallet_id = user_id;
 
               this.hasAlert = false;
-              this.form.transfer_wallet_id = 12;
+              this.form.transfer_wallet_id = this.form.wallet_id;
               this.form.wallet_id = null;
 
               if (this.form.transfer === true) {
@@ -2451,7 +2461,7 @@ __webpack_require__.r(__webpack_exports__);
                 _this4.$router.push('/movements');
               })["catch"](function (error) {
                 _this4.hasAlert = true;
-                console.log(error);
+                _this4.errorMsg = "Error creating new movement!";
               }));
 
             case 9:
@@ -2499,7 +2509,6 @@ __webpack_require__.r(__webpack_exports__);
   sockets: {
     chat: function chat(msg) {
       this.allMsgText = msg + '\n' + this.allMsgText;
-      console.log(this.allMsgText);
     }
   }
 });
@@ -2733,7 +2742,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   sockets: {
     chat: function chat(msg) {
-      console.log(msg);
       this.getMovements();
       this.getUserWallet();
     }
@@ -25456,6 +25464,31 @@ var render = function() {
                                         1
                                       )
                                     : _vm._e(),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-card-actions",
+                                    [
+                                      _c("v-spacer"),
+                                      _vm._v(" "),
+                                      _vm.hasAlert
+                                        ? _c(
+                                            "v-alert",
+                                            {
+                                              attrs: {
+                                                color: "red",
+                                                dense: "",
+                                                outlined: "",
+                                                type: "error"
+                                              }
+                                            },
+                                            [_vm._v(_vm._s(_vm.errorMsg))]
+                                          )
+                                        : _vm._e()
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-spacer"),
                                   _vm._v(" "),
                                   _vm.$store.state.user.type === "u" &&
                                   _vm.$store.state.user.active === 1

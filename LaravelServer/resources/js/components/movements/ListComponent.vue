@@ -157,7 +157,6 @@ export default {
   },
   sockets:{
     chat(msg){
-      console.log(msg)
       this.getMovements();
       this.getUserWallet();
     }

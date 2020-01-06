@@ -136,6 +136,15 @@
                   <v-spacer></v-spacer>
                   <v-btn color="primary" v-on:click.prevent="registerIncome()" >Register New Movement</v-btn>
                 </v-card-actions>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-alert color="red"
+                           dense
+                           outlined
+                           type="error"
+                           v-if="hasAlert">{{errorMsg}}</v-alert>
+                </v-card-actions>
+                <v-spacer></v-spacer>
                 <v-card-actions v-if="$store.state.user.type === 'u' && $store.state.user.active === 1">
                   <v-spacer></v-spacer>
                   <v-btn color="primary" v-on:click.prevent="registerExpense()" >Register New Movement</v-btn>
@@ -202,7 +211,8 @@ export default {
             },
             income_payment_types: [{text: 'Cash', value: 'c'},{text: 'Bank Transfer', value:'bt'}],
             expense_payment_types: [{text: 'Bank Transfer', value:'bt'},{text: 'MB payment', value: 'mb'}],
-            hasAlert:null
+            hasAlert:null,
+            errorMsg:null
         }
     },
 
@@ -255,7 +265,7 @@ export default {
             this.form.type = 'e';
             //this.form.wallet_id = user_id;
             this.hasAlert = false;
-            this.form.transfer_wallet_id = 12;
+            this.form.transfer_wallet_id = this.form.wallet_id;
             this.form.wallet_id=null;
             if(this.form.transfer === true){
               this.form.transfer = 1;
@@ -272,8 +282,8 @@ export default {
                   }
                   this.$router.push('/movements')
                 }).catch(error => {
-                  this.hasAlert = true
-                  console.log(error)
+                  this.hasAlert = true;
+                  this.errorMsg = "Error creating new movement!";
                 });
       
         },
@@ -299,7 +309,6 @@ export default {
   sockets:{
     chat(msg){
       this.allMsgText = msg + '\n' + this.allMsgText;
-      console.log(this.allMsgText);
     }
   }
       
