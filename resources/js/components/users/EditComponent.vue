@@ -75,12 +75,13 @@
                 :rules="[rules.nif]"
 
         ></v-text-field>
-        <v-file-input
-                v-model="photo"
-                placeholder="Pick an avatar"
-                prepend-icon="camera"
-                label="Avatar"
-        ></v-file-input>
+            <v-file-input
+                    v-model="photo"
+                    placeholder="Pick an avatar"
+                    prepend-icon="camera"
+                    label="Avatar"
+            ></v-file-input>
+
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-alert color="red"
@@ -113,6 +114,7 @@ export default {
             },
             selectedFile:null,
             name: null,
+            photo: null,
             oldPassword: null,
             newPassword:null,
             newPasswordConf:null,
@@ -172,15 +174,22 @@ export default {
                 formData.append('newPassword', this.newPassword);
             }
 
-            if(this.nif != null){formData.append('nif', this.user.nif)}
+            if(this.user.nif != null){
 
+                formData.append('nif', this.user.nif)
+            }
             console.log(this.photo)
-            if(this.photo) formData.append('photo', this.photo);
+            if(this.photo){
+                formData.append('photo', this.photo);
+            }
             const headers = { 'Content-Type': 'multipart/form-data'}
 
 
-            console.log(formData)
-            await axios.post(`api/users/${this.user.id}`, formData,headers)
+            await axios.post(`api/users/${this.user.id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
                 .then(response=>{
                     this.$store.commit('setUser',response.data);
                     this.errorMsg = "Updated with success!";
@@ -189,7 +198,7 @@ export default {
                 }).catch(error => {
                     this.errorMsg = "Error updating profile!";
                     this.hasAlert = true;
-                    console.log(error)
+                    //console.log(error)
                 });
 
 

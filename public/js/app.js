@@ -3048,6 +3048,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this = this;
@@ -3063,6 +3064,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       selectedFile: null,
       name: null,
+      photo: null,
       oldPassword: null,
       newPassword: null,
       newPasswordConf: null,
@@ -3151,18 +3153,25 @@ __webpack_require__.r(__webpack_exports__);
                 formData.append('newPassword', this.newPassword);
               }
 
-              if (this.nif != null) {
+              if (this.user.nif != null) {
                 formData.append('nif', this.user.nif);
               }
 
               console.log(this.photo);
-              if (this.photo) formData.append('photo', this.photo);
+
+              if (this.photo) {
+                formData.append('photo', this.photo);
+              }
+
               headers = {
                 'Content-Type': 'multipart/form-data'
               };
-              console.log(formData);
-              _context2.next = 13;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post("api/users/".concat(this.user.id), formData, headers).then(function (response) {
+              _context2.next = 12;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post("api/users/".concat(this.user.id), formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                }
+              }).then(function (response) {
                 _this3.$store.commit('setUser', response.data);
 
                 _this3.errorMsg = "Updated with success!";
@@ -3171,11 +3180,10 @@ __webpack_require__.r(__webpack_exports__);
                 _this3.$router.push('/home');
               })["catch"](function (error) {
                 _this3.errorMsg = "Error updating profile!";
-                _this3.hasAlert = true;
-                console.log(error);
+                _this3.hasAlert = true; //console.log(error)
               }));
 
-            case 13:
+            case 12:
             case "end":
               return _context2.stop();
           }

@@ -43,20 +43,21 @@ class UserControllerAPI extends Controller
          $request->validate([
                    'name' => 'required|string|min:3|regex:/^[A-Za-záàâãéèêíóôõúçÁÀÂÃÉÈÍÓÔÕÚÇ ]+$/',
                    'newPassword' => 'min:3',
-                    'photo' => 'nullable|image|mimes:jpeg,png,jpg,bmp',
-                   'nif' => 'nullable|digits:9|regex:/^[0-9]{9}+$/'
+                    'photo' => 'nullable|image|mimes:jpeg,png,jpg,bmp'
          ]);
 
         $user = User::findOrFail($id);
-          if($request->has('photo')) {
-                   $photo_name = Str::uuid() . '.' . $request->photo->getClientOriginalExtension();
-                   $targetDir = storage_path("app/public/fotos");
-                   $request->photo->move($targetDir, $photo_name);
-                   $user->photo = $photo_name;
-          }
 
 
         $user->update($request->all());
+
+             if($request->has('photo')) {
+                           $photo_name = Str::uuid() . '.' . $request->photo->getClientOriginalExtension();
+                           $targetDir = storage_path("app/public/fotos");
+                           $request->photo->move($targetDir, $photo_name);
+                           $user->photo = $photo_name;
+                  }
+
 
         if($request->has('oldPassword') && !Hash::check($request->oldPassword, $user->password)){
             return response()->json("Old password incorrect!");
