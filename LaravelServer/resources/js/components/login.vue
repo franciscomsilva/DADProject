@@ -103,13 +103,12 @@ export default {
             return;
           }
           
-           axios.post("api/login", this.user)
+          axios.post("api/login", this.user)
             .then(response=> {
               this.$store.commit("setToken", response.data.access_token);
 
               return axios.get("api/users/me");
-            })
-                  .then(response => {
+            }).then(response => {
                     console.log(response)
                     this.$store.commit("setUser", response.data.data);
                     this.$socket.emit('register',response.data.data);
@@ -121,7 +120,6 @@ export default {
                     this.hasAlert = true;
                     console.log(error);
                   });
-
         },
         cancelLogin: function() {
           this.$emit('cancel-login');

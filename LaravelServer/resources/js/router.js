@@ -7,6 +7,7 @@ import Edit from "./components/users/EditComponent";
 import ListMovements from "./components/movements/ListComponent";
 import CreateMovements from "./components/movements/CreateComponent";
 import ListUsers from "./components/users/ListUsers";
+import UserStatistics from "./components/users/movements/personalStatistics";
 import  "./toast";
 
 Vue.use(VueRouter);
@@ -34,7 +35,6 @@ const routes = [
         }
     },
     {path: '/movements', component: ListMovements, beforeEnter: (to, from, next) => {
-        console.log(user)
             if (user.type === 'o') {
                 next('/movements/create');
             }else if(user.type != 'a'){
@@ -42,6 +42,15 @@ const routes = [
             }else{
                 Vue.toasted.global.unauthorized();
                 next('/home');
+            }
+        }
+    },
+    {path: '/movements/statistics', component: UserStatistics, beforeEnter: (to, from, next) => {
+            if (user.type === 'u') {
+                next();
+            } else {
+                Vue.toasted.global.unauthorized();
+                next('/movements');
             }
         }
     }

@@ -51,7 +51,7 @@
 			<!-- Guest user must be able to create an account -->
 			<v-list-item link v-show="!$store.state.user">
 				<v-list-item-icon>
-					<v-icon>mdi-folder</v-icon>
+					<v-icon>mdi-account</v-icon>
 				</v-list-item-icon>
 				<v-list-item-title v-on:click.prevent="registerAccount()">Register</v-list-item-title>
 			</v-list-item>
@@ -63,12 +63,6 @@
 					<v-icon>mdi-account-multiple</v-icon>
 			    </v-list-item-icon>
 			    <v-list-item-title v-on:click.prevent="listMovements()">Movements</v-list-item-title>
-			</v-list-item>
-			<v-list-item link v-show="$store.state.user && $store.state.user.type == 'a'">
-				<v-list-item-icon>
-					<v-icon>mdi-account-multiple</v-icon>
-			    </v-list-item-icon>
-			    <v-list-item-title v-on:click.prevent="listUsers()">Users</v-list-item-title>
 			</v-list-item>
 			<v-list-item link v-show="$store.state.user && $store.state.user.type == 'a'">
 				<v-list-item-icon>
