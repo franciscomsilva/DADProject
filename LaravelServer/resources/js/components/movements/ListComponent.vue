@@ -215,6 +215,16 @@
         }
       }
     },
+    sockets:{
+      transfer(user){
+        this.getMovements();
+        this.getUserWallet();
+      },
+      income(amount){
+        this.getMovements();
+        this.getUserWallet();
+      }
+    },
 
     computed: {
       formTitle () {
